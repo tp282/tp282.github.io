@@ -73,6 +73,16 @@
       background: #9932CC;
     }
     
+    /* 淡出动画 (保留 CSS 定义，但 JS 中不再使用) */
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+    }
+    
+    .animate-fade-out {
+      animation: fadeOut 0.5s ease-in-out forwards;
+    }
+    
     /* 旋转残影效果 */
     @keyframes spinBlur {
       0% { filter: blur(0px); }
@@ -1242,6 +1252,7 @@ function restart() {
       const cardDetailTitle = document.getElementById('cardDetailTitle');
       const cardImage = document.getElementById('cardImage');
       const cardNumber = document.getElementById('cardNumber');
+      // const cardOrientation = document.getElementById('cardOrientation'); // ❗ 已根据用户要求移除
       const cardName = document.getElementById('cardName');
       const cardGroup = document.getElementById('cardGroup');
       const cardDescription = document.getElementById('cardDescription');
@@ -1271,6 +1282,8 @@ function restart() {
       // 设置编号
       cardNumber.textContent = card.id;
 
+      // 牌位模块已移除，不再设置 cardOrientation 的内容和样式
+
       // 设置牌名、牌组、牌意
       cardName.textContent = card.name;
       // 检查 card.suit 是否存在 (用于小阿卡纳)
@@ -1293,116 +1306,56 @@ function restart() {
     }
 
     // 显示作者信息弹窗（启动页）
-function showAuthorMessage() {
-  const authorMessage = document.createElement('div');
-  authorMessage.id = 'authorMessage';
-  authorMessage.className = 'fixed inset-0 bg-dark/95 flex items-center justify-center z-50 animate-fade-in';
-  authorMessage.innerHTML = `
-    <div class="bg-secondary rounded-lg p-8 max-w-sm w-full mx-4 border border-primary/50 shadow-2xl text-center">
-      <div id="authorAvatar" class="relative inline-block mb-4 cursor-pointer group">
-        <img id="avatarImage" 
-             src="https://i1.hdslb.com/bfs/face/ecab5cf363b65a70dfb1b67ae348c3c290288e1e.jpg@128w_128h_1c_1s.webp" 
-             class="w-20 h-20 rounded-full border-2 border-accent transition-all duration-300"
-             alt="作者头像"
-             onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiMzMzQxNTUiLz4KPHBhdGggZD0iTTQwIDI0QzQ0LjQxODMgMjQgNDggMjcuNTgxNyA0OCAzMkM0OCAzNi40MTgzIDQ0LjQxODMgNDAgNDAgNDBDMzUuNTgxNyA0MCAzMiAzNi40MTgzIDMyIDMyQzMyIDI3LjU4MTcgMzUuNTgxNyAyNCA0MCAyNFoiIGZpbGw9IiM2QzcwOEMiLz4KPHBhdGggZD0iTTQ4IDUyQzQ4IDU4LjYyIDQyLjYyIDY0IDM2IDY0SDQ0QzUwLjYyIDY0IDU2IDU4LjYyIDU2IDUyQzU2IDQ1LjM4IDUwLjYyIDQwIDQ0IDQwSDM2QzI5LjM4IDQwIDI0IDQ1LjM4IDI0IDUyQzI0IDU4LjYyIDI5LjM4IDY0IDM2IDY0SDQ0QzUwLjYyIDY0IDU2IDU4LjYyIDU2IDUyWiIgZmlsbD0iIzdCOEQ5QyIvPgo8L3N2Zz4K';">
-        <div class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-75"></div>
-        <div class="absolute inset-0 bg-primary/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <i class="fa fa-music text-white text-lg"></i>
+    function showAuthorMessage() {
+      const authorMessage = document.createElement('div');
+      authorMessage.id = 'authorMessage';
+      authorMessage.className = 'fixed inset-0 bg-dark/95 flex items-center justify-center z-50 animate-fade-in';
+      authorMessage.innerHTML = `
+        <div class="bg-secondary rounded-lg p-8 max-w-sm w-full mx-4 border border-primary/50 shadow-2xl text-center">
+          <div id="authorAvatar" class="relative inline-block mb-4 cursor-pointer">
+            <img id="avatarImage" src="https://avatars.githubusercontent.com/u/244422201?u=4198b680c0c1279889dabc2c19167d011ebbeb10&v=4" class="w-20 h-20 rounded-full border-2 border-accent transition-transform duration-300">
+            <div class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-75"></div>
+          </div>
+          <h2 class="text-2xl font-bold text-accent mb-1">欢迎使用</h2>
+          <p class="text-sm font-medium text-light mb-1">塔罗牌抽取程序</p>
+          <p class="text-xs font-medium text-gray-400 mb-4">点击头像播放/暂停背景音乐</p>
+          <p class="text-sm font-medium text-primary mb-1">作者：嘟嘟可教主</p>
+          <a href="https://space.bilibili.com/425320157" target="_blank" class="text-blue-400 hover:text-blue-300 mb-4 flex items-center justify-center">
+            <i class="fa fa-external-link mr-1"></i> B站主页
+          </a>
+          <p class="text-sm text-gray-400 mb-2">感谢使用塔罗牌抽取程序</p>
+          <p class="text-xs text-gray-500 mb-6">该网页使用ai进行开发</p>
+          <button id="startBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
+            开始使用 <i class="fa fa-arrow-right ml-1"></i>
+          </button>
         </div>
-      </div>
-      <h2 class="text-2xl font-bold text-accent mb-1">欢迎使用</h2>
-      <p class="text-sm font-medium text-light mb-1">塔罗牌抽取程序</p>
-      <p class="text-xs font-medium text-gray-400 mb-4">点击头像播放/暂停背景音乐</p>
-      <p class="text-sm font-medium text-primary mb-1">作者：嘟嘟可教主</p>
-      <a href="https://space.bilibili.com/425320157" target="_blank" class="text-blue-400 hover:text-blue-300 mb-4 flex items-center justify-center transition-colors duration-200">
-        <i class="fa fa-external-link mr-1"></i> B站主页
-      </a>
-      <p class="text-sm text-gray-400 mb-2">感谢使用塔罗牌抽取程序</p>
-      <p class="text-xs text-gray-500 mb-6">该网页使用ai进行开发</p>
-      <button id="startBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-95">
-        开始使用 <i class="fa fa-arrow-right ml-1"></i>
-      </button>
-    </div>
-  `;
-  document.body.appendChild(authorMessage);
+      `;
+      document.body.appendChild(authorMessage);
 
-  // 添加关闭弹窗的ESC键支持
-  const handleKeydown = (e) => {
-    if (e.key === 'Escape') {
-      closeAuthorMessage();
-    }
-  };
-
-  // 点击背景关闭弹窗
-  const handleBackgroundClick = (e) => {
-    if (e.target.id === 'authorMessage') {
-      closeAuthorMessage();
-    }
-  };
-
-  const closeAuthorMessage = () => {
-    // 停止音乐
-    authorAudio.pause();
-    // 移除旋转效果
-    const avatarImage = document.getElementById('avatarImage');
-    avatarImage.classList.remove('spin-blur', 'animate-full-spin');
-    
-    // 添加淡出动画
-    authorMessage.classList.remove('animate-fade-in');
-    authorMessage.classList.add('animate-fade-out');
-    
-    // 动画结束后移除元素
-    setTimeout(() => {
-      if (document.body.contains(authorMessage)) {
+      document.getElementById('startBtn').addEventListener('click', function() {
+        // 停止音乐
+        authorAudio.pause();
+        // 移除旋转和模糊类
+        document.getElementById('avatarImage').classList.remove('spin-blur', 'animate-full-spin');
+        // 关闭弹窗 (立即移除，取消动画)
         document.body.removeChild(authorMessage);
-      }
-      // 清理事件监听器
-      document.removeEventListener('keydown', handleKeydown);
-      authorMessage.removeEventListener('click', handleBackgroundClick);
-    }, 300); // 匹配动画时长
-  };
-
-  // 添加事件监听器
-  document.getElementById('startBtn').addEventListener('click', closeAuthorMessage);
-  document.addEventListener('keydown', handleKeydown);
-  authorMessage.addEventListener('click', handleBackgroundClick);
-
-  // 头像旋转/音乐功能
-  const avatar = document.getElementById('avatarImage');
-  const authorAvatarContainer = document.getElementById('authorAvatar');
-  let isSpinning = false;
-
-  authorAvatarContainer.addEventListener('click', function() {
-    if (authorAudio.paused) {
-      authorAudio.play().catch(error => {
-        console.warn('音频播放失败:', error);
-        // 可以在这里添加播放失败的反馈，比如显示提示
       });
-      avatar.classList.add('spin-blur', 'animate-full-spin');
-      isSpinning = true;
-    } else {
-      authorAudio.pause();
-      avatar.classList.remove('spin-blur', 'animate-full-spin');
-      isSpinning = false;
+
+      // 头像旋转/音乐功能
+      const avatar = document.getElementById('avatarImage');
+      let isSpinning = false; // 状态标志
+      document.getElementById('authorAvatar').addEventListener('click', function() {
+        if (authorAudio.paused) {
+          authorAudio.play();
+          avatar.classList.add('spin-blur', 'animate-full-spin');
+          isSpinning = true;
+        } else {
+          authorAudio.pause();
+          avatar.classList.remove('spin-blur', 'animate-full-spin');
+          isSpinning = false;
+        }
+      });
     }
-  });
-
-  // 图片加载状态处理
-  avatar.addEventListener('load', function() {
-    console.log('头像图片加载成功');
-  });
-
-  avatar.addEventListener('error', function() {
-    console.warn('头像图片加载失败，已使用备用头像');
-    // 可以在这里添加额外的错误处理逻辑
-  });
-
-  // 阻止弹窗内的点击事件冒泡（防止点击内容区域关闭弹窗）
-  const modalContent = authorMessage.querySelector('div.bg-secondary');
-  modalContent.addEventListener('click', function(e) {
-    e.stopPropagation();
-  });
-}
 
     // --- 事件监听器和初始化 ---
 
