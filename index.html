@@ -53,48 +53,49 @@
         background-color: rgba(138, 43, 226, 0.1);
       }
     }
-    
+  </style>
+  
+  <style>
     /* 自定义滚动条 */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
     }
-    
+
     ::-webkit-scrollbar-track {
       background: #1E1E1E;
     }
-    
+
     ::-webkit-scrollbar-thumb {
       background: #8A2BE2;
       border-radius: 4px;
     }
-    
+
     ::-webkit-scrollbar-thumb:hover {
       background: #9932CC;
     }
-    
-    /* 淡出动画 (保留 CSS 定义，但 JS 中不再使用) */
+
+    /* 淡出动画 */
     @keyframes fadeOut {
       from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
       to { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
     }
-    
+
     .animate-fade-out {
       animation: fadeOut 0.5s ease-in-out forwards;
     }
-    
+
     /* 旋转残影效果 */
     @keyframes spinBlur {
       0% { filter: blur(0px); }
       50% { filter: blur(2px); }
       100% { filter: blur(0px); }
     }
-    
+
     .spin-blur {
       animation: spinBlur 0.1s infinite;
     }
-    
-    /* 💡 新增：无限连续旋转的 CSS 动画 */
+
     @keyframes fullSpin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -145,87 +146,59 @@
       <section id="step1" class="animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 class="text-xl font-bold mb-4 text-center">选择要抽取的牌组区域</h2>
-          
           <div class="space-y-4">
             <div class="flex items-center p-3 bg-dark rounded-md border border-primary/20 hover:border-primary transition-colors cursor-pointer deck-option" data-deck="a">
-              <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">
-                <i class="fa fa-star text-primary"></i>
-              </div>
-              <div>
-                <h3 class="font-medium">大阿卡纳</h3>
-                <p class="text-sm text-gray-400">22张主要塔罗牌，代表人生重大课题</p>
-              </div>
+              <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3"><i class="fa fa-star text-primary"></i></div>
+              <div><h3 class="font-medium">大阿卡纳</h3><p class="text-sm text-gray-400">22张主要塔罗牌，代表人生重大课题</p></div>
             </div>
-            
             <div class="flex items-center p-3 bg-dark rounded-md border border-primary/20 hover:border-primary transition-colors cursor-pointer deck-option" data-deck="b">
-              <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">
-                <i class="fa fa-heart text-primary"></i>
-              </div>
-              <div>
-                <h3 class="font-medium">小阿卡纳</h3>
-                <p class="text-sm text-gray-400">56张次要塔罗牌，代表日常生活细节</p>
-              </div>
+              <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3"><i class="fa fa-heart text-primary"></i></div>
+              <div><h3 class="font-medium">小阿卡纳</h3><p class="text-sm text-gray-400">56张次要塔罗牌，代表日常生活细节</p></div>
             </div>
-            
             <div class="flex items-center p-3 bg-dark rounded-md border border-primary/20 hover:border-primary transition-colors cursor-pointer deck-option" data-deck="z">
-              <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">
-                <i class="fa fa-th text-primary"></i>
-              </div>
-              <div>
-                <h3 class="font-medium">全部牌组</h3>
-                <p class="text-sm text-gray-400">78张塔罗牌，全面的解读与指引</p>
-              </div>
+              <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3"><i class="fa fa-th text-primary"></i></div>
+              <div><h3 class="font-medium">全部牌组</h3><p class="text-sm text-gray-400">78张塔罗牌，全面的解读与指引</p></div>
             </div>
           </div>
-          
           <div class="mt-6 text-center">
             <button id="confirmDeckBtn" class="bg-primary hover:bg-primary/80 text-white px-6 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
               确认选择 <i class="fa fa-check ml-1"></i>
             </button>
           </div>
-          
         </div>
       </section>
 
       <section id="step2" class="hidden animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 class="text-xl font-bold mb-4 text-center">选择要抽取的牌数量</h2>
-          
           <div class="mb-4">
             <p class="text-center mb-2">当前选择：<span id="selectedDeckName" class="text-primary font-medium"></span></p>
             <p class="text-center text-sm text-gray-400">可抽取 <span id="minCards">1</span> - <span id="maxCards"></span> 张牌</p>
           </div>
-          
           <div class="flex items-center justify-center space-x-4">
             <button id="decreaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
               <i class="fa fa-minus text-primary"></i>
             </button>
-            
             <div class="text-4xl font-bold text-center w-20" id="cardCount">1</div>
-            
             <button id="increaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
               <i class="fa fa-plus text-primary"></i>
             </button>
           </div>
-          
           <div class="mt-6">
             <label for="manualCountInput" class="block text-sm font-medium mb-2">或手动输入：</label>
             <div class="flex">
               <input type="number" id="manualCountInput" class="flex-grow bg-dark border border-primary/30 rounded-l-md px-4 py-2 focus:outline-none focus:border-primary" min="1" max="" placeholder="输入牌数量">
-              <button onclick="manualCountSubmit()" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-r-md transition-colors">确认</button>
+              <button id="manualCountSubmitBtn" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-r-md transition-colors">确认</button>
             </div>
           </div>
-          
           <div id="countErrorMessage" class="mt-4 text-red-500 text-center hidden">
             <i class="fa fa-exclamation-circle mr-1"></i> 请输入有效的数量
           </div>
-          
           <div class="mt-6 flex justify-between">
-            <button onclick="backToStep1()" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
+            <button id="backToStep1Btn" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
               <i class="fa fa-arrow-left mr-1"></i> 返回
             </button>
-            
-            <button onclick="drawCards()" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
+            <button id="drawCardsBtn" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
               抽取塔罗牌 <i class="fa fa-random ml-1"></i>
             </button>
           </div>
@@ -235,28 +208,22 @@
       <section id="step3" class="hidden">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 class="text-xl font-bold mb-4 text-center">塔罗牌抽取结果</h2>
-          
-          <div id="resultContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2">
-            </div>
-          
+          <div id="resultContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2"></div>
           <div class="mt-6 flex justify-between">
-            <button onclick="backToStep2()" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
+            <button id="backToStep2Btn" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
               <i class="fa fa-arrow-left mr-1"></i> 重新选择
             </button>
-            
             <div class="flex space-x-2">
-              <button id="copyBtn" onclick="copyResults()" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
+              <button id="copyBtn" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
                 <i class="fa fa-copy mr-1"></i> 复制结果
               </button>
-              
-              <button onclick="restart()" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
+              <button id="restartBtn" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
                 刷新 <i class="fa fa-refresh ml-1"></i>
               </button>
             </div>
           </div>
-          
           <div id="copySuccess" class="mt-4 text-green-500 text-center hidden">
-            <i class="fa fa-check-circle mr-1"></i> 结果已复制到剪贴板
+            <i class="fa fa-check-circle mr-1"></i> 已复制到剪贴板
           </div>
         </div>
       </section>
@@ -264,40 +231,18 @@
     
     <div class="mt-8 max-w-4xl mx-auto bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
       <h2 class="text-xl font-bold mb-4 text-center">塔罗牌组信息</h2>
-      
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <h3 class="text-lg font-medium mb-2 text-primary">大阿卡纳 (22张)</h3>
-          <div id="majorArcanaList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
-            </div>
+          <div id="majorArcanaList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div>
         </div>
-        
         <div>
           <h3 class="text-lg font-medium mb-2 text-primary">小阿卡纳 (56张)</h3>
           <div class="space-y-3">
-            <div>
-              <h4 class="font-medium text-accent">权杖</h4>
-              <div id="wandsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
-                </div>
-            </div>
-            
-            <div>
-              <h4 class="font-medium text-accent">圣杯</h4>
-              <div id="cupsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
-                </div>
-            </div>
-            
-            <div>
-              <h4 class="font-medium text-accent">宝剑</h4>
-              <div id="swordsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
-                </div>
-            </div>
-            
-            <div>
-              <h4 class="font-medium text-accent">星币</h4>
-              <div id="pentaclesList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
-                </div>
-            </div>
+            <div><h4 class="font-medium text-accent">权杖</h4><div id="wandsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+            <div><h4 class="font-medium text-accent">圣杯</h4><div id="cupsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+            <div><h4 class="font-medium text-accent">宝剑</h4><div id="swordsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+            <div><h4 class="font-medium text-accent">星币</h4><div id="pentaclesList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
           </div>
         </div>
       </div>
@@ -315,38 +260,15 @@
     <div class="bg-secondary rounded-lg p-6 max-w-md w-full mx-4 border border-primary/30 shadow-lg animate-slide-up">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-primary">使用帮助</h2>
-        <button id="closeHelpBtn" class="text-gray-400 hover:text-white">
-          <i class="fa fa-times text-xl"></i>
-        </button>
+        <button id="closeHelpBtn" class="text-gray-400 hover:text-white"><i class="fa fa-times text-xl"></i></button>
       </div>
-      
       <div class="space-y-4">
-        <div>
-          <h3 class="font-medium text-accent">步骤1：选择牌组</h3>
-          <p class="text-sm">选择您想要抽取的塔罗牌组区域：大阿卡纳、小阿卡纳或全部牌组。</p>
-        </div>
-        
-        <div>
-          <h3 class="font-medium text-accent">步骤2：选择数量</h3>
-          <p class="text-sm">选择您想要抽取的牌数量，范围从1到所选区域的最大牌数。</p>
-        </div>
-        
-        <div>
-          <h3 class="font-medium text-accent">步骤3：查看结果</h3>
-          <p class="text-sm">查看随机抽取的塔罗牌结果，每张牌会随机分配正位或逆位。您可以复制结果到剪贴板。</p>
-        </div>
-        
-        <div>
-          <h3 class="font-medium text-accent">查看牌详情</h3>
-          <p class="text-sm">在牌组信息区域点击任意牌名，可以查看该牌的详细解释，包括牌意、正位和逆位含义。</p>
-        </div>
-        
-        <div>
-          <h3 class="font-medium text-accent">关于塔罗牌</h3>
-          <p class="text-sm">塔罗牌共有78张，分为大阿卡纳(22张)和小阿卡纳(56张)。小阿卡纳又分为权杖、圣杯、宝剑和星币四组。</p>
-        </div>
+        <div><h3 class="font-medium text-accent">步骤1：选择牌组</h3><p class="text-sm">选择您想要抽取的塔罗牌组区域：大阿卡纳、小阿卡纳或全部牌组。</p></div>
+        <div><h3 class="font-medium text-accent">步骤2：选择数量</h3><p class="text-sm">选择您想要抽取的牌数量，范围从1到所选区域的最大牌数。</p></div>
+        <div><h3 class="font-medium text-accent">步骤3：查看结果</h3><p class="text-sm">查看随机抽取的塔罗牌结果，每张牌会随机分配正位或逆位。您可以复制结果到剪贴板。</p></div>
+        <div><h3 class="font-medium text-accent">查看牌详情</h3><p class="text-sm">在牌组信息区域点击任意牌名，可以查看该牌的详细解释，包括牌意、正位和逆位含义。</p></div>
+        <div><h3 class="font-medium text-accent">关于塔罗牌</h3><p class="text-sm">塔罗牌共有78张，分为大阿卡纳(22张)和小阿卡纳(56张)。小阿卡纳又分为权杖、圣杯、宝剑和星币四组。</p></div>
       </div>
-      
       <button id="closeHelpBtn2" class="mt-6 w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
         我知道了
       </button>
@@ -357,11 +279,8 @@
     <div class="bg-secondary rounded-lg p-6 max-w-3xl w-full mx-4 border border-primary/30 shadow-lg animate-slide-up max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center mb-4">
         <h2 id="cardDetailTitle" class="text-xl font-bold text-primary">塔罗牌详情</h2>
-        <button id="closeCardDetailBtn" class="text-gray-400 hover:text-white">
-          <i class="fa fa-times text-xl"></i>
-        </button>
+        <button id="closeCardDetailBtn" class="text-gray-400 hover:text-white"><i class="fa fa-times text-xl"></i></button>
       </div>
-      
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="flex justify-center items-center">
           <div id="cardImageContainer" class="relative max-w-[160px] w-full bg-gradient-to-b from-primary/30 to-dark rounded-lg overflow-hidden border border-primary/50 shadow-lg">
@@ -369,43 +288,16 @@
             <div id="cardNumber" class="absolute top-2 left-2 bg-primary/80 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">0</div>
             </div>
         </div>
-        
         <div class="space-y-4">
-          <div>
-            <h3 class="text-lg font-medium text-accent mb-1">牌名</h3>
-            <p id="cardName" class="text-light text-lg">愚者</p>
-          </div>
-          
-          <div>
-            <h3 class="text-lg font-medium text-accent mb-1">牌组</h3>
-            <p id="cardGroup" class="text-light">大阿卡纳</p>
-          </div>
-          
-          <div>
-            <h3 class="text-lg font-medium text-accent mb-1">牌意</h3>
-            <p id="cardDescription" class="text-light text-sm leading-relaxed">
-              愚者代表新的开始、冒险精神和纯真无邪。他站在悬崖边，象征着对未来的无限可能敞开心扉，勇敢地追求梦想而不畏惧风险。
-            </p>
-          </div>
-          
+          <div><h3 class="text-lg font-medium text-accent mb-1">牌名</h3><p id="cardName" class="text-light text-lg">愚者</p></div>
+          <div><h3 class="text-lg font-medium text-accent mb-1">牌组</h3><p id="cardGroup" class="text-light">大阿卡纳</p></div>
+          <div><h3 class="text-lg font-medium text-accent mb-1">牌意</h3><p id="cardDescription" class="text-light text-sm leading-relaxed">...</p></div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h3 class="text-md font-medium text-green-500 mb-1">正位含义</h3>
-              <p id="cardUpright" class="text-light text-xs leading-relaxed">
-                新的开始、自由、冒险、天真、灵感、创造力、无拘无束
-              </p>
-            </div>
-            
-            <div>
-              <h3 class="text-md font-medium text-red-500 mb-1">逆位含义</h3>
-              <p id="cardReversed" class="text-light text-xs leading-relaxed">
-                鲁莽、缺乏方向、不负责任、冒险过度、天真幼稚、逃避现实
-              </p>
-            </div>
+            <div><h3 class="text-md font-medium text-green-500 mb-1">正位含义</h3><p id="cardUpright" class="text-light text-xs leading-relaxed">...</p></div>
+            <div><h3 class="text-md font-medium text-red-500 mb-1">逆位含义</h3><p id="cardReversed" class="text-light text-xs leading-relaxed">...</p></div>
           </div>
         </div>
       </div>
-      
       <div class="mt-6 flex justify-end">
         <button id="closeCardDetailBtn2" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
           关闭
@@ -414,8 +306,29 @@
     </div>
   </div>
 
+  <div id="authorMessage" class="fixed inset-0 bg-dark/95 flex items-center justify-center z-50 animate-fade-in hidden">
+    <div class="bg-secondary rounded-lg p-8 max-w-sm w-full mx-4 border border-primary/50 shadow-2xl text-center">
+      <div id="authorAvatar" class="relative inline-block mb-4 cursor-pointer">
+        <img id="avatarImage" src="https://avatars.githubusercontent.com/u/244422201?u=4198b680c0c1279889dabc2c19167d011ebbeb10&v=4" class="w-20 h-20 rounded-full border-2 border-accent transition-transform duration-300">
+        <div class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-75"></div>
+      </div>
+      <h2 class="text-2xl font-bold text-accent mb-1">欢迎使用</h2>
+      <p class="text-sm font-medium text-light mb-1">塔罗牌抽取程序</p>
+      <p class="text-xs font-medium text-gray-400 mb-4">点击头像播放/暂停背景音乐</p>
+      <p class="text-sm font-medium text-primary mb-1">作者：嘟嘟可教主</p>
+      <a href="https://space.bilibili.com/425320157" target="_blank" class="text-blue-400 hover:text-blue-300 mb-4 flex items-center justify-center">
+        <i class="fa fa-external-link mr-1"></i> B站主页
+      </a>
+      <p class="text-sm text-gray-400 mb-2">感谢使用塔罗牌抽取程序</p>
+      <p class="text-xs text-gray-500 mb-6">该网页使用ai进行开发</p>
+      <button id="startBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
+        开始使用 <i class="fa fa-arrow-right ml-1"></i>
+      </button>
+    </div>
+  </div>
+
   <script>
-    // 塔罗牌数据（包含详细信息）
+    // --- 塔罗牌数据 ---
     const tarotCards = [
       // 大阿卡纳 (0-21)
       { 
@@ -962,23 +875,21 @@
       }
     ];
 
+    // --- 应用程序逻辑 (原 script.js) ---
+
     // 全局变量
     let selectedDeck = '';
     let selectedCount = 1;
     let drawnCards = [];
 
-    // --- 新增：创建音频元素 ---
-    // !!! 请在这里替换为你自己的音频文件URL !!!
+    // --- 创建音频元素 ---
     const authorAudio = new Audio('https://i.zk6.top/static/yx1//static/music/end.mp3'); 
     authorAudio.loop = true; // 循环播放
-    
+
     // --- 辅助函数 ---
 
     // 更新卡片数量显示和按钮状态
     function updateCardCount(newCount) {
-      // 🐛 修复 bug: 在 maxCards 尚未设置时，parseInt("") 返回 NaN。
-      //    如果此时用户点击 + 按钮，selectedCount 将计算为 NaN。
-      //    使用 || 78 确保在 maxCards 为空时使用 78 作为默认值，避免 NaN 错误。
       const maxCards = parseInt(document.getElementById('maxCards').textContent) || 78;
 
       selectedCount = Math.max(1, Math.min(newCount, maxCards));
@@ -996,7 +907,6 @@
     function manualCountSubmit() {
       const input = document.getElementById('manualCountInput');
       const inputValue = parseInt(input.value);
-      // 🐛 修复 bug: 同样需要确保 maxCards 是一个数字
       const maxCards = parseInt(document.getElementById('maxCards').textContent) || 78;
       
       if (isNaN(inputValue) || inputValue < 1 || inputValue > maxCards) {
@@ -1008,11 +918,9 @@
 
     // 返回步骤1
     function backToStep1() {
-      // 获取指示器元素
       const step1Indicator = document.getElementById('step1Indicator').querySelector('div');
       const step2Indicator = document.getElementById('step2Indicator').querySelector('div');
 
-      // 更新步骤指示器
       step2Indicator.classList.remove('bg-primary');
       step2Indicator.classList.add('bg-secondary');
       step2Indicator.classList.remove('text-dark');
@@ -1022,28 +930,23 @@
       step1Indicator.classList.remove('text-light');
       step1Indicator.classList.add('text-dark');
 
-      // 更新进度条
       document.getElementById('progressBar').style.width = '0%';
       document.getElementById('progressBar2').style.width = '0%';
 
-      // 取消牌组选择
       const deckOptions = document.querySelectorAll('.deck-option');
       deckOptions.forEach(opt => opt.classList.remove('deck-selected'));
       selectedDeck = '';
       document.getElementById('confirmDeckBtn').disabled = true;
 
-      // 显示步骤1
       document.getElementById('step2').classList.add('hidden');
       document.getElementById('step1').classList.remove('hidden');
     }
 
     // 返回步骤2
     function backToStep2() {
-      // 获取指示器元素
       const step2Indicator = document.getElementById('step2Indicator').querySelector('div');
       const step3Indicator = document.getElementById('step3Indicator').querySelector('div');
 
-      // 更新步骤指示器
       step3Indicator.classList.remove('bg-primary');
       step3Indicator.classList.add('bg-secondary');
       step3Indicator.classList.remove('text-dark');
@@ -1053,25 +956,20 @@
       step2Indicator.classList.remove('text-light');
       step2Indicator.classList.add('text-dark');
 
-      // 更新进度条
       document.getElementById('progressBar2').style.width = '0%';
 
-      // 显示步骤2
       document.getElementById('step3').classList.add('hidden');
       document.getElementById('step2').classList.remove('hidden');
     }
 
     // 抽取塔罗牌
     function drawCards() {
-      // 检查牌数是否有效
-      // 🐛 修复 bug: 同样需要确保 maxCards 是一个数字
       const maxCards = parseInt(document.getElementById('maxCards').textContent) || 78;
       if (selectedCount < 1 || selectedCount > maxCards) {
         document.getElementById('countErrorMessage').classList.remove('hidden');
         return;
       }
 
-      // 更新步骤指示器
       const step2Indicator = document.getElementById('step2Indicator').querySelector('div');
       const step3Indicator = document.getElementById('step3Indicator').querySelector('div');
       
@@ -1084,32 +982,26 @@
       step3Indicator.classList.remove('text-light');
       step3Indicator.classList.add('text-dark');
       
-      // 更新进度条
       document.getElementById('progressBar2').style.width = '100%';
 
-      // 隐藏步骤2，显示步骤3
       document.getElementById('step2').classList.add('hidden');
       document.getElementById('step3').classList.remove('hidden');
 
-      // 抽取逻辑
       let deckToDraw = [];
       if (selectedDeck === 'a') {
         deckToDraw = tarotCards.filter(card => card.type === 'major');
       } else if (selectedDeck === 'b') {
         deckToDraw = tarotCards.filter(card => card.type === 'minor');
       } else if (selectedDeck === 'z') {
-        deckToDraw = [...tarotCards]; // 全部牌组
+        deckToDraw = [...tarotCards]; 
       }
 
-      // 随机洗牌
       for (let i = deckToDraw.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [deckToDraw[i], deckToDraw[j]] = [deckToDraw[j], deckToDraw[i]];
       }
 
-      // 抽取选定数量的牌
       drawnCards = deckToDraw.slice(0, selectedCount).map(card => {
-        // 随机决定正位或逆位
         const isReversed = Math.random() < 0.5;
         return {
           ...card,
@@ -1117,7 +1009,6 @@
         };
       });
 
-      // 渲染结果
       renderResults();
     }
 
@@ -1131,19 +1022,14 @@
         const cardDiv = document.createElement('div');
         cardDiv.className = 'flex items-center p-3 bg-dark rounded-md border border-primary/20 shadow-md animate-slide-up hover:border-accent transition-all cursor-pointer';
         cardDiv.style.animationDelay = `${index * 0.1}s`;
-
-        // 为卡片添加点击事件，点击时调用 showCardDetail 并传入这张卡片的数据
-        // (这张 card 对象包含了 'position' 属性)
         cardDiv.addEventListener('click', () => showCardDetail(card));
 
-        // 设置卡片颜色
         let cardColor = 'text-primary';
         if (card.suit === 'wands') cardColor = 'text-red-500';
         if (card.suit === 'cups') cardColor = 'text-blue-500';
         if (card.suit === 'swords') cardColor = 'text-gray-300';
         if (card.suit === 'pentacles') cardColor = 'text-yellow-500';
 
-        // 设置位置颜色
         const positionColor = card.position === '正位' ? 'text-green-500' : 'text-red-500';
 
         cardDiv.innerHTML = `
@@ -1183,13 +1069,12 @@
     }
 
     // 重新开始 (刷新网站)
-function restart() {
-  window.location.reload(); // 刷新当前页面
-}
+    function restart() {
+      window.location.reload(); 
+    }
 
     // 初始化牌组信息列表
     function initializeDeckLists() {
-      // 大阿卡纳
       const majorArcanaList = document.getElementById('majorArcanaList');
       tarotCards.filter(card => card.type === 'major').forEach(card => {
         const div = document.createElement('div');
@@ -1200,7 +1085,6 @@ function restart() {
         majorArcanaList.appendChild(div);
       });
 
-      // 小阿卡纳 - 权杖
       const wandsList = document.getElementById('wandsList');
       tarotCards.filter(card => card.suit === 'wands').forEach(card => {
         const div = document.createElement('div');
@@ -1211,7 +1095,6 @@ function restart() {
         wandsList.appendChild(div);
       });
 
-      // 小阿卡纳 - 圣杯
       const cupsList = document.getElementById('cupsList');
       tarotCards.filter(card => card.suit === 'cups').forEach(card => {
         const div = document.createElement('div');
@@ -1222,7 +1105,6 @@ function restart() {
         cupsList.appendChild(div);
       });
 
-      // 小阿卡纳 - 宝剑
       const swordsList = document.getElementById('swordsList');
       tarotCards.filter(card => card.suit === 'swords').forEach(card => {
         const div = document.createElement('div');
@@ -1233,7 +1115,6 @@ function restart() {
         swordsList.appendChild(div);
       });
 
-      // 小阿卡纳 - 星币
       const pentaclesList = document.getElementById('pentaclesList');
       tarotCards.filter(card => card.suit === 'pentacles').forEach(card => {
         const div = document.createElement('div');
@@ -1247,22 +1128,18 @@ function restart() {
 
     // 显示塔罗牌详情
     function showCardDetail(card) {
-      // 获取模态框元素
       const cardDetailModal = document.getElementById('cardDetailModal');
       const cardDetailTitle = document.getElementById('cardDetailTitle');
       const cardImage = document.getElementById('cardImage');
       const cardNumber = document.getElementById('cardNumber');
-      // const cardOrientation = document.getElementById('cardOrientation'); // ❗ 已根据用户要求移除
       const cardName = document.getElementById('cardName');
       const cardGroup = document.getElementById('cardGroup');
       const cardDescription = document.getElementById('cardDescription');
       const cardUpright = document.getElementById('cardUpright');
       const cardReversed = document.getElementById('cardReversed');
 
-      // 设置标题
       cardDetailTitle.textContent = `${card.name} 详情`;
 
-      // 设置图片
       if (card.image && card.image.trim() !== '') {
         cardImage.src = card.image;
         cardImage.style.display = 'block';
@@ -1270,23 +1147,16 @@ function restart() {
         cardImage.style.display = 'none';
       }
 
-      // 🚀 牌图逆位显示逻辑：如果抽到的牌是逆位，则旋转图片 180 度。
-      cardImage.style.transition = 'transform 0.5s ease-in-out'; // 添加平滑过渡
+      cardImage.style.transition = 'transform 0.5s ease-in-out'; 
       if (card.position === '逆位') {
         cardImage.style.transform = 'rotate(180deg)';
       } else {
-        // 包括信息列表中的牌（默认视为正位）和抽取到的正位牌
         cardImage.style.transform = 'rotate(0deg)';
       }
 
-      // 设置编号
       cardNumber.textContent = card.id;
-
-      // 牌位模块已移除，不再设置 cardOrientation 的内容和样式
-
-      // 设置牌名、牌组、牌意
       cardName.textContent = card.name;
-      // 检查 card.suit 是否存在 (用于小阿卡纳)
+      
       const groupText = card.type === 'major' ? '大阿卡纳' : 
                         (card.suit === 'wands' ? '小阿卡纳 - 权杖' : 
                         (card.suit === 'cups' ? '小阿卡纳 - 圣杯' : 
@@ -1294,67 +1164,15 @@ function restart() {
                         (card.suit === 'pentacles' ? '小阿卡纳 - 星币' : '未知'))));
       cardGroup.textContent = groupText;
       cardDescription.textContent = card.description || '暂无信息';
-
-      // 设置正位含义
       cardUpright.textContent = card.upright || '暂无信息';
-
-      // 设置逆位含义
       cardReversed.textContent = card.reversed || '暂无信息';
 
-      // 显示模态框
       cardDetailModal.classList.remove('hidden');
     }
 
-    // 显示作者信息弹窗（启动页）
+    //  显示作者信息弹窗 
     function showAuthorMessage() {
-      const authorMessage = document.createElement('div');
-      authorMessage.id = 'authorMessage';
-      authorMessage.className = 'fixed inset-0 bg-dark/95 flex items-center justify-center z-50 animate-fade-in';
-      authorMessage.innerHTML = `
-        <div class="bg-secondary rounded-lg p-8 max-w-sm w-full mx-4 border border-primary/50 shadow-2xl text-center">
-          <div id="authorAvatar" class="relative inline-block mb-4 cursor-pointer">
-            <img id="avatarImage" src="https://avatars.githubusercontent.com/u/244422201?u=4198b680c0c1279889dabc2c19167d011ebbeb10&v=4" class="w-20 h-20 rounded-full border-2 border-accent transition-transform duration-300">
-            <div class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-75"></div>
-          </div>
-          <h2 class="text-2xl font-bold text-accent mb-1">欢迎使用</h2>
-          <p class="text-sm font-medium text-light mb-1">塔罗牌抽取程序</p>
-          <p class="text-xs font-medium text-gray-400 mb-4">点击头像播放/暂停背景音乐</p>
-          <p class="text-sm font-medium text-primary mb-1">作者：嘟嘟可教主</p>
-          <a href="https://space.bilibili.com/425320157" target="_blank" class="text-blue-400 hover:text-blue-300 mb-4 flex items-center justify-center">
-            <i class="fa fa-external-link mr-1"></i> B站主页
-          </a>
-          <p class="text-sm text-gray-400 mb-2">感谢使用塔罗牌抽取程序</p>
-          <p class="text-xs text-gray-500 mb-6">该网页使用ai进行开发</p>
-          <button id="startBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
-            开始使用 <i class="fa fa-arrow-right ml-1"></i>
-          </button>
-        </div>
-      `;
-      document.body.appendChild(authorMessage);
-
-      document.getElementById('startBtn').addEventListener('click', function() {
-        // 停止音乐
-        authorAudio.pause();
-        // 移除旋转和模糊类
-        document.getElementById('avatarImage').classList.remove('spin-blur', 'animate-full-spin');
-        // 关闭弹窗 (立即移除，取消动画)
-        document.body.removeChild(authorMessage);
-      });
-
-      // 头像旋转/音乐功能
-      const avatar = document.getElementById('avatarImage');
-      let isSpinning = false; // 状态标志
-      document.getElementById('authorAvatar').addEventListener('click', function() {
-        if (authorAudio.paused) {
-          authorAudio.play();
-          avatar.classList.add('spin-blur', 'animate-full-spin');
-          isSpinning = true;
-        } else {
-          authorAudio.pause();
-          avatar.classList.remove('spin-blur', 'animate-full-spin');
-          isSpinning = false;
-        }
-      });
+      document.getElementById('authorMessage').classList.remove('hidden');
     }
 
     // --- 事件监听器和初始化 ---
@@ -1394,8 +1212,6 @@ function restart() {
           
           selectedDeckName.textContent = deckName;
           maxCardsSpan.textContent = maxCount;
-          
-          // 确保选择牌组后，抽牌数量重置或调整到有效范围
           updateCardCount(Math.min(selectedCount, maxCount));
         });
       });
@@ -1403,7 +1219,6 @@ function restart() {
       confirmDeckBtn.addEventListener('click', () => {
         if (!selectedDeck) return;
         
-        // 更新步骤指示器
         const step1Indicator = document.getElementById('step1Indicator').querySelector('div');
         const step2Indicator = document.getElementById('step2Indicator').querySelector('div');
 
@@ -1416,15 +1231,12 @@ function restart() {
         step2Indicator.classList.remove('text-light');
         step2Indicator.classList.add('text-dark');
         
-        // 更新进度条
         document.getElementById('progressBar').style.width = '100%';
         
-        // 隐藏步骤1，显示步骤2
         document.getElementById('step1').classList.add('hidden');
         document.getElementById('step2').classList.remove('hidden');
         document.getElementById('step2').classList.add('animate-fade-in');
         
-        // 再次确保数量在有效范围内
         updateCardCount(selectedCount);
       });
       
@@ -1436,7 +1248,7 @@ function restart() {
       document.getElementById('increaseBtn').addEventListener('click', () => {
         updateCardCount(selectedCount + 1);
       });
-      
+
       // 5. 帮助模态框
       const helpModal = document.getElementById('helpModal');
       const closeHelpBtns = document.querySelectorAll('#helpBtn, #closeHelpBtn, #closeHelpBtn2');
@@ -1461,10 +1273,36 @@ function restart() {
         });
       });
 
-      // 7. 初始数量设置 (确保页面加载时显示为 1)
+      // 7. 初始数量设置
       updateCardCount(1);
+      
+      // 8. 绑定之前内联的事件
+      document.getElementById('manualCountSubmitBtn').addEventListener('click', manualCountSubmit);
+      document.getElementById('backToStep1Btn').addEventListener('click', backToStep1);
+      document.getElementById('drawCardsBtn').addEventListener('click', drawCards);
+      document.getElementById('backToStep2Btn').addEventListener('click', backToStep2);
+      document.getElementById('copyBtn').addEventListener('click', copyResults);
+      document.getElementById('restartBtn').addEventListener('click', restart);
+
+      // 9. 绑定作者信息弹窗的事件
+      document.getElementById('startBtn').addEventListener('click', function() {
+        authorAudio.pause();
+        document.getElementById('avatarImage').classList.remove('spin-blur', 'animate-full-spin');
+        // 隐藏弹窗
+        document.getElementById('authorMessage').classList.add('hidden');
+      });
+
+      const avatar = document.getElementById('avatarImage');
+      document.getElementById('authorAvatar').addEventListener('click', function() {
+        if (authorAudio.paused) {
+          authorAudio.play();
+          avatar.classList.add('spin-blur', 'animate-full-spin');
+        } else {
+          authorAudio.pause();
+          avatar.classList.remove('spin-blur', 'animate-full-spin');
+        }
+      });
     });
   </script>
 </body>
 </html>
-
