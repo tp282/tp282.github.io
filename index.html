@@ -191,7 +191,7 @@
               </div>
               
               <button onclick="generatePrompt()" class="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 px-4 py-2 rounded-md transition-colors flex items-center justify-center font-medium">
-                <i class="fa fa-terminal mr-2"></i> 生成指令 (复制给你使用的AI)
+                <i class="fa fa-terminal mr-2"></i> 生成指令 (复制给AI)
               </button>
               
               <div class="relative">
@@ -1175,8 +1175,7 @@
 **【第二阶段：解读准备】**
 等待用户提供抽出的牌面后（例如：牌位1是XX牌正位，牌位2是YY牌逆位），你将继续：
 1. 结合牌阵的位置意义和牌面的通用含义进行详细解读。
-2. 为用户提供一个清晰、富有建设性的**总结和建议**。
-3. 进行通俗易懂的总结并给出建议`;
+2. 为用户提供一个清晰、富有建设性的**总结和建议**。`;
 
       promptOutput.value = prompt;
       promptOutput.select();
@@ -1310,7 +1309,7 @@
       // 步骤1：牌组选择
       const deckOptions = document.querySelectorAll('.deck-option');
       const confirmDeckBtn = document.getElementById('confirmDeckBtn');
-      const selectedDeckName = document.getElementById('selectedDeckName');
+      // 修复：移除了 selectedDeckName 的引用，因为它在HTML中已不存在
       const maxCardsSpan = document.getElementById('maxCards');
       
       deckOptions.forEach(option => {
@@ -1333,7 +1332,7 @@
             maxCount = 78;
           }
           
-          selectedDeckName.textContent = deckName;
+          // 修复：移除了 selectedDeckName.textContent 的设置
           maxCardsSpan.textContent = maxCount;
           updateCardCount(Math.min(selectedCount, maxCount));
         });
