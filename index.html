@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>塔罗牌抽取程序</title>
+  <title>塔罗牌抽取程序 & AI 解读助手</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
   
@@ -131,14 +131,14 @@
       </div>
       <div id="step2Indicator" class="flex flex-col items-center">
         <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-light font-bold">2</div>
-        <p class="mt-2 text-sm">选择数量</p>
+        <p class="mt-2 text-sm">抽牌设置</p>
       </div>
       <div class="flex-grow h-1 bg-secondary mx-2 mt-5 relative">
         <div id="progressBar2" class="absolute top-0 left-0 h-full bg-primary transition-all duration-500" style="width: 0%"></div>
       </div>
       <div id="step3Indicator" class="flex flex-col items-center">
         <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-light font-bold">3</div>
-        <p class="mt-2 text-sm">查看结果</p>
+        <p class="mt-2 text-sm">结果与解读</p>
       </div>
     </div>
 
@@ -170,30 +170,69 @@
 
       <section id="step2" class="hidden animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
-          <h2 class="text-xl font-bold mb-4 text-center">选择要抽取的牌数量</h2>
-          <div class="mb-4">
-            <p class="text-center mb-2">当前选择：<span id="selectedDeckName" class="text-primary font-medium"></span></p>
-            <p class="text-center text-sm text-gray-400">可抽取 <span id="minCards">1</span> - <span id="maxCards"></span> 张牌</p>
+          <h2 class="text-xl font-bold mb-2 text-center">设置抽牌选项</h2>
+          
+          <div class="flex justify-center mb-6">
+             <button id="toggleAiBtn" class="group flex items-center space-x-3 bg-dark border border-primary/30 px-5 py-2 rounded-full text-gray-400 hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 shadow-md">
+               <i class="fa fa-toggle-off text-2xl text-gray-500 transition-colors group-hover:text-gray-300" id="toggleAiIcon"></i>
+               <span class="font-medium" id="toggleAiText">开启 AI 占卜助手</span>
+             </button>
           </div>
-          <div class="flex items-center justify-center space-x-4">
-            <button id="decreaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
-              <i class="fa fa-minus text-primary"></i>
-            </button>
-            <div class="text-4xl font-bold text-center w-20" id="cardCount">1</div>
-            <button id="increaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
-              <i class="fa fa-plus text-primary"></i>
-            </button>
-          </div>
-          <div class="mt-6">
-            <label for="manualCountInput" class="block text-sm font-medium mb-2">或手动输入：</label>
-            <div class="flex">
-              <input type="number" id="manualCountInput" class="flex-grow bg-dark border border-primary/30 rounded-l-md px-4 py-2 focus:outline-none focus:border-primary" min="1" max="" placeholder="输入牌数量">
-              <button id="manualCountSubmitBtn" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-r-md transition-colors">确认</button>
+
+          <div id="aiSection" class="hidden mb-8 bg-dark/40 rounded-lg p-4 border border-primary/30 animate-fade-in">
+            <h3 class="text-lg font-bold text-accent mb-3 text-center">
+              <i class="fa fa-magic mr-1"></i> 第一步：生成 AI 占卜指令
+            </h3>
+            
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">你心中的困惑/问题：</label>
+                <input type="text" id="userQuestion" class="w-full bg-secondary border border-primary/30 rounded px-3 py-2 text-light focus:outline-none focus:border-primary transition-colors" placeholder="例如：我这段感情未来的发展如何？">
+              </div>
+              
+              <button onclick="generatePrompt()" class="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 px-4 py-2 rounded-md transition-colors flex items-center justify-center font-medium">
+                <i class="fa fa-terminal mr-2"></i> 生成指令 (AI将推荐牌阵和张数)
+              </button>
+              
+              <div class="relative">
+                <textarea id="promptOutput" class="w-full h-32 bg-secondary border border-primary/30 rounded px-3 py-2 text-xs text-gray-300 focus:outline-none resize-none font-mono" readonly placeholder="点击生成按钮，获取发送给AI的指令..."></textarea>
+                <button onclick="copyPromptText()" class="absolute top-2 right-2 text-gray-400 hover:text-white bg-dark/50 rounded px-2 py-1 text-xs border border-gray-600">
+                  <i class="fa fa-clipboard"></i> 复制
+                </button>
+              </div>
+              <div id="aiPromptTip" class="text-sm text-yellow-400 text-center hidden bg-yellow-400/10 p-2 rounded border border-yellow-400/30">
+                <i class="fa fa-lightbulb-o mr-1"></i> 
+                <strong>重要：</strong>请将指令复制给 AI。AI 回复后，请根据它推荐的<strong>张数</strong>，在下方调整抽牌数量。
+              </div>
             </div>
           </div>
-          <div id="countErrorMessage" class="mt-4 text-red-500 text-center hidden">
-            <i class="fa fa-exclamation-circle mr-1"></i> 请输入有效的数量
+          
+          <div class="mb-4 pt-4 border-t border-primary/20">
+            <p class="text-center mb-2 font-bold text-primary" id="quantityTitle">设置抽牌数量</p>
+            <p class="text-center text-sm text-gray-400 mb-4">当前牌组可抽取 <span id="minCards">1</span> - <span id="maxCards"></span> 张牌</p>
+            
+            <div class="flex items-center justify-center space-x-4">
+              <button id="decreaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
+                <i class="fa fa-minus text-primary"></i>
+              </button>
+              <div class="text-4xl font-bold text-center w-20" id="cardCount">1</div>
+              <button id="increaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
+                <i class="fa fa-plus text-primary"></i>
+              </button>
+            </div>
+            
+            <div class="mt-4">
+              <div class="flex justify-center items-center">
+                <label for="manualCountInput" class="text-sm font-medium mr-2">或手动输入：</label>
+                <input type="number" id="manualCountInput" class="w-20 bg-dark border border-primary/30 rounded-l-md px-2 py-1 focus:outline-none focus:border-primary" min="1" max="" placeholder="数量">
+                <button id="manualCountSubmitBtn" class="bg-primary hover:bg-primary/80 text-white px-3 py-1 rounded-r-md transition-colors text-sm">确认</button>
+              </div>
+            </div>
+            <div id="countErrorMessage" class="mt-4 text-red-500 text-center hidden">
+              <i class="fa fa-exclamation-circle mr-1"></i> 请输入有效的数量
+            </div>
           </div>
+
           <div class="mt-6 flex justify-between">
             <button id="backToStep1Btn" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
               <i class="fa fa-arrow-left mr-1"></i> 返回
@@ -208,22 +247,25 @@
       <section id="step3" class="hidden">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 class="text-xl font-bold mb-4 text-center">塔罗牌抽取结果</h2>
+          
           <div id="resultContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2"></div>
+          
+          <div id="copySuccess" class="mt-4 text-green-500 text-center hidden p-2 bg-green-500/10 rounded border border-green-500/30">
+            <i class="fa fa-check-circle mr-1"></i> 已复制到剪贴板
+          </div>
+
           <div class="mt-6 flex justify-between">
             <button id="backToStep2Btn" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
               <i class="fa fa-arrow-left mr-1"></i> 重新选择
             </button>
             <div class="flex space-x-2">
               <button id="copyBtn" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
-                <i class="fa fa-copy mr-1"></i> 复制结果
+                <i class="fa fa-copy mr-1"></i> <span id="copyBtnText">复制结果</span>
               </button>
               <button id="restartBtn" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
                 刷新 <i class="fa fa-refresh ml-1"></i>
               </button>
             </div>
-          </div>
-          <div id="copySuccess" class="mt-4 text-green-500 text-center hidden">
-            <i class="fa fa-check-circle mr-1"></i> 已复制到剪贴板
           </div>
         </div>
       </section>
@@ -264,10 +306,13 @@
       </div>
       <div class="space-y-4">
         <div><h3 class="font-medium text-accent">步骤1：选择牌组</h3><p class="text-sm">选择您想要抽取的塔罗牌组区域：大阿卡纳、小阿卡纳或全部牌组。</p></div>
-        <div><h3 class="font-medium text-accent">步骤2：选择数量</h3><p class="text-sm">选择您想要抽取的牌数量，范围从1到所选区域的最大牌数。</p></div>
-        <div><h3 class="font-medium text-accent">步骤3：查看结果</h3><p class="text-sm">查看随机抽取的塔罗牌结果，每张牌会随机分配正位或逆位。您可以复制结果到剪贴板。</p></div>
-        <div><h3 class="font-medium text-accent">查看牌详情</h3><p class="text-sm">在牌组信息区域点击任意牌名，可以查看该牌的详细解释，包括牌意、正位和逆位含义。</p></div>
-        <div><h3 class="font-medium text-accent">关于塔罗牌</h3><p class="text-sm">塔罗牌共有78张，分为大阿卡纳(22张)和小阿卡纳(56张)。小阿卡纳又分为权杖、圣杯、宝剑和星币四组。</p></div>
+        <div>
+          <h3 class="font-medium text-accent">步骤2：抽牌设置</h3>
+          <p class="text-sm">1. 您可以直接设置抽牌数量。</p>
+          <p class="text-sm">2. <strong>（可选）开启 AI 占卜助手</strong>：生成专业指令发给 AI，获取牌阵和张数建议，再调整下方数量。</p>
+        </div>
+        <div><h3 class="font-medium text-accent">步骤3：抽取与解读</h3><p class="text-sm">抽取塔罗牌。如果开启了 AI 助手，请复制结果给 AI 进行专业解读。</p></div>
+        <div><h3 class="font-medium text-accent">查看牌详情</h3><p class="text-sm">在牌组信息区域点击任意牌名，可以查看该牌的详细解释。</p></div>
       </div>
       <button id="closeHelpBtn2" class="mt-6 w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
         我知道了
@@ -328,7 +373,7 @@
   </div>
 
   <script>
-    // --- 塔罗牌数据 ---
+    // --- 塔罗牌数据 (完整的 78 张) ---
     const tarotCards = [
       // 大阿卡纳 (0-21)
       { 
@@ -875,12 +920,13 @@
       }
     ];
 
-    // --- 应用程序逻辑 (原 script.js) ---
+    // --- 应用程序逻辑 ---
 
     // 全局变量
     let selectedDeck = '';
     let selectedCount = 1;
     let drawnCards = [];
+    let aiModeActive = false; // 新增：标记是否启用 AI 模式
 
     // --- 创建音频元素 ---
     const authorAudio = new Audio('https://i.zk6.top/static/yx1//static/music/end.mp3'); 
@@ -940,6 +986,11 @@
 
       document.getElementById('step2').classList.add('hidden');
       document.getElementById('step1').classList.remove('hidden');
+      
+      // 重置 AI 输入
+      document.getElementById('userQuestion').value = '';
+      document.getElementById('promptOutput').value = '';
+      document.getElementById('aiPromptTip').classList.add('hidden');
     }
 
     // 返回步骤2
@@ -960,6 +1011,10 @@
 
       document.getElementById('step3').classList.add('hidden');
       document.getElementById('step2').classList.remove('hidden');
+      
+      // 重置抽卡结果
+      drawnCards = [];
+      document.getElementById('copySuccess').classList.add('hidden');
     }
 
     // 抽取塔罗牌
@@ -1018,6 +1073,18 @@
       resultContainer.innerHTML = '';
       document.getElementById('copySuccess').classList.add('hidden');
 
+      // 仅当启用 AI 模式时，才显示提示
+      if (aiModeActive) {
+        const tipDiv = document.createElement('div');
+        tipDiv.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
+        tipDiv.innerHTML = '<i class="fa fa-info-circle mr-1"></i> AI 助手已就绪：点击下方“复制结果给 AI”，将结果发送给 AI 解读。';
+        resultContainer.appendChild(tipDiv);
+        
+        document.getElementById('copyBtnText').textContent = "复制结果给 AI";
+      } else {
+        document.getElementById('copyBtnText').textContent = "复制结果";
+      }
+
       drawnCards.forEach((card, index) => {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'flex items-center p-3 bg-dark rounded-md border border-primary/20 shadow-md animate-slide-up hover:border-accent transition-all cursor-pointer';
@@ -1040,7 +1107,7 @@
               </div>
               <div>
                 <h3 class="font-medium ${cardColor}">${card.name}</h3>
-                <p class="text-xs text-gray-400">编号: ${card.id}</p>
+                <p class="text-xs text-gray-400">牌位: ${index + 1}</p>
               </div>
             </div>
             <span class="px-2 py-1 rounded-full font-bold text-sm ${positionColor} bg-dark/70">
@@ -1052,14 +1119,26 @@
       });
     }
 
-    // 复制结果
+    // 复制结果 (格式化为 AI 可读或普通文本)
     function copyResults() {
       const resultsText = drawnCards.map((card, index) => 
-        `${index + 1}. ${card.name} (${card.position})`
-      ).join('\n');
+        `牌位${index + 1}: ${card.name} (${card.position})`
+      ).join('，');
+      
+      let fullText = '';
+      if (aiModeActive) {
+        fullText = `【我抽到的牌面】：\n${resultsText}。\n请根据之前的牌阵定义开始解读。`;
+      } else {
+        fullText = `塔罗牌抽取结果：\n${resultsText}`;
+      }
 
-      navigator.clipboard.writeText(resultsText).then(() => {
+      navigator.clipboard.writeText(fullText).then(() => {
         const copySuccess = document.getElementById('copySuccess');
+        if (aiModeActive) {
+           copySuccess.innerHTML = '<i class="fa fa-check-circle mr-1"></i> 牌面已复制！请粘贴给 AI。';
+        } else {
+           copySuccess.innerHTML = '<i class="fa fa-check-circle mr-1"></i> 结果已复制到剪贴板。';
+        }
         copySuccess.classList.remove('hidden');
         setTimeout(() => copySuccess.classList.add('hidden'), 3000);
       }).catch(err => {
@@ -1067,66 +1146,116 @@
         alert('复制失败，请手动复制。');
       });
     }
+    
+    // --- 核心：AI 提示词生成器 ---
+    function generatePrompt() {
+      const question = document.getElementById('userQuestion').value.trim();
+      const promptOutput = document.getElementById('promptOutput');
+      const aiPromptTip = document.getElementById('aiPromptTip');
+      
+      if (!question) {
+        promptOutput.value = "请输入您心中的困惑，以便生成精准指令。";
+        return;
+      }
+      
+      const prompt = `请扮演一位专业且公正的塔罗牌解读师。
 
-    // 重新开始 (刷新网站)
+**【第一阶段：牌阵推荐】**
+根据以下用户提出的问题，你必须：
+1. 分析问题类型（例如：感情、事业、自我成长）。
+2. 推荐几个适合此问题的塔罗牌阵。
+3. 明确说明这个牌阵需要抽取**多少张牌**。
+4. 明确说明这个牌阵中每张牌所代表的**位置意义**（例如：过去、现在、挑战、结果）。
+
+用户的问题是：
+"""${question}"""
+
+---
+
+**【第二阶段：解读准备】**
+等待用户提供抽出的牌面后（例如：牌位1是XX牌正位，牌位2是YY牌逆位），你将继续：
+1. 结合牌阵的位置意义和牌面的通用含义进行详细解读。
+2. 为用户提供一个清晰、富有建设性的**总结和建议**。
+3. 进行通俗易懂的总结并给出建议`;
+
+      promptOutput.value = prompt;
+      promptOutput.select();
+      
+      aiPromptTip.classList.remove('hidden');
+    }
+
+    function copyPromptText() {
+      const promptOutput = document.getElementById('promptOutput');
+      if (!promptOutput.value) return;
+      
+      promptOutput.select();
+      navigator.clipboard.writeText(promptOutput.value).then(() => {
+        const aiPromptTip = document.getElementById('aiPromptTip');
+        aiPromptTip.innerHTML = '<i class="fa fa-check-circle mr-1"></i> 指令已复制！请发送给AI，然后根据AI建议的**张数**调整下方设置。';
+        aiPromptTip.classList.remove('bg-yellow-400/10', 'border-yellow-400/30', 'text-yellow-400');
+        aiPromptTip.classList.add('bg-green-500/10', 'border-green-500/30', 'text-green-500');
+      });
+    }
+
+    // --- 新增：AI 开关逻辑 ---
+    function toggleAiMode() {
+      const aiSection = document.getElementById('aiSection');
+      const toggleBtn = document.getElementById('toggleAiBtn');
+      const toggleIcon = document.getElementById('toggleAiIcon');
+      const toggleText = document.getElementById('toggleAiText');
+      const quantityTitle = document.getElementById('quantityTitle');
+
+      aiModeActive = !aiModeActive;
+
+      if (aiModeActive) {
+        // 开启状态
+        aiSection.classList.remove('hidden');
+        toggleIcon.classList.remove('fa-toggle-off', 'text-gray-500');
+        toggleIcon.classList.add('fa-toggle-on', 'text-primary');
+        toggleText.textContent = "关闭 AI 占卜助手";
+        toggleText.classList.add('text-primary');
+        quantityTitle.textContent = "第二步：设置抽牌数量";
+      } else {
+        // 关闭状态
+        aiSection.classList.add('hidden');
+        toggleIcon.classList.remove('fa-toggle-on', 'text-primary');
+        toggleIcon.classList.add('fa-toggle-off', 'text-gray-500');
+        toggleText.textContent = "开启 AI 占卜助手";
+        toggleText.classList.remove('text-primary');
+        quantityTitle.textContent = "设置抽牌数量";
+      }
+    }
+
+    // 重新开始
     function restart() {
       window.location.reload(); 
     }
 
-    // 初始化牌组信息列表
+    // 初始化牌组列表
     function initializeDeckLists() {
       const majorArcanaList = document.getElementById('majorArcanaList');
-      tarotCards.filter(card => card.type === 'major').forEach(card => {
-        const div = document.createElement('div');
-        div.className = 'bg-dark/50 p-1 rounded text-center hover:text-primary transition-colors cursor-pointer';
-        div.textContent = card.name;
-        div.title = `编号: ${card.id}`;
-        div.addEventListener('click', () => showCardDetail(card));
-        majorArcanaList.appendChild(div);
-      });
-
       const wandsList = document.getElementById('wandsList');
-      tarotCards.filter(card => card.suit === 'wands').forEach(card => {
-        const div = document.createElement('div');
-        div.className = 'bg-dark/50 p-1 rounded text-center hover:text-primary transition-colors cursor-pointer';
-        div.textContent = card.name;
-        div.title = `编号: ${card.id}`;
-        div.addEventListener('click', () => showCardDetail(card));
-        wandsList.appendChild(div);
-      });
-
       const cupsList = document.getElementById('cupsList');
-      tarotCards.filter(card => card.suit === 'cups').forEach(card => {
-        const div = document.createElement('div');
-        div.className = 'bg-dark/50 p-1 rounded text-center hover:text-primary transition-colors cursor-pointer';
-        div.textContent = card.name;
-        div.title = `编号: ${card.id}`;
-        div.addEventListener('click', () => showCardDetail(card));
-        cupsList.appendChild(div);
-      });
-
       const swordsList = document.getElementById('swordsList');
-      tarotCards.filter(card => card.suit === 'swords').forEach(card => {
-        const div = document.createElement('div');
-        div.className = 'bg-dark/50 p-1 rounded text-center hover:text-primary transition-colors cursor-pointer';
-        div.textContent = card.name;
-        div.title = `编号: ${card.id}`;
-        div.addEventListener('click', () => showCardDetail(card));
-        swordsList.appendChild(div);
-      });
-
       const pentaclesList = document.getElementById('pentaclesList');
-      tarotCards.filter(card => card.suit === 'pentacles').forEach(card => {
+      
+      const renderCard = (card, container) => {
         const div = document.createElement('div');
         div.className = 'bg-dark/50 p-1 rounded text-center hover:text-primary transition-colors cursor-pointer';
         div.textContent = card.name;
         div.title = `编号: ${card.id}`;
         div.addEventListener('click', () => showCardDetail(card));
-        pentaclesList.appendChild(div);
-      });
+        container.appendChild(div);
+      };
+
+      tarotCards.filter(card => card.type === 'major').forEach(card => renderCard(card, majorArcanaList));
+      tarotCards.filter(card => card.suit === 'wands').forEach(card => renderCard(card, wandsList));
+      tarotCards.filter(card => card.suit === 'cups').forEach(card => renderCard(card, cupsList));
+      tarotCards.filter(card => card.suit === 'swords').forEach(card => renderCard(card, swordsList));
+      tarotCards.filter(card => card.suit === 'pentacles').forEach(card => renderCard(card, pentaclesList));
     }
 
-    // 显示塔罗牌详情
+    // 显示详情
     function showCardDetail(card) {
       const cardDetailModal = document.getElementById('cardDetailModal');
       const cardDetailTitle = document.getElementById('cardDetailTitle');
@@ -1146,13 +1275,10 @@
       } else {
         cardImage.style.display = 'none';
       }
-
-      cardImage.style.transition = 'transform 0.5s ease-in-out'; 
-      if (card.position === '逆位') {
-        cardImage.style.transform = 'rotate(180deg)';
-      } else {
-        cardImage.style.transform = 'rotate(0deg)';
-      }
+      
+      // 在详情页重置旋转
+      cardImage.style.transition = 'none';
+      cardImage.style.transform = 'rotate(0deg)';
 
       cardNumber.textContent = card.id;
       cardName.textContent = card.name;
@@ -1170,21 +1296,18 @@
       cardDetailModal.classList.remove('hidden');
     }
 
-    //  显示作者信息弹窗 
+    // 显示作者弹窗
     function showAuthorMessage() {
       document.getElementById('authorMessage').classList.remove('hidden');
     }
 
-    // --- 事件监听器和初始化 ---
+    // --- 事件监听器 ---
 
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. 显示作者信息弹窗
       showAuthorMessage();
-
-      // 2. 初始化牌组信息列表（在主页下方）
       initializeDeckLists();
       
-      // 3. 步骤1：牌组选择
+      // 步骤1：牌组选择
       const deckOptions = document.querySelectorAll('.deck-option');
       const confirmDeckBtn = document.getElementById('confirmDeckBtn');
       const selectedDeckName = document.getElementById('selectedDeckName');
@@ -1218,65 +1341,42 @@
       
       confirmDeckBtn.addEventListener('click', () => {
         if (!selectedDeck) return;
-        
         const step1Indicator = document.getElementById('step1Indicator').querySelector('div');
         const step2Indicator = document.getElementById('step2Indicator').querySelector('div');
-
-        step1Indicator.classList.remove('bg-primary');
-        step1Indicator.classList.add('bg-secondary');
-        step1Indicator.classList.remove('text-dark');
-        step1Indicator.classList.add('text-light');
-        step2Indicator.classList.remove('bg-secondary');
-        step2Indicator.classList.add('bg-primary');
-        step2Indicator.classList.remove('text-light');
-        step2Indicator.classList.add('text-dark');
+        step1Indicator.classList.replace('bg-primary', 'bg-secondary');
+        step1Indicator.classList.replace('text-dark', 'text-light');
+        step2Indicator.classList.replace('bg-secondary', 'bg-primary');
+        step2Indicator.classList.replace('text-light', 'text-dark');
         
         document.getElementById('progressBar').style.width = '100%';
-        
         document.getElementById('step1').classList.add('hidden');
         document.getElementById('step2').classList.remove('hidden');
         document.getElementById('step2').classList.add('animate-fade-in');
-        
         updateCardCount(selectedCount);
       });
       
-      // 4. 步骤2：数量调整
-      document.getElementById('decreaseBtn').addEventListener('click', () => {
-        updateCardCount(selectedCount - 1);
-      });
-      
-      document.getElementById('increaseBtn').addEventListener('click', () => {
-        updateCardCount(selectedCount + 1);
-      });
+      // 步骤2：数量调整
+      document.getElementById('decreaseBtn').addEventListener('click', () => updateCardCount(selectedCount - 1));
+      document.getElementById('increaseBtn').addEventListener('click', () => updateCardCount(selectedCount + 1));
 
-      // 5. 帮助模态框
+      // AI 开关
+      document.getElementById('toggleAiBtn').addEventListener('click', toggleAiMode);
+
+      // 帮助模态框
       const helpModal = document.getElementById('helpModal');
-      const closeHelpBtns = document.querySelectorAll('#helpBtn, #closeHelpBtn, #closeHelpBtn2');
+      document.getElementById('helpBtn').addEventListener('click', () => helpModal.classList.remove('hidden'));
+      document.getElementById('closeHelpBtn').addEventListener('click', () => helpModal.classList.add('hidden'));
+      document.getElementById('closeHelpBtn2').addEventListener('click', () => helpModal.classList.add('hidden'));
       
-      closeHelpBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (btn.id === 'helpBtn') {
-            helpModal.classList.remove('hidden');
-          } else {
-            helpModal.classList.add('hidden');
-          }
-        });
-      });
-      
-      // 6. 牌详情模态框
+      // 牌详情模态框
       const cardDetailModal = document.getElementById('cardDetailModal');
-      const closeCardDetailBtns = document.querySelectorAll('#closeCardDetailBtn, #closeCardDetailBtn2');
-      
-      closeCardDetailBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          cardDetailModal.classList.add('hidden');
-        });
-      });
+      document.getElementById('closeCardDetailBtn').addEventListener('click', () => cardDetailModal.classList.add('hidden'));
+      document.getElementById('closeCardDetailBtn2').addEventListener('click', () => cardDetailModal.classList.add('hidden'));
 
-      // 7. 初始数量设置
+      // 初始化
       updateCardCount(1);
       
-      // 8. 绑定之前内联的事件
+      // 绑定按钮
       document.getElementById('manualCountSubmitBtn').addEventListener('click', manualCountSubmit);
       document.getElementById('backToStep1Btn').addEventListener('click', backToStep1);
       document.getElementById('drawCardsBtn').addEventListener('click', drawCards);
@@ -1284,11 +1384,10 @@
       document.getElementById('copyBtn').addEventListener('click', copyResults);
       document.getElementById('restartBtn').addEventListener('click', restart);
 
-      // 9. 绑定作者信息弹窗的事件
+      // 作者弹窗
       document.getElementById('startBtn').addEventListener('click', function() {
         authorAudio.pause();
         document.getElementById('avatarImage').classList.remove('spin-blur', 'animate-full-spin');
-        // 隐藏弹窗
         document.getElementById('authorMessage').classList.add('hidden');
       });
 
