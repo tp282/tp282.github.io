@@ -51,6 +51,26 @@
     ::-webkit-scrollbar-track { background: #1E1E1E; }
     ::-webkit-scrollbar-thumb { background: #8A2BE2; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #9932CC; }
+
+    /* 核心动画：卡片单张浮现 */
+    @keyframes cardPopIn {
+      0% { 
+        opacity: 0; 
+        transform: scale(0.8) translateY(20px); 
+        filter: blur(5px); 
+      }
+      100% { 
+        opacity: 1; 
+        transform: scale(1) translateY(0); 
+        filter: blur(0); 
+      }
+    }
+
+    /* 动画类名，使用 cubic-bezier 实现灵动的回弹效果 */
+    .card-animate-item {
+      animation: cardPopIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
     @keyframes spinBlur { 0% { filter: blur(0px); } 50% { filter: blur(2px); } 100% { filter: blur(0px); } }
     .spin-blur { animation: spinBlur 0.1s infinite; }
   </style>
@@ -193,7 +213,7 @@
       <section id="step3" class="hidden animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 class="text-xl font-bold mb-4 text-center">塔罗牌抽取结果</h2>
-          <div id="resultContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2"></div>
+          <div id="resultContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2 scroll-smooth"></div>
           
           <div id="copySuccess" class="mt-4 text-green-500 text-center hidden p-2 bg-green-500/10 rounded border border-green-500/30">
             <i class="fa fa-check-circle mr-1"></i> 已复制到剪贴板
@@ -315,7 +335,7 @@
     </div>
   </div>
 
-  <script>
+ <script>
     /**
      * 第一部分：数据层 (Data)
      * 包含完整的 78 张塔罗牌数据。
@@ -590,9 +610,8 @@
      * 第二部分：核心应用对象 (App Controller)
      */
     const TarotApp = {
-      // 1. 状态管理 (State)
       state: {
-        selectedDeck: null, // 'major', 'minor', 'all'
+        selectedDeck: null,
         maxCards: 78,
         selectedCount: 1,
         drawnCards: [],
@@ -600,10 +619,8 @@
         bgMusic: new Audio('https://link.hhtjim.com/163/1960595909.mp3')
       },
 
-      // 2. DOM 缓存 (Caching DOM Elements)
       dom: {},
 
-      // 3. 初始化入口
       init() {
         this.cacheDOM();
         this.bindEvents();
@@ -615,16 +632,11 @@
       cacheDOM() {
         const getById = (id) => document.getElementById(id);
         this.dom = {
-          // Sections
           steps: [getById('step1'), getById('step2'), getById('step3')],
           indicators: [getById('step1Indicator'), getById('step2Indicator'), getById('step3Indicator')],
           progressBars: [getById('progressBar'), getById('progressBar2')],
-          
-          // Step 1
           deckOptions: document.querySelectorAll('.deck-option'),
           confirmDeckBtn: getById('confirmDeckBtn'),
-          
-          // Step 2
           aiSection: getById('aiSection'),
           toggleAiBtn: getById('toggleAiBtn'),
           toggleAiIcon: getById('toggleAiIcon'),
@@ -639,23 +651,17 @@
           countErrorMessage: getById('countErrorMessage'),
           drawCardsBtn: getById('drawCardsBtn'),
           backToStep1Btn: getById('backToStep1Btn'),
-          
-          // AI Inputs
           userQuestion: getById('userQuestion'),
           generatePromptBtn: getById('generatePromptBtn'),
           promptOutput: getById('promptOutput'),
           copyPromptBtn: getById('copyPromptBtn'),
           aiPromptTip: getById('aiPromptTip'),
-
-          // Step 3
           resultContainer: getById('resultContainer'),
           copyResultsBtn: getById('copyResultsBtn'),
           copyBtnText: getById('copyBtnText'),
           copySuccess: getById('copySuccess'),
           backToStep2Btn: getById('backToStep2Btn'),
           restartBtn: getById('restartBtn'),
-
-          // Modals
           welcomeModal: getById('welcomeModal'),
           startAppBtn: getById('startAppBtn'),
           authorAvatar: getById('authorAvatar'),
@@ -665,17 +671,13 @@
         };
       },
 
-      // 4. 事件绑定
       bindEvents() {
         const { dom } = this;
-
-        // Welcome / Music Events
         dom.startAppBtn.addEventListener('click', () => {
           this.state.bgMusic.pause();
           dom.avatarImage.classList.remove('spin-blur', 'animate-full-spin');
           dom.welcomeModal.classList.add('hidden');
         });
-
         dom.authorAvatar.addEventListener('click', () => {
           if (this.state.bgMusic.paused) {
             this.state.bgMusic.play();
@@ -685,8 +687,6 @@
             dom.avatarImage.classList.remove('spin-blur', 'animate-full-spin');
           }
         });
-
-        // Step 1: Deck Selection
         dom.deckOptions.forEach(option => {
           option.addEventListener('click', () => {
             dom.deckOptions.forEach(opt => opt.classList.remove('deck-selected'));
@@ -694,30 +694,21 @@
             this.setDeck(option.dataset.deck);
           });
         });
-
         dom.confirmDeckBtn.addEventListener('click', () => this.goToStep(2));
         dom.backToStep1Btn.addEventListener('click', () => this.goToStep(1));
-
-        // Step 2: Quantity adjustments
         dom.decreaseBtn.addEventListener('click', () => this.setCount(this.state.selectedCount - 1));
         dom.increaseBtn.addEventListener('click', () => this.setCount(this.state.selectedCount + 1));
         dom.manualCountSubmitBtn.addEventListener('click', () => {
           const val = parseInt(dom.manualCountInput.value);
           this.setCount(val);
         });
-
-        // AI Features
         dom.toggleAiBtn.addEventListener('click', () => this.toggleAiMode());
         dom.generatePromptBtn.addEventListener('click', () => this.generateAIPrompt());
         dom.copyPromptBtn.addEventListener('click', () => this.copyPromptToClipboard());
-
-        // Step 3: Drawing & Results
         dom.drawCardsBtn.addEventListener('click', () => this.executeDraw());
         dom.backToStep2Btn.addEventListener('click', () => this.goToStep(2));
         dom.copyResultsBtn.addEventListener('click', () => this.copyResultsToClipboard());
         dom.restartBtn.addEventListener('click', () => window.location.reload());
-
-        // Navigation Modals
         document.getElementById('helpBtn').addEventListener('click', () => dom.helpModal.classList.remove('hidden'));
         document.getElementById('closeHelpBtn').addEventListener('click', () => dom.helpModal.classList.add('hidden'));
         document.getElementById('closeHelpBtn2').addEventListener('click', () => dom.helpModal.classList.add('hidden'));
@@ -725,7 +716,6 @@
         document.getElementById('closeCardDetailBtn2').addEventListener('click', () => dom.cardDetailModal.classList.add('hidden'));
       },
 
-      // 5. 业务逻辑与状态更新
       updateCardCountUI() {
         this.setCount(this.state.selectedCount);
       },
@@ -733,13 +723,11 @@
       setDeck(deckType) {
         this.state.selectedDeck = deckType;
         this.dom.confirmDeckBtn.disabled = false;
-        
         switch (deckType) {
           case 'major': this.state.maxCards = 22; break;
           case 'minor': this.state.maxCards = 56; break;
           case 'all':   this.state.maxCards = 78; break;
         }
-        
         this.dom.maxCardsSpan.textContent = this.state.maxCards;
         this.setCount(Math.min(this.state.selectedCount, this.state.maxCards));
       },
@@ -750,7 +738,6 @@
           dom.countErrorMessage.classList.remove('hidden');
           return;
         }
-        
         state.selectedCount = newCount;
         dom.cardCountDisplay.textContent = newCount;
         dom.manualCountInput.value = newCount;
@@ -763,7 +750,6 @@
       toggleAiMode() {
         const { state, dom } = this;
         state.aiModeActive = !state.aiModeActive;
-
         if (state.aiModeActive) {
           dom.aiSection.classList.remove('hidden');
           dom.toggleAiIcon.classList.replace('fa-toggle-off', 'fa-toggle-on');
@@ -781,6 +767,9 @@
         }
       },
 
+      /**
+       * 核心业务：执行抽牌
+       */
       executeDraw() {
         const { state } = this;
         if (state.selectedCount < 1 || state.selectedCount > state.maxCards) {
@@ -788,37 +777,90 @@
           return;
         }
 
-        // 过滤牌组
         let pool = [];
         if (state.selectedDeck === 'major') pool = TAROT_DATA.filter(c => c.type === 'major');
         else if (state.selectedDeck === 'minor') pool = TAROT_DATA.filter(c => c.type === 'minor');
         else pool = [...TAROT_DATA];
 
-        // 洗牌算法
+        // 洗牌
         for (let i = pool.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [pool[i], pool[j]] = [pool[j], pool[i]];
         }
 
-        // 抽取并分配正逆位
+        // 抽取
         state.drawnCards = pool.slice(0, state.selectedCount).map(card => ({
           ...card,
           position: Math.random() < 0.5 ? '逆位' : '正位'
         }));
 
-        this.renderDrawResults();
         this.goToStep(3);
+        this.dom.resultContainer.innerHTML = '';
+        this.dom.copySuccess.classList.add('hidden');
+        this.dom.copyBtnText.textContent = state.aiModeActive ? "复制结果给 AI" : "复制结果";
+
+        // AI 模式提示
+        if (state.aiModeActive) {
+          const tip = document.createElement('div');
+          tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
+          tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> AI 助手已就绪：卡片全部展示后，点击下方“复制结果给 AI”。';
+          this.dom.resultContainer.appendChild(tip);
+        }
+
+        // 核心步骤：调用递归发牌
+        this.addCardOneByOne(state.drawnCards, 0);
       },
 
-      // 6. 视图渲染 (View Rendering)
+      /**
+       * 递归发牌函数：实现“一张张浮现”
+       */
+      addCardOneByOne(cardArray, index) {
+        // 如果渲染完成，停止递归
+        if (index >= cardArray.length) return;
+
+        const card = cardArray[index];
+        const isUpright = card.position === '正位';
+        
+        // 创建卡片 DOM 元素
+        const cardDiv = document.createElement('div');
+        // 关键：加入 'card-animate-item' 触发浮现动画
+        cardDiv.className = 'flex items-center p-3 bg-dark rounded-md border border-primary/20 shadow-md card-animate-item hover:border-accent transition-all cursor-pointer mb-4';
+        cardDiv.addEventListener('click', () => this.showCardDetail(card));
+
+        const colorMap = { 'wands': 'text-red-500', 'cups': 'text-blue-500', 'swords': 'text-gray-300', 'pentacles': 'text-yellow-500' };
+        const cardColor = colorMap[card.suit] || 'text-primary';
+        const positionColor = isUpright ? 'text-green-500' : 'text-red-500';
+
+        cardDiv.innerHTML = `
+          <div class="flex-shrink-0 w-16 h-24 bg-secondary rounded overflow-hidden border border-primary/40 mr-4">
+            <img src="${card.image}" class="w-full h-full object-cover ${isUpright ? '' : 'rotate-180'}">
+          </div>
+          <div class="flex-grow">
+            <div class="flex justify-between items-center mb-1">
+               <h3 class="font-bold ${cardColor}">${card.name}</h3>
+               <span class="px-2 py-1 rounded-full font-bold text-[10px] ${positionColor} bg-dark/70">${card.position}</span>
+            </div>
+            <p class="text-xs text-gray-400">牌位编号: #${index + 1}</p>
+            <p class="text-[11px] text-gray-500 mt-1 italic line-clamp-1">"${isUpright ? card.upright : card.reversed}"</p>
+          </div>
+        `;
+
+        this.dom.resultContainer.appendChild(cardDiv);
+        
+        // 自动滚动：确保最新浮现的牌始终在视口内
+        this.dom.resultContainer.scrollTop = this.dom.resultContainer.scrollHeight;
+
+        // 设置 500 毫秒后递归调用渲染下一张
+        setTimeout(() => {
+          this.addCardOneByOne(cardArray, index + 1);
+        }, 500);
+      },
+
       goToStep(stepNumber) {
         const { dom } = this;
-        
-        // 隐藏所有区块
         dom.steps.forEach(sec => sec.classList.add('hidden'));
         dom.steps[stepNumber - 1].classList.remove('hidden');
 
-        // 更新进度条和指示器 UI
         const updateIndicator = (index, isActive) => {
           const circle = dom.indicators[index].querySelector('.step-circle');
           if (isActive) {
@@ -847,62 +889,18 @@
         }
       },
 
-      renderDrawResults() {
-        const { state, dom } = this;
-        dom.resultContainer.innerHTML = '';
-        dom.copySuccess.classList.add('hidden');
-
-        dom.copyBtnText.textContent = state.aiModeActive ? "复制结果给 AI" : "复制结果";
-
-        if (state.aiModeActive) {
-          const tip = document.createElement('div');
-          tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
-          tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> AI 助手已就绪：点击下方“复制结果给 AI”，将结果发送给 AI 解读。';
-          dom.resultContainer.appendChild(tip);
-        }
-
-        state.drawnCards.forEach((card, index) => {
-          const cardDiv = document.createElement('div');
-          cardDiv.className = 'flex items-center p-3 bg-dark rounded-md border border-primary/20 shadow-md animate-slide-up hover:border-accent transition-all cursor-pointer';
-          cardDiv.style.animationDelay = `${index * 0.1}s`;
-          cardDiv.addEventListener('click', () => this.showCardDetail(card));
-
-          const colorMap = { 'wands': 'text-red-500', 'cups': 'text-blue-500', 'swords': 'text-gray-300', 'pentacles': 'text-yellow-500' };
-          const cardColor = colorMap[card.suit] || 'text-primary';
-          const positionColor = card.position === '正位' ? 'text-green-500' : 'text-red-500';
-
-          cardDiv.innerHTML = `
-            <div class="flex justify-between items-center w-full">
-              <div class="flex items-center">
-                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">
-                  <span class="font-bold ${cardColor}">${index + 1}</span>
-                </div>
-                <div>
-                  <h3 class="font-medium ${cardColor}">${card.name}</h3>
-                  <p class="text-xs text-gray-400">牌位: ${index + 1}</p>
-                </div>
-              </div>
-              <span class="px-2 py-1 rounded-full font-bold text-sm ${positionColor} bg-dark/70">${card.position}</span>
-            </div>`;
-          dom.resultContainer.appendChild(cardDiv);
-        });
-      },
-
       renderCatalog() {
         const createCardDiv = (card) => {
           const div = document.createElement('div');
           div.className = 'bg-dark/50 p-1 rounded text-center hover:text-primary transition-colors cursor-pointer';
           div.textContent = card.name;
-          div.title = `编号: ${card.id}`;
           div.addEventListener('click', () => this.showCardDetail(card));
           return div;
         };
-
         const mapToContainer = (filterFn, containerId) => {
           const container = document.getElementById(containerId);
           if(container) TAROT_DATA.filter(filterFn).forEach(card => container.appendChild(createCardDiv(card)));
         };
-
         mapToContainer(c => c.type === 'major', 'majorArcanaList');
         mapToContainer(c => c.suit === 'wands', 'wandsList');
         mapToContainer(c => c.suit === 'cups', 'cupsList');
@@ -918,34 +916,45 @@
         document.getElementById('cardDescription').textContent = card.description || '暂无信息';
         document.getElementById('cardUpright').textContent = card.upright || '暂无信息';
         document.getElementById('cardReversed').textContent = card.reversed || '暂无信息';
-
         const img = document.getElementById('cardImage');
-        if (card.image) {
-          img.src = card.image;
-          img.style.display = 'block';
-        } else {
-          img.style.display = 'none';
-        }
-
-        const groups = {
-          'major': '大阿卡纳', 'wands': '小阿卡纳 - 权杖', 'cups': '小阿卡纳 - 圣杯',
-          'swords': '小阿卡纳 - 宝剑', 'pentacles': '小阿卡纳 - 星币'
-        };
+        if (card.image) { img.src = card.image; img.style.display = 'block'; }
+        else { img.style.display = 'none'; }
+        const groups = { 'major': '大阿卡纳', 'wands': '小阿卡纳 - 权杖', 'cups': '小阿卡纳 - 圣杯', 'swords': '小阿卡纳 - 宝剑', 'pentacles': '小阿卡纳 - 星币' };
         document.getElementById('cardGroup').textContent = groups[card.type] || groups[card.suit] || '未知';
-
         dom.cardDetailModal.classList.remove('hidden');
       },
 
-      // 7. 工具与文本生成功能
       generateAIPrompt() {
         const question = this.dom.userQuestion.value.trim();
-        if (!question) {
-          this.dom.promptOutput.value = "请输入您心中的困惑，以便生成精准指令。";
-          return;
-        }
-        
-        const prompt = `请扮演一位专业且公正的塔罗牌解读师。\n\n**【第一阶段：牌阵推荐】**\n根据以下用户提出的问题，你必须：\n1. 分析问题类型。\n2. 推荐几个适合此问题的塔罗牌阵。\n3. 明确说明这个牌阵需要抽取**多少张牌**。\n4. 明确说明这个牌阵中每张牌所代表的**位置意义**。\n\n用户的问题是：\n"""${question}"""\n\n---\n\n**【第二阶段：解读准备】**\n等待用户提供抽出的牌面后，你将继续：\n1. 结合牌阵的位置意义和牌面的通用含义及对应牌的元素进行全局分析和详细解读。\n2. 为用户提供一个清晰、富有建设性的总结和建议。`;
-        
+        if (!question) { this.dom.promptOutput.value = "请输入您心中的困惑，以便生成精准指令。"; return; }
+        const prompt = `你现在是一位集神秘学造理与深度心理洞察力于一身的**首席塔罗大祭司**。你深谙伟特与透特体系，擅长将牌面符号、四大元素、占星相位与心理原型相结合。
+
+**【第一阶段：能量诊断与牌阵推演】**
+针对用户当前咨询的问题："""${question}"""，你必须执行以下逻辑流程：
+
+1. **核心动能解析**：以富有同理心且犀利的口吻，从潜意识层面分析该问题的**核心矛盾**（如：意志受阻、情感匮乏或认知失衡）。
+2. **专业牌阵推荐**：根据问题性质，精准推荐 **2-3个** 高阶牌阵（如：圣三角、因果链条阵、阴影工作阵等）。
+3. **技术参数明晰**：对于每个推荐牌阵，必须清晰列出：
+   * 该牌阵所需抽取的**【牌张总数】**。
+   * 每一张牌所锚定的**【具体位置意义】**（请使用加粗列表，确保逻辑层级分明）。
+4. **仪式化引导**：请引导用户在静心冥想后，将抽到的**牌名（含正逆位）**反馈给你，并告知用户你已准备好开启深层连接。
+
+---
+
+**【第二阶段：全维深度解读】**
+在收到用户提供的牌面数据后，你将执行以下多维度的专业转译：
+
+1. **宏观格局扫描（Macro-Analysis）**：
+   * **元素尊贵（Elemental Dignities）**：分析火/水/风/土元素的分布与互动，判断行动力与情感的平衡点。
+   * **大/小阿尔卡纳比例**：解读此事受“集体潜意识/命运”影响大，还是受“个人选择/日常生活”影响大。
+2. **微观图解与辩证（Micro-Analysis）**：
+   * 结合牌位定义，深度挖掘牌面关键符号（如：高塔的雷电、星星的泉水）在当前语境下的特指含义。
+   * 引入**占星与数字能量**（如：土星的限制性、数字3的扩张性）阐述问题的隐秘逻辑。
+3. **炼金术式指引（Alchemical Guidance）**：
+   * 拒绝模棱两可的预言，提供极具建设性的**能量转化建议**与**现实行动方案**。
+   * 给出一段极具启发性的总结，帮助用户在现实层面破局。
+
+请以专业、睿智、充满神秘感且富有同理心的口吻开启第一阶段。`;
         this.dom.promptOutput.value = prompt;
         this.dom.aiPromptTip.classList.remove('hidden');
       },
@@ -953,7 +962,6 @@
       copyPromptToClipboard() {
         const text = this.dom.promptOutput.value;
         if (!text) return;
-        
         navigator.clipboard.writeText(text).then(() => {
           this.dom.aiPromptTip.innerHTML = '<i class="fa fa-check-circle mr-1"></i> 指令已复制！请发送给AI，然后根据AI建议的**张数**调整下方设置。';
           this.dom.aiPromptTip.className = 'text-sm text-center bg-green-500/10 p-2 rounded border border-green-500/30 text-green-500';
@@ -965,7 +973,6 @@
         const fullText = this.state.aiModeActive 
           ? `【我抽到的牌面】：\n${resultsText}。\n请根据之前的牌阵定义开始解读。` 
           : `塔罗牌抽取结果：\n${resultsText}`;
-
         navigator.clipboard.writeText(fullText).then(() => {
           this.dom.copySuccess.innerHTML = this.state.aiModeActive 
             ? '<i class="fa fa-check-circle mr-1"></i> 牌面已复制！请粘贴给 AI。' 
@@ -976,7 +983,6 @@
       }
     };
 
-    // 启动应用
     document.addEventListener('DOMContentLoaded', () => {
       TarotApp.init();
     });
