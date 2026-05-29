@@ -6,17 +6,17 @@
   <title>塔罗牌抽取程序 & AI 解读助手</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            primary: '#8A2BE2', 
-            secondary: '#1E1E1E', 
-            accent: '#FFD700', 
-            dark: '#0A0A0A', 
-            light: '#E0E0E0' 
+            primary: '#8A2BE2',
+            secondary: '#1E1E1E',
+            accent: '#FFD700',
+            dark: '#0A0A0A',
+            light: '#E0E0E0'
           },
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
           animation: {
@@ -29,16 +29,16 @@
             fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
             slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
             fullSpin: { from: { transform: 'rotate(0deg)' }, to: { transform: 'rotate(360deg)' } },
-            fadeOut: { 
-              from: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' }, 
-              to: { opacity: 0, transform: 'translate(-50%, -50%) scale(0.95)' } 
+            fadeOut: {
+              from: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+              to: { opacity: 0, transform: 'translate(-50%, -50%) scale(0.95)' }
             }
           }
         }
       }
     }
   </script>
-  
+
   <style type="text/tailwindcss">
     @layer utilities {
       .text-glow { text-shadow: 0 0 10px rgba(138, 43, 226, 0.7); }
@@ -52,27 +52,27 @@
     ::-webkit-scrollbar-thumb { background: #8A2BE2; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #9932CC; }
 
-    /* 核心动画：卡片单张浮现 */
     @keyframes cardPopIn {
-      0% { 
-        opacity: 0; 
-        transform: scale(0.8) translateY(20px); 
-        filter: blur(5px); 
-      }
-      100% { 
-        opacity: 1; 
-        transform: scale(1) translateY(0); 
-        filter: blur(0); 
-      }
+      0% { opacity: 0; transform: scale(0.8) translateY(20px); filter: blur(5px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
     }
-
-    /* 动画类名，使用 cubic-bezier 实现灵动的回弹效果 */
     .card-animate-item {
       animation: cardPopIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
     @keyframes spinBlur { 0% { filter: blur(0px); } 50% { filter: blur(2px); } 100% { filter: blur(0px); } }
     .spin-blur { animation: spinBlur 0.1s infinite; }
+
+    /* 预加载进度条动画 */
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .preload-shimmer {
+      background: linear-gradient(90deg, rgba(138,43,226,0.3) 25%, rgba(138,43,226,0.6) 50%, rgba(138,43,226,0.3) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
   </style>
 </head>
 
@@ -89,6 +89,7 @@
   </header>
 
   <main class="flex-grow container mx-auto px-4 py-8">
+    <!-- 步骤指示器 -->
     <div class="flex justify-between mb-8 max-w-2xl mx-auto">
       <div id="step1Indicator" class="flex flex-col items-center">
         <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-dark font-bold step-circle">1</div>
@@ -111,7 +112,7 @@
     </div>
 
     <div class="max-w-2xl mx-auto">
-      
+      <!-- 步骤1：选择牌组 -->
       <section id="step1" class="animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 class="text-xl font-bold mb-4 text-center">选择要抽取的牌组区域</h2>
@@ -137,10 +138,11 @@
         </div>
       </section>
 
+      <!-- 步骤2：抽牌设置 -->
       <section id="step2" class="hidden animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 class="text-xl font-bold mb-2 text-center">设置抽牌选项</h2>
-          
+
           <div class="flex justify-center mb-6">
              <button id="toggleAiBtn" class="group flex items-center space-x-3 bg-dark border border-primary/30 px-5 py-2 rounded-full text-gray-400 hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 shadow-md">
                <i class="fa fa-toggle-off text-2xl text-gray-500 transition-colors group-hover:text-gray-300" id="toggleAiIcon"></i>
@@ -167,16 +169,16 @@
                 </button>
               </div>
               <div id="aiPromptTip" class="text-sm text-yellow-400 text-center hidden bg-yellow-400/10 p-2 rounded border border-yellow-400/30">
-                <i class="fa fa-lightbulb-o mr-1"></i> 
+                <i class="fa fa-lightbulb-o mr-1"></i>
                 <strong>重要：</strong>请将指令复制给 AI。AI 回复后，请根据它推荐的<strong>张数</strong>，在下方调整抽牌数量。
               </div>
             </div>
           </div>
-          
+
           <div class="mb-4 pt-4 border-t border-primary/20">
             <p class="text-center mb-2 font-bold text-primary" id="quantityTitle">设置抽牌数量</p>
             <p class="text-center text-sm text-gray-400 mb-4">当前牌组可抽取 <span id="minCards">1</span> - <span id="maxCards">78</span> 张牌</p>
-            
+
             <div class="flex items-center justify-center space-x-4">
               <button id="decreaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
                 <i class="fa fa-minus text-primary"></i>
@@ -186,7 +188,7 @@
                 <i class="fa fa-plus text-primary"></i>
               </button>
             </div>
-            
+
             <div class="mt-4">
               <div class="flex justify-center items-center">
                 <label for="manualCountInput" class="text-sm font-medium mr-2">或手动输入：</label>
@@ -210,11 +212,12 @@
         </div>
       </section>
 
+      <!-- 步骤3：结果与解读 -->
       <section id="step3" class="hidden animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 class="text-xl font-bold mb-4 text-center">塔罗牌抽取结果</h2>
           <div id="resultContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2 scroll-smooth"></div>
-          
+
           <div id="copySuccess" class="mt-4 text-green-500 text-center hidden p-2 bg-green-500/10 rounded border border-green-500/30">
             <i class="fa fa-check-circle mr-1"></i> 已复制到剪贴板
           </div>
@@ -235,7 +238,8 @@
         </div>
       </section>
     </div>
-    
+
+    <!-- 牌组信息目录 -->
     <div class="mt-8 max-w-4xl mx-auto bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
       <h2 class="text-xl font-bold mb-4 text-center">塔罗牌组信息</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -263,6 +267,7 @@
     </div>
   </footer>
 
+  <!-- 帮助弹窗 -->
   <div id="helpModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
     <div class="bg-secondary rounded-lg p-6 max-w-md w-full mx-4 border border-primary/30 shadow-lg animate-slide-up">
       <div class="flex justify-between items-center mb-4">
@@ -284,7 +289,8 @@
       </button>
     </div>
   </div>
-  
+
+  <!-- 牌详情弹窗 -->
   <div id="cardDetailModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden">
     <div class="bg-secondary rounded-lg p-6 max-w-3xl w-full mx-4 border border-primary/30 shadow-lg animate-slide-up max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center mb-4">
@@ -314,6 +320,7 @@
     </div>
   </div>
 
+  <!-- 欢迎弹窗（含预加载进度） -->
   <div id="welcomeModal" class="fixed inset-0 bg-dark/95 flex items-center justify-center z-50 animate-fade-in">
     <div class="bg-secondary rounded-lg p-8 max-w-sm w-full mx-4 border border-primary/50 shadow-2xl text-center">
       <div id="authorAvatar" class="relative inline-block mb-4 cursor-pointer">
@@ -323,611 +330,585 @@
       <h2 class="text-2xl font-bold text-accent mb-1">欢迎使用</h2>
       <p class="text-sm font-medium text-light mb-1">塔罗牌抽取程序</p>
       <p class="text-xs font-medium text-gray-400 mb-4">点击头像播放/暂停背景音乐</p>
+
+      <!-- 预加载进度区域 -->
+      <div id="preloadSection" class="mb-4">
+        <div class="flex items-center justify-center space-x-2 mb-2">
+          <i id="preloadIcon" class="fa fa-spinner fa-spin text-primary"></i>
+          <span id="preloadStatus" class="text-sm text-gray-400">正在预加载塔罗牌图片...</span>
+        </div>
+        <div class="w-full bg-dark rounded-full h-2 overflow-hidden border border-primary/20">
+          <div id="preloadProgressBar" class="h-full bg-primary rounded-full transition-all duration-300 preload-shimmer" style="width: 0%"></div>
+        </div>
+        <p id="preloadCount" class="text-xs text-gray-500 mt-1">0 / 78</p>
+      </div>
+
       <p class="text-sm font-medium text-primary mb-1">作者：嘟嘟可教主</p>
       <a href="https://space.bilibili.com/425320157" target="_blank" class="text-blue-400 hover:text-blue-300 mb-4 flex items-center justify-center">
         <i class="fa fa-external-link mr-1"></i> B站主页
       </a>
       <p class="text-sm text-gray-400 mb-2">感谢使用塔罗牌抽取程序</p>
       <p class="text-xs text-gray-500 mb-6">该网页使用ai进行开发</p>
-      <button id="startAppBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors mt-4">
+      <button id="startAppBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
         开始使用 <i class="fa fa-arrow-right ml-1"></i>
       </button>
     </div>
   </div>
 
- <script>
-    /**
-     * 第一部分：数据层 (Data)
-     * 包含完整的 78 张塔罗牌数据。
-     */
-    const TAROT_DATA = [
-      // 大阿卡纳 (0-21)
-      { 
-        id: 0, 
-        name: "愚者", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/0.gif",
-        description: "愚者代表新的开始、冒险精神和纯真无邪。他站在悬崖边，象征着对未来的无限可能敞开心扉，勇敢地追求梦想而不畏惧风险。",
-        upright: "新的开始、自由、冒险、天真、灵感、创造力、无拘无束",
-        reversed: "鲁莽、缺乏方向、不负责任、冒险过度、天真幼稚、逃避现实"
-      },
-      { 
-        id: 1, 
-        name: "魔术师", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/1.gif",
-        description: "魔术师代表创造、行动力和资源的掌控。他拥有无限的潜力，能够将想法转化为现实，展现出自信和决心。",
-        upright: "创造力、行动力、自信、技能、资源、决心、新机会",
-        reversed: "缺乏自信、能力不足、错失机会、操纵、犹豫、资源浪费"
-      },
-      { 
-        id: 2, 
-        name: "女祭司", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/2.gif",
-        description: "女祭司象征直觉、智慧和神秘的知识。她代表内在的声音和潜意识，提醒我们要相信自己的直觉和内在指引。",
-        upright: "直觉、智慧、神秘、内省、精神力量、冷静、洞察力",
-        reversed: "直觉失灵、隐秘、沉默、缺乏洞察力、忽视内心声音"
-      },
-      { 
-        id: 3, 
-        name: "女皇", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/3.gif",
-        description: "女皇代表丰饶、母性、创造力和滋养。她象征着生命的繁荣和自然的丰盛，鼓励我们拥抱生活的美好。",
-        upright: "丰饶、创造力、母性、滋养、繁荣、美丽、享受生活",
-        reversed: "不孕不育、缺乏创造力、依赖、过度放纵、忽视自我需求"
-      },
-      { 
-        id: 4, 
-        name: "皇帝", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/4.gif",
-        description: "皇帝象征权威、结构和控制。他代表着理性思维和领导力，提醒我们要建立稳固的基础和秩序。",
-        upright: "权威、领导力、结构、控制、纪律、理性、保护",
-        reversed: "滥用权力、独裁、缺乏纪律、失控、僵化、缺乏领导力"
-      },
-      { 
-        id: 5, 
-        name: "教皇", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/5.gif",
-        description: "教皇代表传统、灵性指导和道德价值观。他象征着宗教信仰和社会规范，提醒我们要尊重传统并寻求智慧的指引。",
-        upright: "传统、灵性、指导、道德、教育、信仰、社区",
-        reversed: "教条、僵化、盲目信仰、反叛、缺乏道德、错误的指导"
-      },
-      { 
-        id: 6, 
-        name: "恋人", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/6.gif",
-        description: "恋人代表爱、选择和关系。这张牌象征着重要的决定和灵魂的连接，提醒我们要在爱与关系中保持真实和忠诚。",
-        upright: "爱情、关系、选择、和谐、吸引力、灵魂连接、价值观",
-        reversed: "关系问题、错误的选择、不和谐、背叛、缺乏选择、价值观冲突"
-      },
-      { 
-        id: 7, 
-        name: "战车", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/7.gif",
-        description: "战车象征意志、控制和胜利。它代表着通过自律和决心克服障碍，达成目标的能力。",
-        upright: "意志、控制、胜利、决心、自律、前进、成功",
-        reversed: "缺乏控制、意志薄弱、失败、冲突、犹豫不决、停滞不前"
-      },
-      { 
-        id: 8, 
-        name: "力量", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/8.gif",
-        description: "力量代表内在的力量、勇气和温柔。它象征着通过爱和耐心而非暴力来克服挑战的能力。",
-        upright: "勇气、力量、耐心、信心、温柔、毅力、控制激情",
-        reversed: "软弱、缺乏勇气、犹豫不决、滥用力量、恐惧、自我怀疑"
-      },
-      { 
-        id: 9, 
-        name: "隐者", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/9.gif",
-        description: "隐者象征内省、智慧和孤独。他代表着通过独处和反思来寻找生命的意义和答案的过程。",
-        upright: "内省、智慧、孤独、反思、指引、谨慎、寻求真理",
-        reversed: "孤独、隔绝、缺乏方向、过度内省、逃避现实、拒绝帮助"
-      },
-      { 
-        id: 10, 
-        name: "命运之轮", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/10.gif",
-        description: "命运之轮代表变化、命运和机遇。它象征着生命的循环和无常，提醒我们要接受变化并顺应自然的流动。",
-        upright: "变化、命运、机遇、循环、好运、转折点、进步",
-        reversed: "停滞、坏运、抗拒变化、重复模式、延迟、挫折"
-      },
-      { 
-        id: 11, 
-        name: "正义", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/11.gif",
-        description: "正义象征公平、平衡和责任。它代表着因果报应和道德原则，提醒我们要为自己的行为负责。",
-        upright: "公平、正义、平衡、责任、法律、真理、因果",
-        reversed: "不公平、偏见、失衡、逃避责任、法律问题、不公正"
-      },
-      { 
-        id: 12, 
-        name: "倒吊人", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/12.gif",
-        description: "倒吊人代表牺牲、视角转变和等待。它象征着从不同的角度看待问题，以及为了更高的目标而做出牺牲。",
-        upright: "牺牲、耐心、视角转变、等待、冥想、灵性成长",
-        reversed: "不必要的牺牲、固执、徒劳的等待、缺乏远见、不愿改变"
-      },
-      { 
-        id: 13, 
-        name: "死神", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/13.gif",
-        description: "死神象征结束、转变和重生。它代表着旧事物的终结和新事物的开始，提醒我们要接受变化并放下过去。",
-        upright: "结束、转变、重生、变革、放下、新开始、转型",
-        reversed: "抗拒变化、恐惧结束、停滞不前、旧模式延续、延迟",
-      },
-      { 
-        id: 14, 
-        name: "节制", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/14.gif",
-        description: "节制代表平衡、和谐和适度。它象征着在生活的各个方面寻找平衡，以及通过适度和调和来实现内心的平静。",
-        upright: "平衡、和谐、适度、调和、耐心、灵性成长、自我控制",
-        reversed: "失衡、过度、冲突、不耐烦、缺乏控制、不和谐"
-      },
-      { 
-        id: 15, 
-        name: "恶魔", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/15.gif",
-        description: "恶魔象征诱惑、束缚和物质主义。它代表着我们被欲望和恐惧所束缚的状态，提醒我们要摆脱物质的枷锁。",
-        upright: "诱惑、束缚、欲望、物质主义、成瘾、恐惧、限制",
-        reversed: "解放、摆脱束缚、克服恐惧、打破成瘾、自由、觉醒"
-      },
-      { 
-        id: 16, 
-        name: "塔", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/16.gif",
-        description: "塔代表突然的变化、崩溃和觉醒。它象征着旧有结构的崩塌，虽然痛苦，但为新的开始创造了空间。",
-        upright: "突然变化、崩溃、觉醒、灾难、解放、真相揭露、颠覆",
-        reversed: "避免变化、延迟崩溃、抗拒觉醒、恐惧变革、内部冲突"
-      },
-      { 
-        id: 17, 
-        name: "星星", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/17.gif",
-        description: "星星象征希望、灵感和灵性。它代表着在黑暗中寻找光明，以及对未来的乐观和信念。",
-        upright: "希望、灵感、灵性、梦想、乐观、信仰、指引",
-        reversed: "绝望、缺乏灵感、失去希望、幻灭、悲观、灵性空虚"
-      },
-      { 
-        id: 18, 
-        name: "月亮", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/18.gif",
-        description: "月亮代表潜意识、直觉和不确定性。它象征着我们内心的恐惧和隐藏的情感，提醒我们要相信自己的直觉。",
-        upright: "潜意识、直觉、恐惧、幻觉、不确定性、神秘、情感",
-        reversed: "清晰、克服恐惧、揭开真相、摆脱幻觉、明确方向"
-      },
-      { 
-        id: 19, 
-        name: "太阳", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/19.gif",
-        description: "太阳象征光明、快乐和成功。它代表着积极的能量、创造力、生命力，是一张充满希望和喜悦的牌。",
-        upright: "快乐、成功、光明、活力、创造力、温暖、幸福",
-        reversed: "抑郁、失败、黑暗、缺乏活力、创造力受阻、不快乐"
-      },
-      { 
-        id: 20, 
-        name: "审判", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/20.gif",
-        description: "审判代表重生、觉醒和评估。它象征着对过去的反思和新的开始，提醒我们要对自己的行为负责。",
-        upright: "重生、觉醒、评估、原谅、责任、新开始、召唤",
-        reversed: "拒绝改变、悔恨、指责、拖延、缺乏责任感、忽视召唤"
-      },
-      { 
-        id: 21, 
-        name: "世界", 
-        type: "major",
-        image: "https://static.shenpowang.com/img/taluopai/21.gif",
-        description: "世界代表完成、圆满和成就。它象征着一个循环的结束和新的开始，标志着成功和满足。",
-        upright: "完成、圆满、成就、成功、旅行、整合、实现",
-        reversed: "未完成、不圆满、失败、停滞、缺乏整合、未实现"
-      },
-      
-      // 小阿卡纳 - 权杖 (22-35)
-      { id: 22, name: "权杖一", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_1.jpg", description: "权杖一代表新的创意、灵感和行动力的开始。它象征着新的机会和冒险即将来临。", upright: "新开始、创意、灵感、行动力、冒险、机会", reversed: "缺乏创意、行动力不足、错失机会、犹豫不决" },
-      { id: 23, name: "权杖二", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_2.jpg", description: "权杖二象征计划、远见和决策。它代表着对未来的展望和为实现目标做准备。", upright: "计划、远见、决策、准备、自信、扩张", reversed: "缺乏计划、短视、犹豫不决、缺乏自信、限制" },
-      { id: 24, name: "权杖三", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_3.jpg", description: "权杖三代表远见、探索和扩展。它象征着通过探索新领域来实现成长和进步。", upright: "远见、探索、扩展、进步、旅行、成功", reversed: "短视、停滞、限制、失败、保守、缺乏进展" },
-      { id: 25, name: "权杖四", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_4.jpg", description: "权杖四象征稳定、和谐和庆祝。它代表着在完成一项任务后的满足感和安全感。", upright: "稳定、和谐、庆祝、安全、成就、家庭", reversed: "不稳定、冲突、不满足、不安全、失败、家庭问题" },
-      { id: 26, name: "权杖五", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_5.jpg", description: "权杖五代表冲突、竞争和挑战。它象征着在追求目标过程中遇到的阻力和斗争。", upright: "冲突、竞争、挑战、阻力、斗争、分歧", reversed: "和解、合作、克服挑战、和谐、妥协、一致" },
-      { id: 27, name: "权杖六", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_6.jpg", description: "权杖六象征胜利、成功和认可。它代表着通过努力和坚持获得的成就和荣誉。", upright: "胜利、成功、认可、荣誉、自信、进展", reversed: "失败、挫折、不被认可、缺乏自信、停滞" },
-      { id: 28, name: "权杖七", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_7.jpg", description: "权杖七代表坚持、防御和勇气。它象征着在面对挑战时保持坚定和不屈不挠的精神。", upright: "坚持、防御、勇气、不屈不挠、抵抗、决心", reversed: "放弃、退缩、懦弱、屈服、缺乏决心、失败" },
-      { id: 29, name: "权杖八", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_8.jpg", description: "权杖八象征迅速行动、进展和自由。它代表着事情顺利进行，没有阻碍。", upright: "迅速行动、进展、自由、顺利、旅行、消息", reversed: "延迟、阻碍、限制、缓慢、停滞、延迟的消息" },
-      { id: 30, name: "权杖九", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_9.jpg", description: "权杖九代表警惕、防御和准备。它象征着在经历挑战后保持警惕，防止未来的问题。", upright: "警惕、防御、准备、谨慎、经验、恢复", reversed: "疏忽、无准备、鲁莽、过度警惕、恐惧、无法恢复" },
-      { id: 31, name: "权杖十", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_10.jpg", description: "权杖十象征负担、压力和责任。它代表着承担过多的责任和压力，需要学会放下。", upright: "负担、压力、责任、过度工作、疲惫、义务", reversed: "卸下负担、减轻压力、拒绝责任、休息、平衡" },
-      { id: 32, name: "权杖侍从", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_sc.jpg", description: "权杖侍从代表新的创意、热情和冒险精神。它象征着对新事物的好奇和探索欲望。", upright: "新创意、热情、冒险、好奇、探索、消息", reversed: "缺乏创意、冷漠、鲁莽、迟钝、坏消息、缺乏热情" },
-      { id: 33, name: "权杖骑士", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_qs.jpg", description: "权杖骑士象征行动、冲动和活力。他代表着充满活力地追求目标，但也可能缺乏耐心。", upright: "行动、活力、冲动、追求、旅行、热情", reversed: "缺乏行动、延迟、鲁莽、冲突、缺乏活力、失败" },
-      { id: 34, name: "权杖王后", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_wh.jpg", description: "权杖王后代表创造力、热情和自信。她象征着通过创造力和热情实现目标的能力。", upright: "创造力、热情、自信、领导力、独立、灵感", reversed: "缺乏创造力、冷漠、自卑、控制欲、依赖、缺乏灵感" },
-      { id: 35, name: "权杖国王", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_gw.jpg", description: "权杖国王象征领导力、创造力和权威。他代表着通过创造力和远见实现成功的领导者。", upright: "领导力、创造力、权威、远见、成功、自信", reversed: "滥用权力、缺乏创造力、无能、短视、失败、自卑" },
-      
-      // 小阿卡纳 - 圣杯 (36-49)
-      { id: 36, name: "圣杯一", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_1.jpg", description: "圣杯一代表新的情感、爱和灵性的开始。它象征着情感的开放和新的关系的可能性。", upright: "新情感、爱、灵性、喜悦、和谐、新关系", reversed: "情感封闭、冷漠、灵性空虚、不和谐、关系问题" },
-      { id: 37, name: "圣杯二", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_2.jpg", description: "圣杯二象征伙伴关系、爱情和和谐。它代表着平等和相互尊重的关系。", upright: "伙伴关系、爱情、和谐、平等、合作、友谊", reversed: "关系问题、不平等、冲突、不和谐、背叛、竞争" },
-      { id: 38, name: "圣杯三", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_3.jpg", description: "圣杯三代表庆祝、友谊和合作。它象征着与他人分享快乐和成功的时刻。", upright: "庆祝、友谊、合作、分享、快乐、成功", reversed: "孤独、冲突、竞争、嫉妒、不满足、失败" },
-      { id: 39, name: "圣杯四", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_4.jpg", description: "圣杯四象征不满、冷漠和反思。它代表着对现状的不满和对新机会的期待。", upright: "不满、冷漠、反思、期待、选择、新机会", reversed: "满足、热情、行动、接受、感恩、错失机会" },
-      { id: 40, name: "圣杯五", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_5.jpg", description: "圣杯五代表失落、悲伤和遗憾。它象征着对过去的失去感到悲伤，但也暗示着新的希望。", upright: "失落、悲伤、遗憾、哀悼、失望、变化", reversed: "接受、疗愈、希望、放下、恢复、新开始" },
-      { id: 41, name: "圣杯六", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_6.jpg", description: "圣杯六象征给予、接受和互惠。它代表着在关系中的平衡和相互支持。", upright: "给予、接受、互惠、支持、关怀、平衡", reversed: "自私、不平等、依赖、忽视、不平衡、缺乏支持" },
-      { id: 42, name: "圣杯七", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_7.jpg", description: "圣杯七象征梦想、幻想和欲望。它代表着对未来的希望和期待，但也提醒我们要区分现实和幻想。", upright: "梦想、幻想、欲望、希望、期待、选择", reversed: "幻灭、缺乏方向、不切实际、混乱、失望、缺乏选择" },
-      { id: 43, name: "圣杯八", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_8.jpg", description: "圣杯八象征放弃、探索和离开。它代表着为了寻找更深的意义而放弃物质财富和现状。", upright: "放弃、探索、离开、寻找意义、精神旅程、独立", reversed: "停滞、恐惧改变、物质主义、缺乏意义、依赖、回头" },
-      { id: 44, name: "圣杯九", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_9.jpg", description: "圣杯九象征满足、幸福和愿望实现。它代表着通过努力和坚持获得的成就和满足感。", upright: "满足、幸福、愿望实现、成就、自信、成功", reversed: "不满足、失望、失败、缺乏自信、贪婪、虚荣" },
-      { id: 45, name: "圣杯十", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_10.jpg", description: "圣杯十象征家庭、社区和圆满。它代表着家庭的幸福和社区的和谐。", upright: "家庭、社区、圆满、幸福、和谐、安全", reversed: "家庭问题、冲突、不和谐、不安全、失败、孤独" },
-      { id: 46, name: "圣杯侍从", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_sc.jpg", description: "圣杯侍从代表新的情感、好奇心和灵感。它象征着对情感世界的好奇和探索欲望。", upright: "新情感、好奇心、灵感、探索、消息、机会", reversed: "缺乏情感、冷漠、无知、沟通不良、迟钝、保守" },
-      { id: 47, name: "圣杯骑士", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_qs.jpg", description: "圣杯骑士象征浪漫、理想主义和邀请。他代表着充满浪漫和理想主义的追求，但也可能缺乏实际行动。", upright: "浪漫、理想主义、邀请、追求、机会、灵感", reversed: "缺乏浪漫、失望、失败、缺乏行动、不切实际、保守" },
-      { id: 48, name: "圣杯王后", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_wh.jpg", description: "圣杯王后代表情感、直觉和同情。她象征着通过情感和直觉来实现目标的能力。", upright: "情感、直觉、同情、关怀、爱、灵感", reversed: "缺乏情感、冷漠、无情、自私、缺乏灵感" },
-      { id: 49, name: "圣杯国王", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_gw.jpg", description: "圣杯国王象征情感、智慧和权威。他代表着通过情感和智慧实现成功的领导者。", upright: "情感、智慧、权威、成功、同情、领导力", reversed: "缺乏情感、冷漠、无能、自私、缺乏领导力" },
-      
-      // 小阿卡纳 - 宝剑 (50-63)
-      { id: 50, name: "宝剑一", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_1.jpg", description: "宝剑一代表新的思想、清晰和胜利。它象征着通过清晰的思维和决心获得的胜利。", upright: "新思想、清晰、胜利、决心、突破、力量", reversed: "缺乏思想、混乱、失败、犹豫不决、限制" },
-      { id: 51, name: "宝剑二", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_2.jpg", description: "宝剑二象征平衡、和平和犹豫。它代表着在做出决定前需要保持平衡和冷静。", upright: "平衡、和平、犹豫、冷静、等待、选择", reversed: "不平衡、冲突、决定、行动、焦虑、混乱" },
-      { id: 52, name: "宝剑三", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_3.jpg", description: "宝剑三象征心碎、悲伤和痛苦。它代表着在经历痛苦后，需要接受现实并寻找疗愈。", upright: "心碎、悲伤、痛苦、失落、分离、伤害", reversed: "疗愈、接受、恢复、希望、新开始、克服痛苦" },
-      { id: 53, name: "宝剑四", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_4.jpg", description: "宝剑四象征休息、恢复和宁静。它代表着在经历挑战后，需要休息和恢复精力。", upright: "休息、恢复、宁静、和平、冥想、反思", reversed: "疲惫、过度工作、无法休息、焦虑、活跃" },
-      { id: 54, name: "宝剑五", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_5.jpg", description: "宝剑五象征冲突、胜利和损失。它代表着通过冲突获得的胜利，但也伴随着损失。", upright: "冲突、胜利、损失、竞争、分歧、争吵", reversed: "和解、妥协、失败、放弃、和平、合作" },
-      { id: 55, name: "宝剑六", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_6.jpg", description: "宝剑六象征过渡、疗愈和前进。它代表着在经历困难后慢慢恢复和前进。", upright: "过渡、疗愈、前进、恢复、旅程、平静", reversed: "停滞、无法疗愈、后退、困境、动荡、延迟" },
-      { id: 56, name: "宝剑七", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_7.jpg", description: "宝剑七象征策略、欺骗和隐藏。它代表着通过策略和欺骗获得的暂时胜利。", upright: "策略、欺骗、隐藏、机智、狡猾、暂时胜利", reversed: "诚实、公开、失败、天真、被欺骗、长期损失" },
-      { id: 57, name: "宝剑八", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_8.jpg", description: "宝剑八象征限制、恐惧和束缚。它代表着被自己的恐惧和信念所束缚。", upright: "限制、恐惧、束缚、无知、困境、自我设限", reversed: "自由、勇气、释放、知识、突破、自我解放" },
-      { id: 58, name: "宝剑九", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_9.jpg", description: "宝剑九象征恐惧、焦虑和噩梦。它代表着被恐惧和焦虑所困扰的状态。", upright: "恐惧、焦虑、噩梦、失眠、内疚、痛苦", reversed: "勇气、平静、疗愈、释怀、安心、希望" },
-      { id: 59, name: "宝剑十", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_10.jpg", description: "宝剑十象征结束、损失和转变。它代表着一个艰难时期的结束和新的开始的可能性。", upright: "结束、损失、转变、痛苦、失败、结论", reversed: "新开始、恢复、希望、转变、部分胜利、延续" },
-      { id: 60, name: "宝剑侍从", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_sc.jpg", description: "宝剑侍从代表新的思想、好奇心和学习。它象征着对知识和新思想的渴望。", upright: "新思想、好奇心、学习、沟通、机智、探索", reversed: "缺乏思想、冷漠、无知、沟通不良、迟钝、保守" },
-      { id: 61, name: "宝剑骑士", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_qs.jpg", description: "宝剑骑士象征行动、冲动和速度。他代表着充满活力地追求目标，但也可能缺乏耐心和谨慎。", upright: "行动、冲动、速度、追求、思考、决心", reversed: "缺乏行动、延迟、鲁莽、冲突、缺乏活力、失败" },
-      { id: 62, name: "宝剑王后", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_wh.jpg", description: "宝剑王后代表清晰、智慧和独立。她象征着通过清晰的思维和独立性来实现目标的能力。", upright: "清晰、智慧、独立、洞察力、理性、果断", reversed: "缺乏清晰、混乱、依赖、无知、不理性、犹豫不决" },
-      { id: 63, name: "宝剑国王", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_gw.jpg", description: "宝剑国王象征清晰、权威和智慧。他代表着通过清晰的思维和智慧实现成功的领导者。", upright: "清晰、权威、智慧、成功、理性、领导力", reversed: "缺乏清晰、混乱、无能、愚蠢、不理性、缺乏领导力" },
-      
-      // 小阿卡纳 - 星币 (64-77)
-      { id: 64, name: "星币一", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_1.jpg", description: "星币一代表新的财务、机会和繁荣。它象征着新的财务机会和物质世界的成功。", upright: "新财务、机会、繁荣、成功、稳定、安全", reversed: "缺乏财务、错失机会、不稳定、失败、不安全" },
-      { id: 65, name: "星币二", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_2.jpg", description: "星币二象征平衡、适应和灵活。它代表着在财务和生活之间找到平衡的能力。", upright: "平衡、适应、灵活、变动、选择、机会", reversed: "不平衡、僵化、缺乏灵活、停滞、选择困难" },
-      { id: 66, name: "星币三", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_3.jpg", description: "星币三象征团队合作、技能和认可。它代表着通过团队合作和技能获得的成就。", upright: "团队合作、技能、认可、成就、学习、成功", reversed: "缺乏团队合作、技能不足、不被认可、失败、缺乏学习" },
-      { id: 67, name: "星币四", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_4.jpg", description: "星币四象征稳定、安全和控制。它代表着对财务和物质世界的控制和安全感。", upright: "稳定、安全、控制、保守、财产、积累", reversed: "不稳定、不安全、失控、浪费、缺乏积累" },
-      { id: 68, name: "星币五", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_5.jpg", description: "星币五象征贫穷、失落和孤独。它代表着在物质和情感上的失落和孤独。", upright: "贫穷、失落、孤独、困境、需要帮助", reversed: "恢复、希望、帮助、新开始、克服困境" },
-      { id: 69, name: "星币六", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_6.jpg", description: "星币六象征给予、接受和慷慨。它代表着在财务上的平衡和慷慨。", upright: "给予、接受、慷慨、平衡、互助、成功", reversed: "自私、贪婪、不平衡、缺乏互助、失败" },
-      { id: 70, name: "星币七", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_7.jpg", description: "星币七象征耐心、评估和投资。它代表着在等待结果时需要保持耐心和评估投资。", upright: "耐心、评估、投资、等待、成长、回报", reversed: "缺乏耐心、失败、浪费、急躁、缺乏回报" },
-      { id: 71, name: "星币八", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_8.jpg", description: "星币八象征勤奋、技能和专注。它代表着通过勤奋和专注获得的成就。", upright: "勤奋、技能、专注、成就、学习、进步", reversed: "懒惰、粗心、技能不足、无知、保守、失败" },
-      { id: 72, name: "星币九", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_9.jpg", description: "星币九象征独立、财富和享受。它代表着通过独立和努力获得的财富和享受。", upright: "独立、财富、享受、成功、自足、自信", reversed: "依赖、贫穷、失败、不满足、缺乏自信" },
-      { id: 73, name: "星币十", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_10.jpg", description: "星币十象征财富、传承和家庭。它代表着家庭的财富和稳定，以及代代相传的价值观。", upright: "财富、传承、家庭、稳定、成功、安全", reversed: "贫穷、断裂、家庭问题、不稳定、失败、不安全" },
-      { id: 74, name: "星币侍从", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_sc.jpg", description: "星币侍从代表新的机会、学习和实践。它象征着对财务和物质世界的好奇和学习欲望。", upright: "新机会、学习、实践、好奇、勤奋、责任", reversed: "错失机会、无知、懒惰、冷漠、不负责任、浪费" },
-      { id: 75, name: "星币骑士", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_qs.jpg", description: "星币骑士象征勤奋、耐心和可靠。他代表着通过勤奋和耐心来实现财务目标的能力。", upright: "勤奋、耐心、可靠、务实、进步、责任感", reversed: "懒惰、急躁、不可靠、不切实际、停滞、不负责任" },
-      { id: 76, name: "星币王后", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_wh.jpg", description: "星币王后代表丰饶、务实和关怀。她象征着对家庭和财务的关怀和管理能力。", upright: "丰饶、务实、关怀、慷慨、稳定、可靠", reversed: "贫瘠、不切实际、冷漠、吝啬、不稳定、不可靠" },
-      { id: 77, name: "星币国王", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_gw.jpg", description: "星币国王象征财富、权威和成功。他代表着通过智慧和努力工作获得的财务成功和权威。", upright: "财富、权威、成功、智慧、务实、领导力", reversed: "贫穷、无能、失败、愚蠢、不切实际、缺乏领导力" }
-    ];
+  <script>
+  /* ============================================================
+   * 第一层：数据层 (Data)
+   * 78 张塔罗牌的完整数据
+   * ============================================================ */
+  const TAROT_DATA = [
+    // 大阿卡纳 (0-21)
+    { id: 0, name: "愚者", type: "major", image: "https://static.shenpowang.com/img/taluopai/0.gif", description: "愚者代表新的开始、冒险精神和纯真无邪。他站在悬崖边，象征着对未来的无限可能敞开心扉，勇敢地追求梦想而不畏惧风险。", upright: "新的开始、自由、冒险、天真、灵感、创造力、无拘无束", reversed: "鲁莽、缺乏方向、不负责任、冒险过度、天真幼稚、逃避现实" },
+    { id: 1, name: "魔术师", type: "major", image: "https://static.shenpowang.com/img/taluopai/1.gif", description: "魔术师代表创造、行动力和资源的掌控。他拥有无限的潜力，能够将想法转化为现实，展现出自信和决心。", upright: "创造力、行动力、自信、技能、资源、决心、新机会", reversed: "缺乏自信、能力不足、错失机会、操纵、犹豫、资源浪费" },
+    { id: 2, name: "女祭司", type: "major", image: "https://static.shenpowang.com/img/taluopai/2.gif", description: "女祭司象征直觉、智慧和神秘的知识。她代表内在的声音和潜意识，提醒我们要相信自己的直觉和内在指引。", upright: "直觉、智慧、神秘、内省、精神力量、冷静、洞察力", reversed: "直觉失灵、隐秘、沉默、缺乏洞察力、忽视内心声音" },
+    { id: 3, name: "女皇", type: "major", image: "https://static.shenpowang.com/img/taluopai/3.gif", description: "女皇代表丰饶、母性、创造力和滋养。她象征着生命的繁荣和自然的丰盛，鼓励我们拥抱生活的美好。", upright: "丰饶、创造力、母性、滋养、繁荣、美丽、享受生活", reversed: "不孕不育、缺乏创造力、依赖、过度放纵、忽视自我需求" },
+    { id: 4, name: "皇帝", type: "major", image: "https://static.shenpowang.com/img/taluopai/4.gif", description: "皇帝象征权威、结构和控制。他代表着理性思维和领导力，提醒我们要建立稳固的基础和秩序。", upright: "权威、领导力、结构、控制、纪律、理性、保护", reversed: "滥用权力、独裁、缺乏纪律、失控、僵化、缺乏领导力" },
+    { id: 5, name: "教皇", type: "major", image: "https://static.shenpowang.com/img/taluopai/5.gif", description: "教皇代表传统、灵性指导和道德价值观。他象征着宗教信仰和社会规范，提醒我们要尊重传统并寻求智慧的指引。", upright: "传统、灵性、指导、道德、教育、信仰、社区", reversed: "教条、僵化、盲目信仰、反叛、缺乏道德、错误的指导" },
+    { id: 6, name: "恋人", type: "major", image: "https://static.shenpowang.com/img/taluopai/6.gif", description: "恋人代表爱、选择和关系。这张牌象征着重要的决定和灵魂的连接，提醒我们要在爱与关系中保持真实和忠诚。", upright: "爱情、关系、选择、和谐、吸引力、灵魂连接、价值观", reversed: "关系问题、错误的选择、不和谐、背叛、缺乏选择、价值观冲突" },
+    { id: 7, name: "战车", type: "major", image: "https://static.shenpowang.com/img/taluopai/7.gif", description: "战车象征意志、控制和胜利。它代表着通过自律和决心克服障碍，达成目标的能力。", upright: "意志、控制、胜利、决心、自律、前进、成功", reversed: "缺乏控制、意志薄弱、失败、冲突、犹豫不决、停滞不前" },
+    { id: 8, name: "力量", type: "major", image: "https://static.shenpowang.com/img/taluopai/8.gif", description: "力量代表内在的力量、勇气和温柔。它象征着通过爱和耐心而非暴力来克服挑战的能力。", upright: "勇气、力量、耐心、信心、温柔、毅力、控制激情", reversed: "软弱、缺乏勇气、犹豫不决、滥用力量、恐惧、自我怀疑" },
+    { id: 9, name: "隐者", type: "major", image: "https://static.shenpowang.com/img/taluopai/9.gif", description: "隐者象征内省、智慧和孤独。他代表着通过独处和反思来寻找生命的意义和答案的过程。", upright: "内省、智慧、孤独、反思、指引、谨慎、寻求真理", reversed: "孤独、隔绝、缺乏方向、过度内省、逃避现实、拒绝帮助" },
+    { id: 10, name: "命运之轮", type: "major", image: "https://static.shenpowang.com/img/taluopai/10.gif", description: "命运之轮代表变化、命运和机遇。它象征着生命的循环和无常，提醒我们要接受变化并顺应自然的流动。", upright: "变化、命运、机遇、循环、好运、转折点、进步", reversed: "停滞、坏运、抗拒变化、重复模式、延迟、挫折" },
+    { id: 11, name: "正义", type: "major", image: "https://static.shenpowang.com/img/taluopai/11.gif", description: "正义象征公平、平衡和责任。它代表着因果报应和道德原则，提醒我们要为自己的行为负责。", upright: "公平、正义、平衡、责任、法律、真理、因果", reversed: "不公平、偏见、失衡、逃避责任、法律问题、不公正" },
+    { id: 12, name: "倒吊人", type: "major", image: "https://static.shenpowang.com/img/taluopai/12.gif", description: "倒吊人代表牺牲、视角转变和等待。它象征着从不同的角度看待问题，以及为了更高的目标而做出牺牲。", upright: "牺牲、耐心、视角转变、等待、冥想、灵性成长", reversed: "不必要的牺牲、固执、徒劳的等待、缺乏远见、不愿改变" },
+    { id: 13, name: "死神", type: "major", image: "https://static.shenpowang.com/img/taluopai/13.gif", description: "死神象征结束、转变和重生。它代表着旧事物的终结和新事物的开始，提醒我们要接受变化并放下过去。", upright: "结束、转变、重生、变革、放下、新开始、转型", reversed: "抗拒变化、恐惧结束、停滞不前、旧模式延续、延迟" },
+    { id: 14, name: "节制", type: "major", image: "https://static.shenpowang.com/img/taluopai/14.gif", description: "节制代表平衡、和谐和适度。它象征着在生活的各个方面寻找平衡，以及通过适度和调和来实现内心的平静。", upright: "平衡、和谐、适度、调和、耐心、灵性成长、自我控制", reversed: "失衡、过度、冲突、不耐烦、缺乏控制、不和谐" },
+    { id: 15, name: "恶魔", type: "major", image: "https://static.shenpowang.com/img/taluopai/15.gif", description: "恶魔象征诱惑、束缚和物质主义。它代表着我们被欲望和恐惧所束缚的状态，提醒我们要摆脱物质的枷锁。", upright: "诱惑、束缚、欲望、物质主义、成瘾、恐惧、限制", reversed: "解放、摆脱束缚、克服恐惧、打破成瘾、自由、觉醒" },
+    { id: 16, name: "塔", type: "major", image: "https://static.shenpowang.com/img/taluopai/16.gif", description: "塔代表突然的变化、崩溃和觉醒。它象征着旧有结构的崩塌，虽然痛苦，但为新的开始创造了空间。", upright: "突然变化、崩溃、觉醒、灾难、解放、真相揭露、颠覆", reversed: "避免变化、延迟崩溃、抗拒觉醒、恐惧变革、内部冲突" },
+    { id: 17, name: "星星", type: "major", image: "https://static.shenpowang.com/img/taluopai/17.gif", description: "星星象征希望、灵感和灵性。它代表着在黑暗中寻找光明，以及对未来的乐观和信念。", upright: "希望、灵感、灵性、梦想、乐观、信仰、指引", reversed: "绝望、缺乏灵感、失去希望、幻灭、悲观、灵性空虚" },
+    { id: 18, name: "月亮", type: "major", image: "https://static.shenpowang.com/img/taluopai/18.gif", description: "月亮代表潜意识、直觉和不确定性。它象征着我们内心的恐惧和隐藏的情感，提醒我们要相信自己的直觉。", upright: "潜意识、直觉、恐惧、幻觉、不确定性、神秘、情感", reversed: "清晰、克服恐惧、揭开真相、摆脱幻觉、明确方向" },
+    { id: 19, name: "太阳", type: "major", image: "https://static.shenpowang.com/img/taluopai/19.gif", description: "太阳象征光明、快乐和成功。它代表着积极的能量、创造力、生命力，是一张充满希望和喜悦的牌。", upright: "快乐、成功、光明、活力、创造力、温暖、幸福", reversed: "抑郁、失败、黑暗、缺乏活力、创造力受阻、不快乐" },
+    { id: 20, name: "审判", type: "major", image: "https://static.shenpowang.com/img/taluopai/20.gif", description: "审判代表重生、觉醒和评估。它象征着对过去的反思和新的开始，提醒我们要对自己的行为负责。", upright: "重生、觉醒、评估、原谅、责任、新开始、召唤", reversed: "拒绝改变、悔恨、指责、拖延、缺乏责任感、忽视召唤" },
+    { id: 21, name: "世界", type: "major", image: "https://static.shenpowang.com/img/taluopai/21.gif", description: "世界代表完成、圆满和成就。它象征着一个循环的结束和新的开始，标志着成功和满足。", upright: "完成、圆满、成就、成功、旅行、整合、实现", reversed: "未完成、不圆满、失败、停滞、缺乏整合、未实现" },
+
+    // 小阿卡纳 - 权杖 (22-35)
+    { id: 22, name: "权杖一", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_1.jpg", description: "权杖一代表新的创意、灵感和行动力的开始。它象征着新的机会和冒险即将来临。", upright: "新开始、创意、灵感、行动力、冒险、机会", reversed: "缺乏创意、行动力不足、错失机会、犹豫不决" },
+    { id: 23, name: "权杖二", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_2.jpg", description: "权杖二象征计划、远见和决策。它代表着对未来的展望和为实现目标做准备。", upright: "计划、远见、决策、准备、自信、扩张", reversed: "缺乏计划、短视、犹豫不决、缺乏自信、限制" },
+    { id: 24, name: "权杖三", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_3.jpg", description: "权杖三代表远见、探索和扩展。它象征着通过探索新领域来实现成长和进步。", upright: "远见、探索、扩展、进步、旅行、成功", reversed: "短视、停滞、限制、失败、保守、缺乏进展" },
+    { id: 25, name: "权杖四", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_4.jpg", description: "权杖四象征稳定、和谐和庆祝。它代表着在完成一项任务后的满足感和安全感。", upright: "稳定、和谐、庆祝、安全、成就、家庭", reversed: "不稳定、冲突、不满足、不安全、失败、家庭问题" },
+    { id: 26, name: "权杖五", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_5.jpg", description: "权杖五代表冲突、竞争和挑战。它象征着在追求目标过程中遇到的阻力和斗争。", upright: "冲突、竞争、挑战、阻力、斗争、分歧", reversed: "和解、合作、克服挑战、和谐、妥协、一致" },
+    { id: 27, name: "权杖六", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_6.jpg", description: "权杖六象征胜利、成功和认可。它代表着通过努力和坚持获得的成就和荣誉。", upright: "胜利、成功、认可、荣誉、自信、进展", reversed: "失败、挫折、不被认可、缺乏自信、停滞" },
+    { id: 28, name: "权杖七", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_7.jpg", description: "权杖七代表坚持、防御和勇气。它象征着在面对挑战时保持坚定和不屈不挠的精神。", upright: "坚持、防御、勇气、不屈不挠、抵抗、决心", reversed: "放弃、退缩、懦弱、屈服、缺乏决心、失败" },
+    { id: 29, name: "权杖八", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_8.jpg", description: "权杖八象征迅速行动、进展和自由。它代表着事情顺利进行，没有阻碍。", upright: "迅速行动、进展、自由、顺利、旅行、消息", reversed: "延迟、阻碍、限制、缓慢、停滞、延迟的消息" },
+    { id: 30, name: "权杖九", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_9.jpg", description: "权杖九代表警惕、防御和准备。它象征着在经历挑战后保持警惕，防止未来的问题。", upright: "警惕、防御、准备、谨慎、经验、恢复", reversed: "疏忽、无准备、鲁莽、过度警惕、恐惧、无法恢复" },
+    { id: 31, name: "权杖十", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_10.jpg", description: "权杖十象征负担、压力和责任。它代表着承担过多的责任和压力，需要学会放下。", upright: "负担、压力、责任、过度工作、疲惫、义务", reversed: "卸下负担、减轻压力、拒绝责任、休息、平衡" },
+    { id: 32, name: "权杖侍从", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_sc.jpg", description: "权杖侍从代表新的创意、热情和冒险精神。它象征着对新事物的好奇和探索欲望。", upright: "新创意、热情、冒险、好奇、探索、消息", reversed: "缺乏创意、冷漠、鲁莽、迟钝、坏消息、缺乏热情" },
+    { id: 33, name: "权杖骑士", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_qs.jpg", description: "权杖骑士象征行动、冲动和活力。他代表着充满活力地追求目标，但也可能缺乏耐心。", upright: "行动、活力、冲动、追求、旅行、热情", reversed: "缺乏行动、延迟、鲁莽、冲突、缺乏活力、失败" },
+    { id: 34, name: "权杖王后", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_wh.jpg", description: "权杖王后代表创造力、热情和自信。她象征着通过创造力和热情实现目标的能力。", upright: "创造力、热情、自信、领导力、独立、灵感", reversed: "缺乏创造力、冷漠、自卑、控制欲、依赖、缺乏灵感" },
+    { id: 35, name: "权杖国王", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_gw.jpg", description: "权杖国王象征领导力、创造力和权威。他代表着通过创造力和远见实现成功的领导者。", upright: "领导力、创造力、权威、远见、成功、自信", reversed: "滥用权力、缺乏创造力、无能、短视、失败、自卑" },
+
+    // 小阿卡纳 - 圣杯 (36-49)
+    { id: 36, name: "圣杯一", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_1.jpg", description: "圣杯一代表新的情感、爱和灵性的开始。它象征着情感的开放和新的关系的可能性。", upright: "新情感、爱、灵性、喜悦、和谐、新关系", reversed: "情感封闭、冷漠、灵性空虚、不和谐、关系问题" },
+    { id: 37, name: "圣杯二", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_2.jpg", description: "圣杯二象征伙伴关系、爱情和和谐。它代表着平等和相互尊重的关系。", upright: "伙伴关系、爱情、和谐、平等、合作、友谊", reversed: "关系问题、不平等、冲突、不和谐、背叛、竞争" },
+    { id: 38, name: "圣杯三", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_3.jpg", description: "圣杯三代表庆祝、友谊和合作。它象征着与他人分享快乐和成功的时刻。", upright: "庆祝、友谊、合作、分享、快乐、成功", reversed: "孤独、冲突、竞争、嫉妒、不满足、失败" },
+    { id: 39, name: "圣杯四", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_4.jpg", description: "圣杯四象征不满、冷漠和反思。它代表着对现状的不满和对新机会的期待。", upright: "不满、冷漠、反思、期待、选择、新机会", reversed: "满足、热情、行动、接受、感恩、错失机会" },
+    { id: 40, name: "圣杯五", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_5.jpg", description: "圣杯五代表失落、悲伤和遗憾。它象征着对过去的失去感到悲伤，但也暗示着新的希望。", upright: "失落、悲伤、遗憾、哀悼、失望、变化", reversed: "接受、疗愈、希望、放下、恢复、新开始" },
+    { id: 41, name: "圣杯六", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_6.jpg", description: "圣杯六象征给予、接受和互惠。它代表着在关系中的平衡和相互支持。", upright: "给予、接受、互惠、支持、关怀、平衡", reversed: "自私、不平等、依赖、忽视、不平衡、缺乏支持" },
+    { id: 42, name: "圣杯七", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_7.jpg", description: "圣杯七象征梦想、幻想和欲望。它代表着对未来的希望和期待，但也提醒我们要区分现实和幻想。", upright: "梦想、幻想、欲望、希望、期待、选择", reversed: "幻灭、缺乏方向、不切实际、混乱、失望、缺乏选择" },
+    { id: 43, name: "圣杯八", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_8.jpg", description: "圣杯八象征放弃、探索和离开。它代表着为了寻找更深的意义而放弃物质财富和现状。", upright: "放弃、探索、离开、寻找意义、精神旅程、独立", reversed: "停滞、恐惧改变、物质主义、缺乏意义、依赖、回头" },
+    { id: 44, name: "圣杯九", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_9.jpg", description: "圣杯九象征满足、幸福和愿望实现。它代表着通过努力和坚持获得的成就和满足感。", upright: "满足、幸福、愿望实现、成就、自信、成功", reversed: "不满足、失望、失败、缺乏自信、贪婪、虚荣" },
+    { id: 45, name: "圣杯十", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_10.jpg", description: "圣杯十象征家庭、社区和圆满。它代表着家庭的幸福和社区的和谐。", upright: "家庭、社区、圆满、幸福、和谐、安全", reversed: "家庭问题、冲突、不和谐、不安全、失败、孤独" },
+    { id: 46, name: "圣杯侍从", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_sc.jpg", description: "圣杯侍从代表新的情感、好奇心和灵感。它象征着对情感世界的好奇和探索欲望。", upright: "新情感、好奇心、灵感、探索、消息、机会", reversed: "缺乏情感、冷漠、无知、沟通不良、迟钝、保守" },
+    { id: 47, name: "圣杯骑士", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_qs.jpg", description: "圣杯骑士象征浪漫、理想主义和邀请。他代表着充满浪漫和理想主义的追求，但也可能缺乏实际行动。", upright: "浪漫、理想主义、邀请、追求、机会、灵感", reversed: "缺乏浪漫、失望、失败、缺乏行动、不切实际、保守" },
+    { id: 48, name: "圣杯王后", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_wh.jpg", description: "圣杯王后代表情感、直觉和同情。她象征着通过情感和直觉来实现目标的能力。", upright: "情感、直觉、同情、关怀、爱、灵感", reversed: "缺乏情感、冷漠、无情、自私、缺乏灵感" },
+    { id: 49, name: "圣杯国王", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_gw.jpg", description: "圣杯国王象征情感、智慧和权威。他代表着通过情感和智慧实现成功的领导者。", upright: "情感、智慧、权威、成功、同情、领导力", reversed: "缺乏情感、冷漠、无能、自私、缺乏领导力" },
+
+    // 小阿卡纳 - 宝剑 (50-63)
+    { id: 50, name: "宝剑一", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_1.jpg", description: "宝剑一代表新的思想、清晰和胜利。它象征着通过清晰的思维和决心获得的胜利。", upright: "新思想、清晰、胜利、决心、突破、力量", reversed: "缺乏思想、混乱、失败、犹豫不决、限制" },
+    { id: 51, name: "宝剑二", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_2.jpg", description: "宝剑二象征平衡、和平和犹豫。它代表着在做出决定前需要保持平衡和冷静。", upright: "平衡、和平、犹豫、冷静、等待、选择", reversed: "不平衡、冲突、决定、行动、焦虑、混乱" },
+    { id: 52, name: "宝剑三", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_3.jpg", description: "宝剑三象征心碎、悲伤和痛苦。它代表着在经历痛苦后，需要接受现实并寻找疗愈。", upright: "心碎、悲伤、痛苦、失落、分离、伤害", reversed: "疗愈、接受、恢复、希望、新开始、克服痛苦" },
+    { id: 53, name: "宝剑四", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_4.jpg", description: "宝剑四象征休息、恢复和宁静。它代表着在经历挑战后，需要休息和恢复精力。", upright: "休息、恢复、宁静、和平、冥想、反思", reversed: "疲惫、过度工作、无法休息、焦虑、活跃" },
+    { id: 54, name: "宝剑五", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_5.jpg", description: "宝剑五象征冲突、胜利和损失。它代表着通过冲突获得的胜利，但也伴随着损失。", upright: "冲突、胜利、损失、竞争、分歧、争吵", reversed: "和解、妥协、失败、放弃、和平、合作" },
+    { id: 55, name: "宝剑六", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_6.jpg", description: "宝剑六象征过渡、疗愈和前进。它代表着在经历困难后慢慢恢复和前进。", upright: "过渡、疗愈、前进、恢复、旅程、平静", reversed: "停滞、无法疗愈、后退、困境、动荡、延迟" },
+    { id: 56, name: "宝剑七", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_7.jpg", description: "宝剑七象征策略、欺骗和隐藏。它代表着通过策略和欺骗获得的暂时胜利。", upright: "策略、欺骗、隐藏、机智、狡猾、暂时胜利", reversed: "诚实、公开、失败、天真、被欺骗、长期损失" },
+    { id: 57, name: "宝剑八", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_8.jpg", description: "宝剑八象征限制、恐惧和束缚。它代表着被自己的恐惧和信念所束缚。", upright: "限制、恐惧、束缚、无知、困境、自我设限", reversed: "自由、勇气、释放、知识、突破、自我解放" },
+    { id: 58, name: "宝剑九", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_9.jpg", description: "宝剑九象征恐惧、焦虑和噩梦。它代表着被恐惧和焦虑所困扰的状态。", upright: "恐惧、焦虑、噩梦、失眠、内疚、痛苦", reversed: "勇气、平静、疗愈、释怀、安心、希望" },
+    { id: 59, name: "宝剑十", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_10.jpg", description: "宝剑十象征结束、损失和转变。它代表着一个艰难时期的结束和新的开始的可能性。", upright: "结束、损失、转变、痛苦、失败、结论", reversed: "新开始、恢复、希望、转变、部分胜利、延续" },
+    { id: 60, name: "宝剑侍从", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_sc.jpg", description: "宝剑侍从代表新的思想、好奇心和学习。它象征着对知识和新思想的渴望。", upright: "新思想、好奇心、学习、沟通、机智、探索", reversed: "缺乏思想、冷漠、无知、沟通不良、迟钝、保守" },
+    { id: 61, name: "宝剑骑士", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_qs.jpg", description: "宝剑骑士象征行动、冲动和速度。他代表着充满活力地追求目标，但也可能缺乏耐心和谨慎。", upright: "行动、冲动、速度、追求、思考、决心", reversed: "缺乏行动、延迟、鲁莽、冲突、缺乏活力、失败" },
+    { id: 62, name: "宝剑王后", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_wh.jpg", description: "宝剑王后代表清晰、智慧和独立。她象征着通过清晰的思维和独立性来实现目标的能力。", upright: "清晰、智慧、独立、洞察力、理性、果断", reversed: "缺乏清晰、混乱、依赖、无知、不理性、犹豫不决" },
+    { id: 63, name: "宝剑国王", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_gw.jpg", description: "宝剑国王象征清晰、权威和智慧。他代表着通过清晰的思维和智慧实现成功的领导者。", upright: "清晰、权威、智慧、成功、理性、领导力", reversed: "缺乏清晰、混乱、无能、愚蠢、不理性、缺乏领导力" },
+
+    // 小阿卡纳 - 星币 (64-77)
+    { id: 64, name: "星币一", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_1.jpg", description: "星币一代表新的财务、机会和繁荣。它象征着新的财务机会和物质世界的成功。", upright: "新财务、机会、繁荣、成功、稳定、安全", reversed: "缺乏财务、错失机会、不稳定、失败、不安全" },
+    { id: 65, name: "星币二", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_2.jpg", description: "星币二象征平衡、适应和灵活。它代表着在财务和生活之间找到平衡的能力。", upright: "平衡、适应、灵活、变动、选择、机会", reversed: "不平衡、僵化、缺乏灵活、停滞、选择困难" },
+    { id: 66, name: "星币三", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_3.jpg", description: "星币三象征团队合作、技能和认可。它代表着通过团队合作和技能获得的成就。", upright: "团队合作、技能、认可、成就、学习、成功", reversed: "缺乏团队合作、技能不足、不被认可、失败、缺乏学习" },
+    { id: 67, name: "星币四", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_4.jpg", description: "星币四象征稳定、安全和控制。它代表着对财务和物质世界的控制和安全感。", upright: "稳定、安全、控制、保守、财产、积累", reversed: "不稳定、不安全、失控、浪费、缺乏积累" },
+    { id: 68, name: "星币五", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_5.jpg", description: "星币五象征贫穷、失落和孤独。它代表着在物质和情感上的失落和孤独。", upright: "贫穷、失落、孤独、困境、需要帮助", reversed: "恢复、希望、帮助、新开始、克服困境" },
+    { id: 69, name: "星币六", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_6.jpg", description: "星币六象征给予、接受和慷慨。它代表着在财务上的平衡和慷慨。", upright: "给予、接受、慷慨、平衡、互助、成功", reversed: "自私、贪婪、不平衡、缺乏互助、失败" },
+    { id: 70, name: "星币七", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_7.jpg", description: "星币七象征耐心、评估和投资。它代表着在等待结果时需要保持耐心和评估投资。", upright: "耐心、评估、投资、等待、成长、回报", reversed: "缺乏耐心、失败、浪费、急躁、缺乏回报" },
+    { id: 71, name: "星币八", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_8.jpg", description: "星币八象征勤奋、技能和专注。它代表着通过勤奋和专注获得的成就。", upright: "勤奋、技能、专注、成就、学习、进步", reversed: "懒惰、粗心、技能不足、无知、保守、失败" },
+    { id: 72, name: "星币九", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_9.jpg", description: "星币九象征独立、财富和享受。它代表着通过独立和努力获得的财富和享受。", upright: "独立、财富、享受、成功、自足、自信", reversed: "依赖、贫穷、失败、不满足、缺乏自信" },
+    { id: 73, name: "星币十", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_10.jpg", description: "星币十象征财富、传承和家庭。它代表着家庭的财富和稳定，以及代代相传的价值观。", upright: "财富、传承、家庭、稳定、成功、安全", reversed: "贫穷、断裂、家庭问题、不稳定、失败、不安全" },
+    { id: 74, name: "星币侍从", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_sc.jpg", description: "星币侍从代表新的机会、学习和实践。它象征着对财务和物质世界的好奇和学习欲望。", upright: "新机会、学习、实践、好奇、勤奋、责任", reversed: "错失机会、无知、懒惰、冷漠、不负责任、浪费" },
+    { id: 75, name: "星币骑士", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_qs.jpg", description: "星币骑士象征勤奋、耐心和可靠。他代表着通过勤奋和耐心来实现财务目标的能力。", upright: "勤奋、耐心、可靠、务实、进步、责任感", reversed: "懒惰、急躁、不可靠、不切实际、停滞、不负责任" },
+    { id: 76, name: "星币王后", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_wh.jpg", description: "星币王后代表丰饶、务实和关怀。她象征着对家庭和财务的关怀和管理能力。", upright: "丰饶、务实、关怀、慷慨、稳定、可靠", reversed: "贫瘠、不切实际、冷漠、吝啬、不稳定、不可靠" },
+    { id: 77, name: "星币国王", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_gw.jpg", description: "星币国王象征财富、权威和成功。他代表着通过智慧和努力工作获得的财务成功和权威。", upright: "财富、权威、成功、智慧、务实、领导力", reversed: "贫穷、无能、失败、愚蠢、不切实际、缺乏领导力" }
+  ];
+
+  /* ============================================================
+   * 第二层：图片预加载器 (ImagePreloader)
+   * 并发控制 + 进度回调 + 失败兜底
+   * ============================================================ */
+  const ImagePreloader = {
+    _cache: new Map(),       // url -> HTMLImageElement
+    _failed: new Set(),      // 加载失败的 url 集合
 
     /**
-     * 第二部分：核心应用对象 (App Controller)
+     * 预加载一批图片
+     * @param {string[]} urls - 图片 URL 列表
+     * @param {object} callbacks
+     * @param {function} callbacks.onProgress  - (loaded, total) => void
+     * @param {function} callbacks.onComplete  - (loaded, failed, total) => void
+     * @param {number}   concurrency - 并发数，默认 6
      */
-    const TarotApp = {
-      state: {
-        selectedDeck: null,
-        maxCards: 78,
-        selectedCount: 1,
-        drawnCards: [],
-        aiModeActive: false,
-        bgMusic: new Audio('https://link.hhtjim.com/163/1960595909.mp3')
-      },
+    preload(urls, { onProgress, onComplete } = {}, concurrency = 6) {
+      const total = urls.length;
+      let loaded = 0;
+      let failedCount = 0;
+      let index = 0;
 
-      dom: {},
+      const loadNext = () => {
+        if (index >= total) return;
+        const url = urls[index++];
+        const img = new Image();
 
-      init() {
-        this.cacheDOM();
-        this.bindEvents();
-        this.state.bgMusic.loop = true;
-        this.renderCatalog();
-        this.updateCardCountUI();
-      },
-
-      cacheDOM() {
-        const getById = (id) => document.getElementById(id);
-        this.dom = {
-          steps: [getById('step1'), getById('step2'), getById('step3')],
-          indicators: [getById('step1Indicator'), getById('step2Indicator'), getById('step3Indicator')],
-          progressBars: [getById('progressBar'), getById('progressBar2')],
-          deckOptions: document.querySelectorAll('.deck-option'),
-          confirmDeckBtn: getById('confirmDeckBtn'),
-          aiSection: getById('aiSection'),
-          toggleAiBtn: getById('toggleAiBtn'),
-          toggleAiIcon: getById('toggleAiIcon'),
-          toggleAiText: getById('toggleAiText'),
-          quantityTitle: getById('quantityTitle'),
-          maxCardsSpan: getById('maxCards'),
-          cardCountDisplay: getById('cardCount'),
-          decreaseBtn: getById('decreaseBtn'),
-          increaseBtn: getById('increaseBtn'),
-          manualCountInput: getById('manualCountInput'),
-          manualCountSubmitBtn: getById('manualCountSubmitBtn'),
-          countErrorMessage: getById('countErrorMessage'),
-          drawCardsBtn: getById('drawCardsBtn'),
-          backToStep1Btn: getById('backToStep1Btn'),
-          userQuestion: getById('userQuestion'),
-          generatePromptBtn: getById('generatePromptBtn'),
-          promptOutput: getById('promptOutput'),
-          copyPromptBtn: getById('copyPromptBtn'),
-          aiPromptTip: getById('aiPromptTip'),
-          resultContainer: getById('resultContainer'),
-          copyResultsBtn: getById('copyResultsBtn'),
-          copyBtnText: getById('copyBtnText'),
-          copySuccess: getById('copySuccess'),
-          backToStep2Btn: getById('backToStep2Btn'),
-          restartBtn: getById('restartBtn'),
-          welcomeModal: getById('welcomeModal'),
-          startAppBtn: getById('startAppBtn'),
-          authorAvatar: getById('authorAvatar'),
-          avatarImage: getById('avatarImage'),
-          helpModal: getById('helpModal'),
-          cardDetailModal: getById('cardDetailModal')
+        img.onload = () => {
+          this._cache.set(url, img);
+          loaded++;
+          onProgress?.(loaded + failedCount, total);
+          loadNext();
         };
-      },
 
-      bindEvents() {
-        const { dom } = this;
-        dom.startAppBtn.addEventListener('click', () => {
+        img.onerror = () => {
+          this._failed.add(url);
+          failedCount++;
+          onProgress?.(loaded + failedCount, total);
+          loadNext();
+        };
+
+        img.src = url;
+      };
+
+      // 启动并发
+      const workers = Math.min(concurrency, total);
+      for (let i = 0; i < workers; i++) loadNext();
+
+      // 完成检测（轮询，因为无法在闭包内精确判断）
+      return new Promise(resolve => {
+        const check = setInterval(() => {
+          if (loaded + failedCount >= total) {
+            clearInterval(check);
+            onComplete?.(loaded, failedCount, total);
+            resolve({ loaded, failed: failedCount, total });
+          }
+        }, 50);
+      });
+    },
+
+    /** 从缓存获取图片，失败时返回 null */
+    get(url) {
+      if (this._failed.has(url)) return null;
+      return this._cache.get(url) || null;
+    },
+
+    /** 判断图片是否已缓存 */
+    isReady(url) {
+      return this._cache.has(url);
+    }
+  };
+
+  /* ============================================================
+   * 第三层：应用控制器 (TarotApp)
+   * 状态管理 + DOM 操作 + 业务逻辑
+   * ============================================================ */
+  const TarotApp = {
+    /* --- 状态 --- */
+    state: {
+      selectedDeck: null,
+      maxCards: 78,
+      selectedCount: 1,
+      drawnCards: [],
+      aiModeActive: false,
+      imagesReady: false,
+      bgMusic: new Audio('https://link.hhtjim.com/163/1960595909.mp3')
+    },
+
+    dom: {},
+
+    /* --- 初始化 --- */
+    init() {
+      this.cacheDOM();
+      this.bindEvents();
+      this.state.bgMusic.loop = true;
+      this.renderCatalog();
+      this.updateCardCountUI();
+      this.startPreload();
+    },
+
+    /* --- DOM 缓存 --- */
+    cacheDOM() {
+      const $ = (id) => document.getElementById(id);
+      this.dom = {
+        steps: [$('step1'), $('step2'), $('step3')],
+        indicators: [$('step1Indicator'), $('step2Indicator'), $('step3Indicator')],
+        progressBars: [$('progressBar'), $('progressBar2')],
+        deckOptions: document.querySelectorAll('.deck-option'),
+        confirmDeckBtn: $('confirmDeckBtn'),
+        aiSection: $('aiSection'),
+        toggleAiBtn: $('toggleAiBtn'),
+        toggleAiIcon: $('toggleAiIcon'),
+        toggleAiText: $('toggleAiText'),
+        quantityTitle: $('quantityTitle'),
+        maxCardsSpan: $('maxCards'),
+        cardCountDisplay: $('cardCount'),
+        decreaseBtn: $('decreaseBtn'),
+        increaseBtn: $('increaseBtn'),
+        manualCountInput: $('manualCountInput'),
+        manualCountSubmitBtn: $('manualCountSubmitBtn'),
+        countErrorMessage: $('countErrorMessage'),
+        drawCardsBtn: $('drawCardsBtn'),
+        backToStep1Btn: $('backToStep1Btn'),
+        userQuestion: $('userQuestion'),
+        generatePromptBtn: $('generatePromptBtn'),
+        promptOutput: $('promptOutput'),
+        copyPromptBtn: $('copyPromptBtn'),
+        aiPromptTip: $('aiPromptTip'),
+        resultContainer: $('resultContainer'),
+        copyResultsBtn: $('copyResultsBtn'),
+        copyBtnText: $('copyBtnText'),
+        copySuccess: $('copySuccess'),
+        backToStep2Btn: $('backToStep2Btn'),
+        restartBtn: $('restartBtn'),
+        welcomeModal: $('welcomeModal'),
+        startAppBtn: $('startAppBtn'),
+        authorAvatar: $('authorAvatar'),
+        avatarImage: $('avatarImage'),
+        helpModal: $('helpModal'),
+        cardDetailModal: $('cardDetailModal'),
+        // 预加载相关
+        preloadIcon: $('preloadIcon'),
+        preloadStatus: $('preloadStatus'),
+        preloadProgressBar: $('preloadProgressBar'),
+        preloadCount: $('preloadCount')
+      };
+    },
+
+    /* --- 事件绑定 --- */
+    bindEvents() {
+      const { dom } = this;
+
+      // 欢迎页：开始使用
+      dom.startAppBtn.addEventListener('click', () => {
+        this.state.bgMusic.pause();
+        dom.avatarImage.classList.remove('spin-blur', 'animate-full-spin');
+        dom.welcomeModal.classList.add('hidden');
+      });
+
+      // 头像点击：播放/暂停音乐
+      dom.authorAvatar.addEventListener('click', () => {
+        if (this.state.bgMusic.paused) {
+          this.state.bgMusic.play();
+          dom.avatarImage.classList.add('spin-blur', 'animate-full-spin');
+        } else {
           this.state.bgMusic.pause();
           dom.avatarImage.classList.remove('spin-blur', 'animate-full-spin');
-          dom.welcomeModal.classList.add('hidden');
+        }
+      });
+
+      // 牌组选择
+      dom.deckOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          dom.deckOptions.forEach(opt => opt.classList.remove('deck-selected'));
+          option.classList.add('deck-selected');
+          this.setDeck(option.dataset.deck);
         });
-        dom.authorAvatar.addEventListener('click', () => {
-          if (this.state.bgMusic.paused) {
-            this.state.bgMusic.play();
-            dom.avatarImage.classList.add('spin-blur', 'animate-full-spin');
+      });
+
+      // 步骤导航
+      dom.confirmDeckBtn.addEventListener('click', () => this.goToStep(2));
+      dom.backToStep1Btn.addEventListener('click', () => this.goToStep(1));
+      dom.backToStep2Btn.addEventListener('click', () => this.goToStep(2));
+
+      // 数量控制
+      dom.decreaseBtn.addEventListener('click', () => this.setCount(this.state.selectedCount - 1));
+      dom.increaseBtn.addEventListener('click', () => this.setCount(this.state.selectedCount + 1));
+      dom.manualCountSubmitBtn.addEventListener('click', () => {
+        this.setCount(parseInt(dom.manualCountInput.value));
+      });
+
+      // AI 模式
+      dom.toggleAiBtn.addEventListener('click', () => this.toggleAiMode());
+      dom.generatePromptBtn.addEventListener('click', () => this.generateAIPrompt());
+      dom.copyPromptBtn.addEventListener('click', () => this.copyPromptToClipboard());
+
+      // 抽牌 & 结果
+      dom.drawCardsBtn.addEventListener('click', () => this.executeDraw());
+      dom.copyResultsBtn.addEventListener('click', () => this.copyResultsToClipboard());
+      dom.restartBtn.addEventListener('click', () => window.location.reload());
+
+      // 弹窗
+      $('helpBtn').addEventListener('click', () => dom.helpModal.classList.remove('hidden'));
+      $('closeHelpBtn').addEventListener('click', () => dom.helpModal.classList.add('hidden'));
+      $('closeHelpBtn2').addEventListener('click', () => dom.helpModal.classList.add('hidden'));
+      $('closeCardDetailBtn').addEventListener('click', () => dom.cardDetailModal.classList.add('hidden'));
+      $('closeCardDetailBtn2').addEventListener('click', () => dom.cardDetailModal.classList.add('hidden'));
+    },
+
+    /* --- 图片预加载 --- */
+    startPreload() {
+      const { dom } = this;
+      const urls = TAROT_DATA.map(c => c.image).filter(Boolean);
+
+      ImagePreloader.preload(urls, {
+        onProgress: (done, total) => {
+          const pct = Math.round((done / total) * 100);
+          dom.preloadProgressBar.style.width = pct + '%';
+          dom.preloadCount.textContent = `${done} / ${total}`;
+        },
+        onComplete: (loaded, failed, total) => {
+          this.state.imagesReady = true;
+          dom.startAppBtn.disabled = false;
+
+          if (failed > 0) {
+            dom.preloadIcon.className = 'fa fa-exclamation-triangle text-yellow-400';
+            dom.preloadStatus.textContent = `预加载完成（${failed}张图片加载失败）`;
+            dom.preloadStatus.className = 'text-sm text-yellow-400';
           } else {
-            this.state.bgMusic.pause();
-            dom.avatarImage.classList.remove('spin-blur', 'animate-full-spin');
+            dom.preloadIcon.className = 'fa fa-check-circle text-green-500';
+            dom.preloadStatus.textContent = '图片预加载完成！';
+            dom.preloadStatus.className = 'text-sm text-green-500';
           }
-        });
-        dom.deckOptions.forEach(option => {
-          option.addEventListener('click', () => {
-            dom.deckOptions.forEach(opt => opt.classList.remove('deck-selected'));
-            option.classList.add('deck-selected');
-            this.setDeck(option.dataset.deck);
-          });
-        });
-        dom.confirmDeckBtn.addEventListener('click', () => this.goToStep(2));
-        dom.backToStep1Btn.addEventListener('click', () => this.goToStep(1));
-        dom.decreaseBtn.addEventListener('click', () => this.setCount(this.state.selectedCount - 1));
-        dom.increaseBtn.addEventListener('click', () => this.setCount(this.state.selectedCount + 1));
-        dom.manualCountSubmitBtn.addEventListener('click', () => {
-          const val = parseInt(dom.manualCountInput.value);
-          this.setCount(val);
-        });
-        dom.toggleAiBtn.addEventListener('click', () => this.toggleAiMode());
-        dom.generatePromptBtn.addEventListener('click', () => this.generateAIPrompt());
-        dom.copyPromptBtn.addEventListener('click', () => this.copyPromptToClipboard());
-        dom.drawCardsBtn.addEventListener('click', () => this.executeDraw());
-        dom.backToStep2Btn.addEventListener('click', () => this.goToStep(2));
-        dom.copyResultsBtn.addEventListener('click', () => this.copyResultsToClipboard());
-        dom.restartBtn.addEventListener('click', () => window.location.reload());
-        document.getElementById('helpBtn').addEventListener('click', () => dom.helpModal.classList.remove('hidden'));
-        document.getElementById('closeHelpBtn').addEventListener('click', () => dom.helpModal.classList.add('hidden'));
-        document.getElementById('closeHelpBtn2').addEventListener('click', () => dom.helpModal.classList.add('hidden'));
-        document.getElementById('closeCardDetailBtn').addEventListener('click', () => dom.cardDetailModal.classList.add('hidden'));
-        document.getElementById('closeCardDetailBtn2').addEventListener('click', () => dom.cardDetailModal.classList.add('hidden'));
-      },
-
-      updateCardCountUI() {
-        this.setCount(this.state.selectedCount);
-      },
-
-      setDeck(deckType) {
-        this.state.selectedDeck = deckType;
-        this.dom.confirmDeckBtn.disabled = false;
-        switch (deckType) {
-          case 'major': this.state.maxCards = 22; break;
-          case 'minor': this.state.maxCards = 56; break;
-          case 'all':   this.state.maxCards = 78; break;
+          dom.preloadProgressBar.classList.remove('preload-shimmer');
         }
-        this.dom.maxCardsSpan.textContent = this.state.maxCards;
-        this.setCount(Math.min(this.state.selectedCount, this.state.maxCards));
-      },
+      }, 8);
+    },
 
-      setCount(newCount) {
-        const { state, dom } = this;
-        if (isNaN(newCount) || newCount < 1 || newCount > state.maxCards) {
-          dom.countErrorMessage.classList.remove('hidden');
-          return;
-        }
-        state.selectedCount = newCount;
-        dom.cardCountDisplay.textContent = newCount;
-        dom.manualCountInput.value = newCount;
-        dom.decreaseBtn.disabled = newCount <= 1;
-        dom.increaseBtn.disabled = newCount >= state.maxCards;
-        dom.manualCountInput.max = state.maxCards;
-        dom.countErrorMessage.classList.add('hidden');
-      },
+    /* --- 数量控制 --- */
+    updateCardCountUI() {
+      this.setCount(this.state.selectedCount);
+    },
 
-      toggleAiMode() {
-        const { state, dom } = this;
-        state.aiModeActive = !state.aiModeActive;
-        if (state.aiModeActive) {
-          dom.aiSection.classList.remove('hidden');
-          dom.toggleAiIcon.classList.replace('fa-toggle-off', 'fa-toggle-on');
-          dom.toggleAiIcon.classList.replace('text-gray-500', 'text-primary');
-          dom.toggleAiText.textContent = "关闭 AI 占卜助手";
-          dom.toggleAiText.classList.add('text-primary');
-          dom.quantityTitle.textContent = "第二步：设置抽牌数量";
+    setDeck(deckType) {
+      this.state.selectedDeck = deckType;
+      this.dom.confirmDeckBtn.disabled = false;
+      switch (deckType) {
+        case 'major': this.state.maxCards = 22; break;
+        case 'minor': this.state.maxCards = 56; break;
+        case 'all':   this.state.maxCards = 78; break;
+      }
+      this.dom.maxCardsSpan.textContent = this.state.maxCards;
+      this.setCount(Math.min(this.state.selectedCount, this.state.maxCards));
+    },
+
+    setCount(newCount) {
+      const { state, dom } = this;
+      if (isNaN(newCount) || newCount < 1 || newCount > state.maxCards) {
+        dom.countErrorMessage.classList.remove('hidden');
+        return;
+      }
+      state.selectedCount = newCount;
+      dom.cardCountDisplay.textContent = newCount;
+      dom.manualCountInput.value = newCount;
+      dom.decreaseBtn.disabled = newCount <= 1;
+      dom.increaseBtn.disabled = newCount >= state.maxCards;
+      dom.manualCountInput.max = state.maxCards;
+      dom.countErrorMessage.classList.add('hidden');
+    },
+
+    /* --- AI 模式切换 --- */
+    toggleAiMode() {
+      const { state, dom } = this;
+      state.aiModeActive = !state.aiModeActive;
+      if (state.aiModeActive) {
+        dom.aiSection.classList.remove('hidden');
+        dom.toggleAiIcon.classList.replace('fa-toggle-off', 'fa-toggle-on');
+        dom.toggleAiIcon.classList.replace('text-gray-500', 'text-primary');
+        dom.toggleAiText.textContent = "关闭 AI 占卜助手";
+        dom.toggleAiText.classList.add('text-primary');
+        dom.quantityTitle.textContent = "第二步：设置抽牌数量";
+      } else {
+        dom.aiSection.classList.add('hidden');
+        dom.toggleAiIcon.classList.replace('fa-toggle-on', 'fa-toggle-off');
+        dom.toggleAiIcon.classList.replace('text-primary', 'text-gray-500');
+        dom.toggleAiText.textContent = "开启 AI 占卜助手";
+        dom.toggleAiText.classList.remove('text-primary');
+        dom.quantityTitle.textContent = "设置抽牌数量";
+      }
+    },
+
+    /* --- 核心业务：执行抽牌 --- */
+    executeDraw() {
+      const { state } = this;
+      if (state.selectedCount < 1 || state.selectedCount > state.maxCards) {
+        this.dom.countErrorMessage.classList.remove('hidden');
+        return;
+      }
+
+      let pool = [];
+      if (state.selectedDeck === 'major') pool = TAROT_DATA.filter(c => c.type === 'major');
+      else if (state.selectedDeck === 'minor') pool = TAROT_DATA.filter(c => c.type === 'minor');
+      else pool = [...TAROT_DATA];
+
+      // Fisher-Yates 洗牌
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+
+      // 抽取并随机正逆位
+      state.drawnCards = pool.slice(0, state.selectedCount).map(card => ({
+        ...card,
+        position: Math.random() < 0.5 ? '逆位' : '正位'
+      }));
+
+      this.goToStep(3);
+      this.dom.resultContainer.innerHTML = '';
+      this.dom.copySuccess.classList.add('hidden');
+      this.dom.copyBtnText.textContent = state.aiModeActive ? "复制结果给 AI" : "复制结果";
+
+      // AI 模式提示
+      if (state.aiModeActive) {
+        const tip = document.createElement('div');
+        tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
+        tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> AI 助手已就绪：卡片全部展示后，点击下方"复制结果给 AI"。';
+        this.dom.resultContainer.appendChild(tip);
+      }
+
+      // 逐张发牌动画
+      this.addCardOneByOne(state.drawnCards, 0);
+    },
+
+    /* --- 递归发牌动画 --- */
+    addCardOneByOne(cardArray, index) {
+      if (index >= cardArray.length) return;
+
+      const card = cardArray[index];
+      const isUpright = card.position === '正位';
+
+      const cardDiv = document.createElement('div');
+      cardDiv.className = 'flex items-center p-3 bg-dark rounded-md border border-primary/20 shadow-md card-animate-item hover:border-accent transition-all cursor-pointer mb-4';
+      cardDiv.addEventListener('click', () => this.showCardDetail(card));
+
+      const colorMap = { 'wands': 'text-red-500', 'cups': 'text-blue-500', 'swords': 'text-gray-300', 'pentacles': 'text-yellow-500' };
+      const cardColor = colorMap[card.suit] || 'text-primary';
+      const positionColor = isUpright ? 'text-green-500' : 'text-red-500';
+
+      // 优先使用预加载缓存中的图片，否则 fallback 到 src
+      const cachedImg = ImagePreloader.get(card.image);
+      const imgSrc = cachedImg ? cachedImg.src : card.image;
+
+      cardDiv.innerHTML = `
+        <div class="flex-shrink-0 w-16 h-24 bg-secondary rounded overflow-hidden border border-primary/40 mr-4">
+          <img src="${imgSrc}" class="w-full h-full object-contain ${isUpright ? '' : 'rotate-180'}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-gray-600 text-xs\\'>加载失败</div>'">
+        </div>
+        <div class="flex-grow">
+          <div class="flex justify-between items-center mb-1">
+             <h3 class="font-bold ${cardColor}">${card.name}</h3>
+             <span class="px-2 py-1 rounded-full font-bold text-[10px] ${positionColor} bg-dark/70">${card.position}</span>
+          </div>
+          <p class="text-xs text-gray-400">牌位编号: #${index + 1}</p>
+          <p class="text-[11px] text-gray-500 mt-1 italic line-clamp-1">"${isUpright ? card.upright : card.reversed}"</p>
+        </div>
+      `;
+
+      this.dom.resultContainer.appendChild(cardDiv);
+      this.dom.resultContainer.scrollTop = this.dom.resultContainer.scrollHeight;
+
+      setTimeout(() => this.addCardOneByOne(cardArray, index + 1), 500);
+    },
+
+    /* --- 步骤导航 --- */
+    goToStep(stepNumber) {
+      const { dom } = this;
+      dom.steps.forEach(sec => sec.classList.add('hidden'));
+      dom.steps[stepNumber - 1].classList.remove('hidden');
+
+      const updateIndicator = (index, isActive) => {
+        const circle = dom.indicators[index].querySelector('.step-circle');
+        if (isActive) {
+          circle.classList.replace('bg-secondary', 'bg-primary');
+          circle.classList.replace('text-light', 'text-dark');
         } else {
-          dom.aiSection.classList.add('hidden');
-          dom.toggleAiIcon.classList.replace('fa-toggle-on', 'fa-toggle-off');
-          dom.toggleAiIcon.classList.replace('text-primary', 'text-gray-500');
-          dom.toggleAiText.textContent = "开启 AI 占卜助手";
-          dom.toggleAiText.classList.remove('text-primary');
-          dom.quantityTitle.textContent = "设置抽牌数量";
+          circle.classList.replace('bg-primary', 'bg-secondary');
+          circle.classList.replace('text-dark', 'text-light');
         }
-      },
+      };
 
-      /**
-       * 核心业务：执行抽牌
-       */
-      executeDraw() {
-        const { state } = this;
-        if (state.selectedCount < 1 || state.selectedCount > state.maxCards) {
-          this.dom.countErrorMessage.classList.remove('hidden');
-          return;
-        }
+      if (stepNumber === 1) {
+        updateIndicator(0, true); updateIndicator(1, false); updateIndicator(2, false);
+        dom.progressBars[0].style.width = '0%';
+        dom.progressBars[1].style.width = '0%';
+        this.dom.userQuestion.value = '';
+        this.dom.promptOutput.value = '';
+        this.dom.aiPromptTip.classList.add('hidden');
+      } else if (stepNumber === 2) {
+        updateIndicator(0, false); updateIndicator(1, true); updateIndicator(2, false);
+        dom.progressBars[0].style.width = '100%';
+        dom.progressBars[1].style.width = '0%';
+      } else if (stepNumber === 3) {
+        updateIndicator(1, false); updateIndicator(2, true);
+        dom.progressBars[1].style.width = '100%';
+      }
+    },
 
-        let pool = [];
-        if (state.selectedDeck === 'major') pool = TAROT_DATA.filter(c => c.type === 'major');
-        else if (state.selectedDeck === 'minor') pool = TAROT_DATA.filter(c => c.type === 'minor');
-        else pool = [...TAROT_DATA];
+    /* --- 牌组目录渲染 --- */
+    renderCatalog() {
+      const createCardDiv = (card) => {
+        const div = document.createElement('div');
+        div.className = 'bg-dark/50 p-1 rounded text-center hover:text-primary transition-colors cursor-pointer';
+        div.textContent = card.name;
+        div.addEventListener('click', () => this.showCardDetail(card));
+        return div;
+      };
+      const mapToContainer = (filterFn, containerId) => {
+        const container = document.getElementById(containerId);
+        if (container) TAROT_DATA.filter(filterFn).forEach(card => container.appendChild(createCardDiv(card)));
+      };
+      mapToContainer(c => c.type === 'major', 'majorArcanaList');
+      mapToContainer(c => c.suit === 'wands', 'wandsList');
+      mapToContainer(c => c.suit === 'cups', 'cupsList');
+      mapToContainer(c => c.suit === 'swords', 'swordsList');
+      mapToContainer(c => c.suit === 'pentacles', 'pentaclesList');
+    },
 
-        // 洗牌
-        for (let i = pool.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [pool[i], pool[j]] = [pool[j], pool[i]];
-        }
+    /* --- 牌详情弹窗 --- */
+    showCardDetail(card) {
+      const { dom } = this;
+      $('cardDetailTitle').textContent = `${card.name} 详情`;
+      $('cardNumber').textContent = card.id;
+      $('cardName').textContent = card.name;
+      $('cardDescription').textContent = card.description || '暂无信息';
+      $('cardUpright').textContent = card.upright || '暂无信息';
+      $('cardReversed').textContent = card.reversed || '暂无信息';
 
-        // 抽取
-        state.drawnCards = pool.slice(0, state.selectedCount).map(card => ({
-          ...card,
-          position: Math.random() < 0.5 ? '逆位' : '正位'
-        }));
-
-        this.goToStep(3);
-        this.dom.resultContainer.innerHTML = '';
-        this.dom.copySuccess.classList.add('hidden');
-        this.dom.copyBtnText.textContent = state.aiModeActive ? "复制结果给 AI" : "复制结果";
-
-        // AI 模式提示
-        if (state.aiModeActive) {
-          const tip = document.createElement('div');
-          tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
-          tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> AI 助手已就绪：卡片全部展示后，点击下方“复制结果给 AI”。';
-          this.dom.resultContainer.appendChild(tip);
-        }
-
-        // 核心步骤：调用递归发牌
-        this.addCardOneByOne(state.drawnCards, 0);
-      },
-
-      /**
-       * 递归发牌函数：实现“一张张浮现”
-       */
-      addCardOneByOne(cardArray, index) {
-        // 如果渲染完成，停止递归
-        if (index >= cardArray.length) return;
-
-        const card = cardArray[index];
-        const isUpright = card.position === '正位';
-        
-        // 创建卡片 DOM 元素
-        const cardDiv = document.createElement('div');
-        // 关键：加入 'card-animate-item' 触发浮现动画
-        cardDiv.className = 'flex items-center p-3 bg-dark rounded-md border border-primary/20 shadow-md card-animate-item hover:border-accent transition-all cursor-pointer mb-4';
-        cardDiv.addEventListener('click', () => this.showCardDetail(card));
-
-        const colorMap = { 'wands': 'text-red-500', 'cups': 'text-blue-500', 'swords': 'text-gray-300', 'pentacles': 'text-yellow-500' };
-        const cardColor = colorMap[card.suit] || 'text-primary';
-        const positionColor = isUpright ? 'text-green-500' : 'text-red-500';
-
-        cardDiv.innerHTML = `
-          <div class="flex-shrink-0 w-16 h-24 bg-secondary rounded overflow-hidden border border-primary/40 mr-4">
-            <img src="${card.image}" class="w-full h-full object-contain ${isUpright ? '' : 'rotate-180'}">
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-center mb-1">
-               <h3 class="font-bold ${cardColor}">${card.name}</h3>
-               <span class="px-2 py-1 rounded-full font-bold text-[10px] ${positionColor} bg-dark/70">${card.position}</span>
-            </div>
-            <p class="text-xs text-gray-400">牌位编号: #${index + 1}</p>
-            <p class="text-[11px] text-gray-500 mt-1 italic line-clamp-1">"${isUpright ? card.upright : card.reversed}"</p>
-          </div>
-        `;
-
-        this.dom.resultContainer.appendChild(cardDiv);
-        
-        // 自动滚动：确保最新浮现的牌始终在视口内
-        this.dom.resultContainer.scrollTop = this.dom.resultContainer.scrollHeight;
-
-        // 设置 500 毫秒后递归调用渲染下一张
-        setTimeout(() => {
-          this.addCardOneByOne(cardArray, index + 1);
-        }, 500);
-      },
-
-      goToStep(stepNumber) {
-        const { dom } = this;
-        dom.steps.forEach(sec => sec.classList.add('hidden'));
-        dom.steps[stepNumber - 1].classList.remove('hidden');
-
-        const updateIndicator = (index, isActive) => {
-          const circle = dom.indicators[index].querySelector('.step-circle');
-          if (isActive) {
-            circle.classList.replace('bg-secondary', 'bg-primary');
-            circle.classList.replace('text-light', 'text-dark');
-          } else {
-            circle.classList.replace('bg-primary', 'bg-secondary');
-            circle.classList.replace('text-dark', 'text-light');
-          }
+      const img = $('cardImage');
+      if (card.image) {
+        // 优先使用预加载缓存
+        const cached = ImagePreloader.get(card.image);
+        img.src = cached ? cached.src : card.image;
+        img.style.display = 'block';
+        img.onerror = () => {
+          img.style.display = 'none';
         };
+      } else {
+        img.style.display = 'none';
+      }
 
-        if (stepNumber === 1) {
-          updateIndicator(0, true); updateIndicator(1, false); updateIndicator(2, false);
-          dom.progressBars[0].style.width = '0%';
-          dom.progressBars[1].style.width = '0%';
-          this.dom.userQuestion.value = '';
-          this.dom.promptOutput.value = '';
-          this.dom.aiPromptTip.classList.add('hidden');
-        } else if (stepNumber === 2) {
-          updateIndicator(0, false); updateIndicator(1, true); updateIndicator(2, false);
-          dom.progressBars[0].style.width = '100%';
-          dom.progressBars[1].style.width = '0%';
-        } else if (stepNumber === 3) {
-          updateIndicator(1, false); updateIndicator(2, true);
-          dom.progressBars[1].style.width = '100%';
-        }
-      },
+      const groups = { 'major': '大阿卡纳', 'wands': '小阿卡纳 - 权杖', 'cups': '小阿卡纳 - 圣杯', 'swords': '小阿卡纳 - 宝剑', 'pentacles': '小阿卡纳 - 星币' };
+      $('cardGroup').textContent = groups[card.type] || groups[card.suit] || '未知';
+      dom.cardDetailModal.classList.remove('hidden');
+    },
 
-      renderCatalog() {
-        const createCardDiv = (card) => {
-          const div = document.createElement('div');
-          div.className = 'bg-dark/50 p-1 rounded text-center hover:text-primary transition-colors cursor-pointer';
-          div.textContent = card.name;
-          div.addEventListener('click', () => this.showCardDetail(card));
-          return div;
-        };
-        const mapToContainer = (filterFn, containerId) => {
-          const container = document.getElementById(containerId);
-          if(container) TAROT_DATA.filter(filterFn).forEach(card => container.appendChild(createCardDiv(card)));
-        };
-        mapToContainer(c => c.type === 'major', 'majorArcanaList');
-        mapToContainer(c => c.suit === 'wands', 'wandsList');
-        mapToContainer(c => c.suit === 'cups', 'cupsList');
-        mapToContainer(c => c.suit === 'swords', 'swordsList');
-        mapToContainer(c => c.suit === 'pentacles', 'pentaclesList');
-      },
-
-      showCardDetail(card) {
-        const { dom } = this;
-        document.getElementById('cardDetailTitle').textContent = `${card.name} 详情`;
-        document.getElementById('cardNumber').textContent = card.id;
-        document.getElementById('cardName').textContent = card.name;
-        document.getElementById('cardDescription').textContent = card.description || '暂无信息';
-        document.getElementById('cardUpright').textContent = card.upright || '暂无信息';
-        document.getElementById('cardReversed').textContent = card.reversed || '暂无信息';
-        const img = document.getElementById('cardImage');
-        if (card.image) { img.src = card.image; img.style.display = 'block'; }
-        else { img.style.display = 'none'; }
-        const groups = { 'major': '大阿卡纳', 'wands': '小阿卡纳 - 权杖', 'cups': '小阿卡纳 - 圣杯', 'swords': '小阿卡纳 - 宝剑', 'pentacles': '小阿卡纳 - 星币' };
-        document.getElementById('cardGroup').textContent = groups[card.type] || groups[card.suit] || '未知';
-        dom.cardDetailModal.classList.remove('hidden');
-      },
-
-      generateAIPrompt() {
-        const question = this.dom.userQuestion.value.trim();
-        if (!question) { this.dom.promptOutput.value = "请输入您心中的困惑，以便生成精准指令。"; return; }
-        const prompt = `你现在是一位集神秘学造理与深度心理洞察力于一身的**首席塔罗大祭司**。你深谙伟特与透特体系，擅长将牌面符号、四大元素、占星相位与心理原型相结合。
+    /* --- AI 提示词生成 --- */
+    generateAIPrompt() {
+      const question = this.dom.userQuestion.value.trim();
+      if (!question) { this.dom.promptOutput.value = "请输入您心中的困惑，以便生成精准指令。"; return; }
+      const prompt = `你现在是一位集神秘学造理与深度心理洞察力于一身的**首席塔罗大祭司**。你深谙伟特与透特体系，擅长将牌面符号、四大元素、占星相位与心理原型相结合。
 
 **【第一阶段：能量诊断与牌阵推演】**
 针对用户当前咨询的问题："""${question}"""，你必须执行以下逻辑流程：
@@ -946,7 +927,7 @@
 
 1. **宏观格局扫描（Macro-Analysis）**：
    * **元素尊贵（Elemental Dignities）**：分析火/水/风/土元素的分布与互动，判断行动力与情感的平衡点。
-   * **大/小阿尔卡纳比例**：解读此事受“集体潜意识/命运”影响大，还是受“个人选择/日常生活”影响大。
+   * **大/小阿尔卡纳比例**：解读此事受"集体潜意识/命运"影响大，还是受"个人选择/日常生活"影响大。
 2. **微观图解与辩证（Micro-Analysis）**：
    * 结合牌位定义，深度挖掘牌面关键符号（如：高塔的雷电、星星的泉水）在当前语境下的特指含义。
    * 引入**占星与数字能量**（如：土星的限制性、数字3的扩张性）阐述问题的隐秘逻辑。
@@ -955,37 +936,40 @@
    * 给出一段极具启发性的总结，帮助用户在现实层面破局。
 
 请以专业、睿智、充满神秘感且富有同理心的口吻开启第一阶段。`;
-        this.dom.promptOutput.value = prompt;
-        this.dom.aiPromptTip.classList.remove('hidden');
-      },
+      this.dom.promptOutput.value = prompt;
+      this.dom.aiPromptTip.classList.remove('hidden');
+    },
 
-      copyPromptToClipboard() {
-        const text = this.dom.promptOutput.value;
-        if (!text) return;
-        navigator.clipboard.writeText(text).then(() => {
-          this.dom.aiPromptTip.innerHTML = '<i class="fa fa-check-circle mr-1"></i> 指令已复制！请发送给AI，然后根据AI建议的**张数**调整下方设置。';
-          this.dom.aiPromptTip.className = 'text-sm text-center bg-green-500/10 p-2 rounded border border-green-500/30 text-green-500';
-        });
-      },
+    /* --- 剪贴板操作 --- */
+    copyPromptToClipboard() {
+      const text = this.dom.promptOutput.value;
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        this.dom.aiPromptTip.innerHTML = '<i class="fa fa-check-circle mr-1"></i> 指令已复制！请发送给AI，然后根据AI建议的**张数**调整下方设置。';
+        this.dom.aiPromptTip.className = 'text-sm text-center bg-green-500/10 p-2 rounded border border-green-500/30 text-green-500';
+      });
+    },
 
-      copyResultsToClipboard() {
-        const resultsText = this.state.drawnCards.map((card, idx) => `牌位${idx + 1}: ${card.name} (${card.position})`).join('，');
-        const fullText = this.state.aiModeActive 
-          ? `【我抽到的牌面】：\n${resultsText}。\n请根据之前的牌阵定义开始解读。` 
-          : `塔罗牌抽取结果：\n${resultsText}`;
-        navigator.clipboard.writeText(fullText).then(() => {
-          this.dom.copySuccess.innerHTML = this.state.aiModeActive 
-            ? '<i class="fa fa-check-circle mr-1"></i> 牌面已复制！请粘贴给 AI。' 
-            : '<i class="fa fa-check-circle mr-1"></i> 结果已复制到剪贴板。';
-          this.dom.copySuccess.classList.remove('hidden');
-          setTimeout(() => this.dom.copySuccess.classList.add('hidden'), 3000);
-        }).catch(() => alert('复制失败，请手动复制。'));
-      }
-    };
+    copyResultsToClipboard() {
+      const resultsText = this.state.drawnCards.map((card, idx) => `牌位${idx + 1}: ${card.name} (${card.position})`).join('，');
+      const fullText = this.state.aiModeActive
+        ? `【我抽到的牌面】：\n${resultsText}。\n请根据之前的牌阵定义开始解读。`
+        : `塔罗牌抽取结果：\n${resultsText}`;
+      navigator.clipboard.writeText(fullText).then(() => {
+        this.dom.copySuccess.innerHTML = this.state.aiModeActive
+          ? '<i class="fa fa-check-circle mr-1"></i> 牌面已复制！请粘贴给 AI。'
+          : '<i class="fa fa-check-circle mr-1"></i> 结果已复制到剪贴板。';
+        this.dom.copySuccess.classList.remove('hidden');
+        setTimeout(() => this.dom.copySuccess.classList.add('hidden'), 3000);
+      }).catch(() => alert('复制失败，请手动复制。'));
+    }
+  };
 
-    document.addEventListener('DOMContentLoaded', () => {
-      TarotApp.init();
-    });
+  /* --- 辅助函数 --- */
+  function $(id) { return document.getElementById(id); }
+
+  /* --- 启动 --- */
+  document.addEventListener('DOMContentLoaded', () => TarotApp.init());
   </script>
 </body>
 </html>
