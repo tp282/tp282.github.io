@@ -63,7 +63,6 @@
     @keyframes spinBlur { 0% { filter: blur(0px); } 50% { filter: blur(2px); } 100% { filter: blur(0px); } }
     .spin-blur { animation: spinBlur 0.1s infinite; }
 
-    /* 预加载进度条动画 */
     @keyframes shimmer {
       0% { background-position: -200% 0; }
       100% { background-position: 200% 0; }
@@ -82,10 +81,10 @@
       <h1 class="text-2xl md:text-3xl font-bold text-glow">
         <i class="fa fa-star mr-2 text-accent"></i><span id="headerTitle">塔罗牌抽取程序</span>
       </h1>
-            <div id="langSwitcher" class="flex items-center space-x-1 mr-4">
-        <button class="lang-btn px-2 py-1 rounded text-xs font-medium border transition-all duration-200" data-lang="zh" onclick="switchLanguage('zh')">🇨🇳 <span class="hidden sm:inline">中</span></button>
-        <button class="lang-btn px-2 py-1 rounded text-xs font-medium border transition-all duration-200" data-lang="en" onclick="switchLanguage('en')">🇺🇸 <span class="hidden sm:inline">EN</span></button>
-        <button class="lang-btn px-2 py-1 rounded text-xs font-medium border transition-all duration-200" data-lang="ja" onclick="switchLanguage('ja')">🇯🇵 <span class="hidden sm:inline">日</span></button>
+      <div id="langSwitcher" class="flex items-center space-x-1 mr-4">
+        <button class="lang-btn px-2 py-1 rounded text-xs font-medium border transition-all duration-200" data-lang="zh" onclick="switchLanguage('zh')">ZH</button>
+<button class="lang-btn px-2 py-1 rounded text-xs font-medium border transition-all duration-200" data-lang="en" onclick="switchLanguage('en')">EN</button>
+<button class="lang-btn px-2 py-1 rounded text-xs font-medium border transition-all duration-200" data-lang="ja" onclick="switchLanguage('ja')">JA</button>
       </div>
       <button id="helpBtn" class="text-primary hover:text-accent transition-colors">
         <i class="fa fa-question-circle text-xl"></i>
@@ -94,7 +93,6 @@
   </header>
 
   <main class="flex-grow container mx-auto px-4 py-8" style="transition: opacity 0.2s ease;">
-    <!-- 步骤指示器 -->
     <div class="flex justify-between mb-8 max-w-2xl mx-auto">
       <div id="step1Indicator" class="flex flex-col items-center">
         <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-dark font-bold step-circle">1</div>
@@ -117,7 +115,6 @@
     </div>
 
     <div class="max-w-2xl mx-auto">
-      <!-- 步骤1：选择牌组 -->
       <section id="step1" class="animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 id="step1Title" class="text-xl font-bold mb-4 text-center">选择要抽取的牌组区域</h2>
@@ -143,34 +140,33 @@
         </div>
       </section>
 
-      <!-- 步骤2：抽牌设置 -->
       <section id="step2" class="hidden animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 id="step2Title" class="text-xl font-bold mb-2 text-center">设置抽牌选项</h2>
 
           <div class="flex justify-center mb-6">
-             <button id="toggleAiBtn" class="group flex items-center space-x-3 bg-dark border border-primary/30 px-5 py-2 rounded-full text-gray-400 hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 shadow-md">
-               <i class="fa fa-toggle-off text-2xl text-gray-500 transition-colors group-hover:text-gray-300" id="toggleAiIcon"></i>
-               <span class="font-medium" id="toggleAiText">开启 AI 占卜助手</span>
-             </button>
+            <button id="toggleAiBtn" class="group flex items-center space-x-3 bg-dark border border-primary/30 px-5 py-2 rounded-full text-gray-400 hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 shadow-md">
+              <i class="fa fa-toggle-off text-2xl text-gray-500 transition-colors group-hover:text-gray-300" id="toggleAiIcon"></i>
+              <span class="font-medium" id="toggleAiText">开启 AI 占卜助手</span>
+            </button>
           </div>
 
           <div id="aiSection" class="hidden mb-8 bg-dark/40 rounded-lg p-4 border border-primary/30 animate-fade-in">
             <h3 id="aiStepTitle" class="text-lg font-bold text-accent mb-3 text-center">
-                          <i class="fa fa-magic mr-1"></i> 第一步：生成 AI 占卜指令
-                        </h3>
-                        <div class="space-y-3">
-                          <div>
-                            <label id="aiQuestionLabel" class="block text-xs text-gray-400 mb-1">你心中的困惑/问题：</label>
-                            <input type="text" id="userQuestion" class="w-full bg-secondary border border-primary/30 rounded px-3 py-2 text-light focus:outline-none focus:border-primary transition-colors" placeholder="例如：我这段感情未来的发展如何？">
-                          </div>
-                          <button id="generatePromptBtn" class="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 px-4 py-2 rounded-md transition-colors flex items-center justify-center font-medium">
-                            <i class="fa fa-terminal mr-2"></i> <span id="aiGenerateBtn">生成指令 (复制给AI)</span>
-                          </button>
+              <i class="fa fa-magic mr-1"></i> 第一步：生成 AI 占卜指令
+            </h3>
+            <div class="space-y-3">
+              <div>
+                <label id="aiQuestionLabel" class="block text-xs text-gray-400 mb-1">你心中的困惑/问题：</label>
+                <input type="text" id="userQuestion" class="w-full bg-secondary border border-primary/30 rounded px-3 py-2 text-light focus:outline-none focus:border-primary transition-colors" placeholder="例如：我这段感情未来的发展如何？">
+              </div>
+              <button id="generatePromptBtn" class="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 px-4 py-2 rounded-md transition-colors flex items-center justify-center font-medium">
+                <i class="fa fa-terminal mr-2"></i> <span id="aiGenerateBtn">生成指令 (复制给AI)</span>
+              </button>
               <div class="relative">
                 <textarea id="promptOutput" class="w-full h-32 bg-secondary border border-primary/30 rounded px-3 py-2 text-xs text-gray-300 focus:outline-none resize-none font-mono" readonly placeholder="点击生成按钮，获取发送给AI的指令..."></textarea>
                 <button id="copyPromptBtn" class="absolute top-2 right-2 text-gray-400 hover:text-white bg-dark/50 rounded px-2 py-1 text-xs border border-gray-600">
-                                  <i class="fa fa-clipboard"></i> <span id="aiCopyBtn">复制</span>
+                  <i class="fa fa-clipboard"></i> <span id="aiCopyBtn">复制</span>
                 </button>
               </div>
               <div id="aiPromptTip" class="text-sm text-yellow-400 text-center hidden bg-yellow-400/10 p-2 rounded border border-yellow-400/30">
@@ -185,13 +181,9 @@
             <p class="text-center text-sm text-gray-400 mb-4"><span id="rangeText">当前牌组可抽取</span> <span id="minCards">1</span> - <span id="maxCards">78</span> <span id="rangeUnit">张牌</span></p>
 
             <div class="flex items-center justify-center space-x-4">
-              <button id="decreaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
-                <i class="fa fa-minus text-primary"></i>
-              </button>
+              <button id="decreaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors"><i class="fa fa-minus text-primary"></i></button>
               <div class="text-4xl font-bold text-center w-20" id="cardCount">1</div>
-              <button id="increaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
-                <i class="fa fa-plus text-primary"></i>
-              </button>
+              <button id="increaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors"><i class="fa fa-plus text-primary"></i></button>
             </div>
 
             <div class="mt-4">
@@ -217,16 +209,13 @@
         </div>
       </section>
 
-      <!-- 步骤3：结果与解读 -->
       <section id="step3" class="hidden animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
           <h2 id="step3Title" class="text-xl font-bold mb-4 text-center">塔罗牌抽取结果</h2>
           <div id="resultContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2 scroll-smooth"></div>
-
           <div id="copySuccess" class="mt-4 text-green-500 text-center hidden p-2 bg-green-500/10 rounded border border-green-500/30">
             <i class="fa fa-check-circle mr-1"></i> 已复制到剪贴板
           </div>
-
           <div class="mt-6 flex justify-between">
             <button id="backToStep2Btn" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
               <i class="fa fa-arrow-left mr-1"></i> 重新选择
@@ -244,21 +233,20 @@
       </section>
     </div>
 
-    <!-- 牌组信息目录 -->
     <div class="mt-8 max-w-4xl mx-auto bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
       <h2 id="catalogTitle" class="text-xl font-bold mb-4 text-center">塔罗牌组信息</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 id="majorCatalogHeader" class="text-lg font-medium mb-2 text-primary">大阿卡纳 (22张)</h3>
-                <div id="majorArcanaList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div>
-              </div>
-              <div>
-                <h3 id="minorCatalogHeader" class="text-lg font-medium mb-2 text-primary">小阿卡纳 (56张)</h3>
-                <div class="space-y-3">
-                  <div><h4 id="suitWandsHeader" class="font-medium text-accent">权杖</h4><div id="wandsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
-                  <div><h4 id="suitCupsHeader" class="font-medium text-accent">圣杯</h4><div id="cupsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
-                  <div><h4 id="suitSwordsHeader" class="font-medium text-accent">宝剑</h4><div id="swordsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
-                  <div><h4 id="suitPentaclesHeader" class="font-medium text-accent">星币</h4><div id="pentaclesList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 id="majorCatalogHeader" class="text-lg font-medium mb-2 text-primary">大阿卡纳 (22张)</h3>
+          <div id="majorArcanaList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div>
+        </div>
+        <div>
+          <h3 id="minorCatalogHeader" class="text-lg font-medium mb-2 text-primary">小阿卡纳 (56张)</h3>
+          <div class="space-y-3">
+            <div><h4 id="suitWandsHeader" class="font-medium text-accent">权杖</h4><div id="wandsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+            <div><h4 id="suitCupsHeader" class="font-medium text-accent">圣杯</h4><div id="cupsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+            <div><h4 id="suitSwordsHeader" class="font-medium text-accent">宝剑</h4><div id="swordsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+            <div><h4 id="suitPentaclesHeader" class="font-medium text-accent">星币</h4><div id="pentaclesList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
           </div>
         </div>
       </div>
@@ -272,30 +260,22 @@
     </div>
   </footer>
 
-  <!-- 帮助弹窗 -->
   <div id="helpModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
     <div class="bg-secondary rounded-lg p-6 max-w-md w-full mx-4 border border-primary/30 shadow-lg animate-slide-up">
       <div class="flex justify-between items-center mb-4">
         <h2 id="helpTitle" class="text-xl font-bold text-primary">使用帮助</h2>
-                <button id="closeHelpBtn" class="text-gray-400 hover:text-white"><i class="fa fa-times text-xl"></i></button>
-              </div>
-              <div class="space-y-4">
-                <div><h3 id="helpStep1Title" class="font-medium text-accent">步骤1：选择牌组</h3><p id="helpStep1Text" class="text-sm">选择您想要抽取的塔罗牌组区域：大阿卡纳、小阿卡纳或全部牌组。</p></div>
-                <div>
-                  <h3 id="helpStep2Title" class="font-medium text-accent">步骤2：抽牌设置</h3>
-                  <p id="helpStep2Text1" class="text-sm">1. 您可以直接设置抽牌数量。</p>
-                  <p id="helpStep2Text2" class="text-sm">2. <strong>（可选）开启 AI 占卜助手</strong>：生成专业指令发给 AI，获取牌阵和张数建议，再调整下方数量。</p>
-                </div>
-                <div><h3 id="helpStep3Title" class="font-medium text-accent">步骤3：抽取与解读</h3><p id="helpStep3Text" class="text-sm">抽取塔罗牌。如果开启了 AI 助手，请复制结果给 AI 进行专业解读。</p></div>
-                <div><h3 id="helpCardDetailTitle" class="font-medium text-accent">查看牌详情</h3><p id="helpCardDetailText" class="text-sm">在牌组信息区域点击任意牌名，可以查看该牌的详细解释。</p></div>
-              </div>
-              <button id="closeHelpBtn2" class="mt-6 w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
-                <span id="helpCloseBtn">我知道了</span>
-      </button>
+        <button id="closeHelpBtn" class="text-gray-400 hover:text-white"><i class="fa fa-times text-xl"></i></button>
+      </div>
+      <div class="space-y-4">
+        <div><h3 id="helpStep1Title" class="font-medium text-accent">步骤1：选择牌组</h3><p id="helpStep1Text" class="text-sm">选择您想要抽取的塔罗牌组区域：大阿卡纳、小阿卡纳或全部牌组。</p></div>
+        <div><h3 id="helpStep2Title" class="font-medium text-accent">步骤2：抽牌设置</h3><p id="helpStep2Text1" class="text-sm">1. 您可以直接设置抽牌数量。</p><p id="helpStep2Text2" class="text-sm">2. <strong>（可选）开启 AI 占卜助手</strong>：生成专业指令发给 AI，获取牌阵和张数建议，再调整下方数量。</p></div>
+        <div><h3 id="helpStep3Title" class="font-medium text-accent">步骤3：抽取与解读</h3><p id="helpStep3Text" class="text-sm">抽取塔罗牌。如果开启了 AI 助手，请复制结果给 AI 进行专业解读。</p></div>
+        <div><h3 id="helpCardDetailTitle" class="font-medium text-accent">查看牌详情</h3><p id="helpCardDetailText" class="text-sm">在牌组信息区域点击任意牌名，可以查看该牌的详细解释。</p></div>
+      </div>
+      <button id="closeHelpBtn2" class="mt-6 w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors"><span id="helpCloseBtn">我知道了</span></button>
     </div>
   </div>
 
-  <!-- 牌详情弹窗 -->
   <div id="cardDetailModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden">
     <div class="bg-secondary rounded-lg p-6 max-w-3xl w-full mx-4 border border-primary/30 shadow-lg animate-slide-up max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center mb-4">
@@ -311,11 +291,11 @@
         </div>
         <div class="space-y-4">
           <div><h3 id="cardNameLabel" class="text-lg font-medium text-accent mb-1">牌名</h3><p id="cardName" class="text-light text-lg">愚者</p></div>
-                    <div><h3 id="cardGroupLabel" class="text-lg font-medium text-accent mb-1">牌组</h3><p id="cardGroup" class="text-light">大阿卡纳</p></div>
-                    <div><h3 id="cardDescLabel" class="text-lg font-medium text-accent mb-1">牌意</h3><p id="cardDescription" class="text-light text-sm leading-relaxed">...</p></div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div><h3 id="cardUprightLabel" class="text-md font-medium text-green-500 mb-1">正位含义</h3><p id="cardUpright" class="text-light text-xs leading-relaxed">...</p></div>
-                      <div><h3 id="cardReversedLabel" class="text-md font-medium text-red-500 mb-1">逆位含义</h3><p id="cardReversed" class="text-light text-xs leading-relaxed">...</p></div>
+          <div><h3 id="cardGroupLabel" class="text-lg font-medium text-accent mb-1">牌组</h3><p id="cardGroup" class="text-light">大阿卡纳</p></div>
+          <div><h3 id="cardDescLabel" class="text-lg font-medium text-accent mb-1">牌意</h3><p id="cardDescription" class="text-light text-sm leading-relaxed">...</p></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><h3 id="cardUprightLabel" class="text-md font-medium text-green-500 mb-1">正位含义</h3><p id="cardUpright" class="text-light text-xs leading-relaxed">...</p></div>
+            <div><h3 id="cardReversedLabel" class="text-md font-medium text-red-500 mb-1">逆位含义</h3><p id="cardReversed" class="text-light text-xs leading-relaxed">...</p></div>
           </div>
         </div>
       </div>
@@ -325,7 +305,6 @@
     </div>
   </div>
 
-  <!-- 欢迎弹窗（含预加载进度） -->
   <div id="welcomeModal" class="fixed inset-0 bg-dark/95 flex items-center justify-center z-50 animate-fade-in">
     <div class="bg-secondary rounded-lg p-8 max-w-sm w-full mx-4 border border-primary/50 shadow-2xl text-center">
       <div id="authorAvatar" class="relative inline-block mb-4 cursor-pointer">
@@ -333,29 +312,26 @@
         <div class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-75"></div>
       </div>
       <h2 id="welcomeTitle" class="text-2xl font-bold text-accent mb-1">欢迎使用</h2>
-            <p id="welcomeSubtitle" class="text-sm font-medium text-light mb-1">塔罗牌抽取程序</p>
-            <p id="welcomeMusicTip" class="text-xs font-medium text-gray-400 mb-4">点击头像播放/暂停背景音乐</p>
-
-            <!-- 预加载进度区域 -->
-            <div id="preloadSection" class="mb-4">
-              <div class="flex items-center justify-center space-x-2 mb-2">
-                <i id="preloadIcon" class="fa fa-spinner fa-spin text-primary"></i>
-                <span id="preloadStatus" class="text-sm text-gray-400">正在预加载塔罗牌图片...</span>
-              </div>
-              <div class="w-full bg-dark rounded-full h-2 overflow-hidden border border-primary/20">
-                <div id="preloadProgressBar" class="h-full bg-primary rounded-full transition-all duration-300 preload-shimmer" style="width: 0%"></div>
-              </div>
-              <p id="preloadCount" class="text-xs text-gray-500 mt-1">0 / 78</p>
-            </div>
-
-            <p id="welcomeAuthor" class="text-sm font-medium text-primary mb-1">作者：嘟嘟可教主</p>
-            <a href="https://space.bilibili.com/425320157" target="_blank" class="text-blue-400 hover:text-blue-300 mb-4 flex items-center justify-center">
-              <i class="fa fa-external-link mr-1"></i> <span id="welcomeBilibili">B站主页</span>
-            </a>
-            <p id="welcomeThanks" class="text-sm text-gray-400 mb-2">感谢使用塔罗牌抽取程序</p>
-            <p id="welcomeAiNote" class="text-xs text-gray-500 mb-6">该网页使用ai进行开发</p>
-            <button id="startAppBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-              <span id="welcomeStartBtn">开始使用</span> <i class="fa fa-arrow-right ml-1"></i>
+      <p id="welcomeSubtitle" class="text-sm font-medium text-light mb-1">塔罗牌抽取程序</p>
+      <p id="welcomeMusicTip" class="text-xs font-medium text-gray-400 mb-4">点击头像播放/暂停背景音乐</p>
+      <div id="preloadSection" class="mb-4">
+        <div class="flex items-center justify-center space-x-2 mb-2">
+          <i id="preloadIcon" class="fa fa-spinner fa-spin text-primary"></i>
+          <span id="preloadStatus" class="text-sm text-gray-400">正在预加载塔罗牌图片...</span>
+        </div>
+        <div class="w-full bg-dark rounded-full h-2 overflow-hidden border border-primary/20">
+          <div id="preloadProgressBar" class="h-full bg-primary rounded-full transition-all duration-300 preload-shimmer" style="width: 0%"></div>
+        </div>
+        <p id="preloadCount" class="text-xs text-gray-500 mt-1">0 / 78</p>
+      </div>
+      <p id="welcomeAuthor" class="text-sm font-medium text-primary mb-1">作者：嘟嘟可教主</p>
+      <a href="https://space.bilibili.com/425320157" target="_blank" class="text-blue-400 hover:text-blue-300 mb-4 flex items-center justify-center">
+        <i class="fa fa-external-link mr-1"></i> <span id="welcomeBilibili">B站主页</span>
+      </a>
+      <p id="welcomeThanks" class="text-sm text-gray-400 mb-2">感谢使用塔罗牌抽取程序</p>
+      <p id="welcomeAiNote" class="text-xs text-gray-500 mb-6">该网页使用ai进行开发</p>
+      <button id="startAppBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+        <span id="welcomeStartBtn">开始使用</span> <i class="fa fa-arrow-right ml-1"></i>
       </button>
     </div>
   </div>
@@ -363,9 +339,8 @@
   <script>
   /* ============================================================
    * 第一层：数据层 (Data)
-   * 78 张塔罗牌的完整数据
+   * 78 张塔罗牌的完整数据（已修正小阿卡纳释义）
    * ============================================================ */
-/* I18N Data: zh/en/ja for all 78 Tarot cards + UI text */
 const I18N = {
 c:{
 0:{zh:['愚者','愚者代表新的开始、冒险精神和纯真无邪。他站在悬崖边，象征着对未来的无限可能敞开心扉，勇敢地追求梦想而不畏惧风险。','新的开始、自由、冒险、天真、灵感、创造力、无拘无束','鲁莽、缺乏方向、不负责任、冒险过度、天真幼稚、逃避现实'],
@@ -434,174 +409,182 @@ ja:['審判','審判は再生、覚醒、評価を表す。過去を振り返り
 21:{zh:['世界','世界代表完成、圆满和成就。它象征着一个循环的结束和新的开始，标志着成功和满足。','完成、圆满、成就、成功、旅行、整合、实现','未完成、不圆满、失败、停滞、缺乏整合、未实现'],
 en:['The World','The World represents completion, fulfillment, and achievement. It symbolizes the end of a cycle and new beginnings, marking success and satisfaction.','Completion, fulfillment, achievement, success, travel, integration, realization','Incompletion, unfulfillment, failure, stagnation, lack of integration, unrealized'],
 ja:['世界','世界は完成、円満、達成を表す。一つのサイクルの終わりと新たな始まりを象徴し、成功と満足を示す。','完成、円満、達成、成功、旅、統合、実現','未完成、不円満、失敗、停滞、統合不足、未実現']},
-22:{zh:['权杖一','权杖一代表新的开始。它是创意/行动/热情领域的重要卡牌。','积极面——新的开始、创意/行动/热情','消极面——缺乏新的开始、受阻'],
-en:['Ace of Wands','Ace of Wands represents new beginning in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — new beginning, creativity/action/passion','Negative — blocked new beginning, stagnation'],
-ja:['ワンドのエース','ワンドのエースは創造性/行動/情熱の領域における新たな始まりを表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——新たな始まり、創造性/行動/情熱','ネガティブ——新たな始まりの不足、停滞']},
-23:{zh:['权杖二','权杖二代表计划与决策。它是创意/行动/热情领域的重要卡牌。','积极面——计划与决策、创意/行动/热情','消极面——缺乏计划、受阻'],
-en:['Two of Wands','Two of Wands represents planning & decisions in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — planning & decisions, creativity/action/passion','Negative — blocked planning, stagnation'],
-ja:['ワンドの2','ワンドの2は創造性/行動/情熱の領域における計画と決断を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——計画と決断、創造性/行動/情熱','ネガティブ——計画の不足、停滞']},
-24:{zh:['权杖三','权杖三代表扩展与远见。它是创意/行动/热情领域的重要卡牌。','积极面——扩展与远见、创意/行动/热情','消极面——缺乏扩展、受阻'],
-en:['Three of Wands','Three of Wands represents expansion & foresight in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — expansion & foresight, creativity/action/passion','Negative — blocked expansion, stagnation'],
-ja:['ワンドの3','ワンドの3は創造性/行動/情熱の領域における拡大と先見を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——拡大と先見、創造性/行動/情熱','ネガティブ——拡大の不足、停滞']},
-25:{zh:['权杖四','权杖四代表稳定与庆祝。它是创意/行动/热情领域的重要卡牌。','积极面——稳定与庆祝、创意/行动/热情','消极面——缺乏稳定、受阻'],
-en:['Four of Wands','Four of Wands represents stability & celebration in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — stability & celebration, creativity/action/passion','Negative — blocked stability, stagnation'],
-ja:['ワンドの4','ワンドの4は創造性/行動/情熱の領域における安定と祝福を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——安定と祝福、創造性/行動/情熱','ネガティブ——安定の不足、停滞']},
-26:{zh:['权杖五','权杖五代表冲突与挑战。它是创意/行动/热情领域的重要卡牌。','积极面——冲突与挑战、创意/行动/热情','消极面——缺乏冲突、受阻'],
-en:['Five of Wands','Five of Wands represents conflict & challenge in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — conflict & challenge, creativity/action/passion','Negative — blocked conflict, stagnation'],
-ja:['ワンドの5','ワンドの5は創造性/行動/情熱の領域における葛藤と挑戦を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——葛藤と挑戦、創造性/行動/情熱','ネガティブ——葛藤の不足、停滞']},
-27:{zh:['权杖六','权杖六代表胜利与认可。它是创意/行动/热情领域的重要卡牌。','积极面——胜利与认可、创意/行动/热情','消极面——缺乏胜利、受阻'],
-en:['Six of Wands','Six of Wands represents victory & recognition in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — victory & recognition, creativity/action/passion','Negative — blocked victory, stagnation'],
-ja:['ワンドの6','ワンドの6は創造性/行動/情熱の領域における勝利と承認を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——勝利と承認、創造性/行動/情熱','ネガティブ——勝利の不足、停滞']},
-28:{zh:['权杖七','权杖七象征坚持与防御。它是创意/行动/热情领域的重要卡牌。','积极面——坚持与防御、创意/行动/热情','消极面——缺乏坚持、受阻'],
-en:['Seven of Wands','Seven of Wands represents perseverance & defense in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — perseverance & defense, creativity/action/passion','Negative — blocked perseverance, stagnation'],
-ja:['ワンドの7','ワンドの7は創造性/行動/情熱の領域における忍耐と防衛を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——忍耐と防衛、創造性/行動/情熱','ネガティブ——忍耐の不足、停滞']},
-29:{zh:['权杖八','权杖八象征迅速行动。它是创意/行动/热情领域的重要卡牌。','积极面——迅速行动、创意/行动/热情','消极面——缺乏迅速行动、受阻'],
-en:['Eight of Wands','Eight of Wands represents swift action in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — swift action, creativity/action/passion','Negative — blocked swift action, stagnation'],
-ja:['ワンドの8','ワンドの8は創造性/行動/情熱の領域における迅速な行動を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——迅速な行動、創造性/行動/情熱','ネガティブ——迅速な行動の不足、停滞']},
-30:{zh:['权杖九','权杖九象征警惕与准备。它是创意/行动/热情领域的重要卡牌。','积极面——警惕与准备、创意/行动/热情','消极面——缺乏警惕、受阻'],
-en:['Nine of Wands','Nine of Wands represents vigilance & readiness in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — vigilance & readiness, creativity/action/passion','Negative — blocked vigilance, stagnation'],
-ja:['ワンドの9','ワンドの9は創造性/行動/情熱の領域における警戒と準備を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——警戒と準備、創造性/行動/情熱','ネガティブ——警戒の不足、停滞']},
-31:{zh:['权杖十','权杖十提醒我们负担与完成。它是创意/行动/热情领域的重要卡牌。','积极面——负担与完成、创意/行动/热情','消极面——缺乏负担、受阻'],
-en:['Ten of Wands','Ten of Wands represents burden & completion in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — burden & completion, creativity/action/passion','Negative — blocked burden, stagnation'],
-ja:['ワンドの10','ワンドの10は創造性/行動/情熱の領域における重荷と完成を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——重荷と完成、創造性/行動/情熱','ネガティブ——重荷の不足、停滞']},
-32:{zh:['权杖侍从','权杖侍从代表新的开始与好奇。这张宫廷牌展现了创意/行动/热情的人格化表达。','积极——新的开始与好奇、创意/行动/热情','消极——缺乏新的开始、不成熟'],
-en:['Page of Wands','Page of Wands represents new beginnings & curiosity. This court card embodies the personal expression of creativity/action/passion.','Positive — new beginnings & curiosity, creativity/action/passion','Negative — immaturity, blocked creativity/action/passion'],
-ja:['ワンドのペイジ','ワンドのペイジは新たな始まりと好奇心を表す。このコートカードは創造性/行動/情熱の人格的表現を体現する。','ポジティブ——新たな始まりと好奇心、創造性/行動/情熱','ネガティブ——未熟さ、創造性/行動/情熱の停滞']},
-33:{zh:['权杖骑士','权杖骑士代表行动与追求。这张宫廷牌展现了创意/行动/热情的人格化表达。','积极——行动与追求、创意/行动/热情','消极——缺乏行动、不成熟'],
-en:['Knight of Wands','Knight of Wands represents action & pursuit. This court card embodies the personal expression of creativity/action/passion.','Positive — action & pursuit, creativity/action/passion','Negative — immaturity, blocked creativity/action/passion'],
-ja:['ワンドのナイト','ワンドのナイトは行動と追求を表す。このコートカードは創造性/行動/情熱の人格的表現を体現する。','ポジティブ——行動と追求、創造性/行動/情熱','ネガティブ——未熟さ、創造性/行動/情熱の停滞']},
-34:{zh:['权杖王后','权杖王后代表成熟与滋养。这张宫廷牌展现了创意/行动/热情的人格化表达。','积极——成熟与滋养、创意/行动/热情','消极——缺乏成熟、不成熟'],
-en:['Queen of Wands','Queen of Wands represents maturity & nurturing. This court card embodies the personal expression of creativity/action/passion.','Positive — maturity & nurturing, creativity/action/passion','Negative — immaturity, blocked creativity/action/passion'],
-ja:['ワンドのクイーン','ワンドのクイーンは成熟と養育を表す。このコートカードは創造性/行動/情熱の人格的表現を体現する。','ポジティブ——成熟と養育、創造性/行動/情熱','ネガティブ——未熟さ、創造性/行動/情熱の停滞']},
-35:{zh:['权杖国王','权杖国王代表权威与掌控。这张宫廷牌展现了创意/行动/热情的人格化表达。','积极——权威与掌控、创意/行动/热情','消极——缺乏权威、不成熟'],
-en:['King of Wands','King of Wands represents authority & mastery. This court card embodies the personal expression of creativity/action/passion.','Positive — authority & mastery, creativity/action/passion','Negative — immaturity, blocked creativity/action/passion'],
-ja:['ワンドのキング','ワンドのキングは権威と掌握を表す。このコートカードは創造性/行動/情熱の人格的表現を体現する。','ポジティブ——権威と掌握、創造性/行動/情熱','ネガティブ——未熟さ、創造性/行動/情熱の停滞']},
-36:{zh:['圣杯一','圣杯一代表新的开始。它是情感/爱/直觉领域的重要卡牌。','积极面——新的开始、情感/爱/直觉','消极面——缺乏新的开始、受阻'],
-en:['Ace of Cups','Ace of Cups represents new beginning in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — new beginning, emotions/love/intuition','Negative — blocked new beginning, stagnation'],
-ja:['カップのエース','カップのエースは感情/愛/直感の領域における新たな始まりを表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——新たな始まり、感情/愛/直感','ネガティブ——新たな始まりの不足、停滞']},
-37:{zh:['圣杯二','圣杯二代表计划与决策。它是情感/爱/直觉领域的重要卡牌。','积极面——计划与决策、情感/爱/直觉','消极面——缺乏计划、受阻'],
-en:['Two of Cups','Two of Cups represents planning & decisions in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — planning & decisions, emotions/love/intuition','Negative — blocked planning, stagnation'],
-ja:['カップの2','カップの2は感情/愛/直感の領域における計画と決断を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——計画と決断、感情/愛/直感','ネガティブ——計画の不足、停滞']},
-38:{zh:['圣杯三','圣杯三代表扩展与远见。它是情感/爱/直觉领域的重要卡牌。','积极面——扩展与远见、情感/爱/直觉','消极面——缺乏扩展、受阻'],
-en:['Three of Cups','Three of Cups represents expansion & foresight in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — expansion & foresight, emotions/love/intuition','Negative — blocked expansion, stagnation'],
-ja:['カップの3','カップの3は感情/愛/直感の領域における拡大と先見を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——拡大と先見、感情/愛/直感','ネガティブ——拡大の不足、停滞']},
-39:{zh:['圣杯四','圣杯四代表稳定与庆祝。它是情感/爱/直觉领域的重要卡牌。','积极面——稳定与庆祝、情感/爱/直觉','消极面——缺乏稳定、受阻'],
-en:['Four of Cups','Four of Cups represents stability & celebration in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — stability & celebration, emotions/love/intuition','Negative — blocked stability, stagnation'],
-ja:['カップの4','カップの4は感情/愛/直感の領域における安定と祝福を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——安定と祝福、感情/愛/直感','ネガティブ——安定の不足、停滞']},
-40:{zh:['圣杯五','圣杯五代表冲突与挑战。它是情感/爱/直觉领域的重要卡牌。','积极面——冲突与挑战、情感/爱/直觉','消极面——缺乏冲突、受阻'],
-en:['Five of Cups','Five of Cups represents conflict & challenge in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — conflict & challenge, emotions/love/intuition','Negative — blocked conflict, stagnation'],
-ja:['カップの5','カップの5は感情/愛/直感の領域における葛藤と挑戦を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——葛藤と挑戦、感情/愛/直感','ネガティブ——葛藤の不足、停滞']},
-41:{zh:['圣杯六','圣杯六代表胜利与认可。它是情感/爱/直觉领域的重要卡牌。','积极面——胜利与认可、情感/爱/直觉','消极面——缺乏胜利、受阻'],
-en:['Six of Cups','Six of Cups represents victory & recognition in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — victory & recognition, emotions/love/intuition','Negative — blocked victory, stagnation'],
-ja:['カップの6','カップの6は感情/愛/直感の領域における勝利と承認を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——勝利と承認、感情/愛/直感','ネガティブ——勝利の不足、停滞']},
-42:{zh:['圣杯七','圣杯七象征坚持与防御。它是情感/爱/直觉领域的重要卡牌。','积极面——坚持与防御、情感/爱/直觉','消极面——缺乏坚持、受阻'],
-en:['Seven of Cups','Seven of Cups represents perseverance & defense in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — perseverance & defense, emotions/love/intuition','Negative — blocked perseverance, stagnation'],
-ja:['カップの7','カップの7は感情/愛/直感の領域における忍耐と防衛を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——忍耐と防衛、感情/愛/直感','ネガティブ——忍耐の不足、停滞']},
-43:{zh:['圣杯八','圣杯八象征迅速行动。它是情感/爱/直觉领域的重要卡牌。','积极面——迅速行动、情感/爱/直觉','消极面——缺乏迅速行动、受阻'],
-en:['Eight of Cups','Eight of Cups represents swift action in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — swift action, emotions/love/intuition','Negative — blocked swift action, stagnation'],
-ja:['カップの8','カップの8は感情/愛/直感の領域における迅速な行動を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——迅速な行動、感情/愛/直感','ネガティブ——迅速な行動の不足、停滞']},
-44:{zh:['圣杯九','圣杯九象征警惕与准备。它是情感/爱/直觉领域的重要卡牌。','积极面——警惕与准备、情感/爱/直觉','消极面——缺乏警惕、受阻'],
-en:['Nine of Cups','Nine of Cups represents vigilance & readiness in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — vigilance & readiness, emotions/love/intuition','Negative — blocked vigilance, stagnation'],
-ja:['カップの9','カップの9は感情/愛/直感の領域における警戒と準備を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——警戒と準備、感情/愛/直感','ネガティブ——警戒の不足、停滞']},
-45:{zh:['圣杯十','圣杯十提醒我们负担与完成。它是情感/爱/直觉领域的重要卡牌。','积极面——负担与完成、情感/爱/直觉','消极面——缺乏负担、受阻'],
-en:['Ten of Cups','Ten of Cups represents burden & completion in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — burden & completion, emotions/love/intuition','Negative — blocked burden, stagnation'],
-ja:['カップの10','カップの10は感情/愛/直感の領域における重荷と完成を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——重荷と完成、感情/愛/直感','ネガティブ——重荷の不足、停滞']},
-46:{zh:['圣杯侍从','圣杯侍从代表新的开始与好奇。这张宫廷牌展现了情感/爱/直觉的人格化表达。','积极——新的开始与好奇、情感/爱/直觉','消极——缺乏新的开始、不成熟'],
-en:['Page of Cups','Page of Cups represents new beginnings & curiosity. This court card embodies the personal expression of emotions/love/intuition.','Positive — new beginnings & curiosity, emotions/love/intuition','Negative — immaturity, blocked emotions/love/intuition'],
-ja:['カップのペイジ','カップのペイジは新たな始まりと好奇心を表す。このコートカードは感情/愛/直感の人格的表現を体現する。','ポジティブ——新たな始まりと好奇心、感情/愛/直感','ネガティブ——未熟さ、感情/愛/直感の停滞']},
-47:{zh:['圣杯骑士','圣杯骑士代表行动与追求。这张宫廷牌展现了情感/爱/直觉的人格化表达。','积极——行动与追求、情感/爱/直觉','消极——缺乏行动、不成熟'],
-en:['Knight of Cups','Knight of Cups represents action & pursuit. This court card embodies the personal expression of emotions/love/intuition.','Positive — action & pursuit, emotions/love/intuition','Negative — immaturity, blocked emotions/love/intuition'],
-ja:['カップのナイト','カップのナイトは行動と追求を表す。このコートカードは感情/愛/直感の人格的表現を体現する。','ポジティブ——行動と追求、感情/愛/直感','ネガティブ——未熟さ、感情/愛/直感の停滞']},
-48:{zh:['圣杯王后','圣杯王后代表成熟与滋养。这张宫廷牌展现了情感/爱/直觉的人格化表达。','积极——成熟与滋养、情感/爱/直觉','消极——缺乏成熟、不成熟'],
-en:['Queen of Cups','Queen of Cups represents maturity & nurturing. This court card embodies the personal expression of emotions/love/intuition.','Positive — maturity & nurturing, emotions/love/intuition','Negative — immaturity, blocked emotions/love/intuition'],
-ja:['カップのクイーン','カップのクイーンは成熟と養育を表す。このコートカードは感情/愛/直感の人格的表現を体現する。','ポジティブ——成熟と養育、感情/愛/直感','ネガティブ——未熟さ、感情/愛/直感の停滞']},
-49:{zh:['圣杯国王','圣杯国王代表权威与掌控。这张宫廷牌展现了情感/爱/直觉的人格化表达。','积极——权威与掌控、情感/爱/直觉','消极——缺乏权威、不成熟'],
-en:['King of Cups','King of Cups represents authority & mastery. This court card embodies the personal expression of emotions/love/intuition.','Positive — authority & mastery, emotions/love/intuition','Negative — immaturity, blocked emotions/love/intuition'],
-ja:['カップのキング','カップのキングは権威と掌握を表す。このコートカードは感情/愛/直感の人格的表現を体現する。','ポジティブ——権威と掌握、感情/愛/直感','ネガティブ——未熟さ、感情/愛/直感の停滞']},
-50:{zh:['宝剑一','宝剑一代表新的开始。它是思想/理智/冲突领域的重要卡牌。','积极面——新的开始、思想/理智/冲突','消极面——缺乏新的开始、受阻'],
-en:['Ace of Swords','Ace of Swords represents new beginning in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — new beginning, intellect/reason/conflict','Negative — blocked new beginning, stagnation'],
-ja:['ソードのエース','ソードのエースは思考/理性/葛藤の領域における新たな始まりを表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——新たな始まり、思考/理性/葛藤','ネガティブ——新たな始まりの不足、停滞']},
-51:{zh:['宝剑二','宝剑二代表计划与决策。它是思想/理智/冲突领域的重要卡牌。','积极面——计划与决策、思想/理智/冲突','消极面——缺乏计划、受阻'],
-en:['Two of Swords','Two of Swords represents planning & decisions in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — planning & decisions, intellect/reason/conflict','Negative — blocked planning, stagnation'],
-ja:['ソードの2','ソードの2は思考/理性/葛藤の領域における計画と決断を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——計画と決断、思考/理性/葛藤','ネガティブ——計画の不足、停滞']},
-52:{zh:['宝剑三','宝剑三代表扩展与远见。它是思想/理智/冲突领域的重要卡牌。','积极面——扩展与远见、思想/理智/冲突','消极面——缺乏扩展、受阻'],
-en:['Three of Swords','Three of Swords represents expansion & foresight in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — expansion & foresight, intellect/reason/conflict','Negative — blocked expansion, stagnation'],
-ja:['ソードの3','ソードの3は思考/理性/葛藤の領域における拡大と先見を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——拡大と先見、思考/理性/葛藤','ネガティブ——拡大の不足、停滞']},
-53:{zh:['宝剑四','宝剑四代表稳定与庆祝。它是思想/理智/冲突领域的重要卡牌。','积极面——稳定与庆祝、思想/理智/冲突','消极面——缺乏稳定、受阻'],
-en:['Four of Swords','Four of Swords represents stability & celebration in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — stability & celebration, intellect/reason/conflict','Negative — blocked stability, stagnation'],
-ja:['ソードの4','ソードの4は思考/理性/葛藤の領域における安定と祝福を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——安定と祝福、思考/理性/葛藤','ネガティブ——安定の不足、停滞']},
-54:{zh:['宝剑五','宝剑五代表冲突与挑战。它是思想/理智/冲突领域的重要卡牌。','积极面——冲突与挑战、思想/理智/冲突','消极面——缺乏冲突、受阻'],
-en:['Five of Swords','Five of Swords represents conflict & challenge in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — conflict & challenge, intellect/reason/conflict','Negative — blocked conflict, stagnation'],
-ja:['ソードの5','ソードの5は思考/理性/葛藤の領域における葛藤と挑戦を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——葛藤と挑戦、思考/理性/葛藤','ネガティブ——葛藤の不足、停滞']},
-55:{zh:['宝剑六','宝剑六代表胜利与认可。它是思想/理智/冲突领域的重要卡牌。','积极面——胜利与认可、思想/理智/冲突','消极面——缺乏胜利、受阻'],
-en:['Six of Swords','Six of Swords represents victory & recognition in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — victory & recognition, intellect/reason/conflict','Negative — blocked victory, stagnation'],
-ja:['ソードの6','ソードの6は思考/理性/葛藤の領域における勝利と承認を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——勝利と承認、思考/理性/葛藤','ネガティブ——勝利の不足、停滞']},
-56:{zh:['宝剑七','宝剑七象征坚持与防御。它是思想/理智/冲突领域的重要卡牌。','积极面——坚持与防御、思想/理智/冲突','消极面——缺乏坚持、受阻'],
-en:['Seven of Swords','Seven of Swords represents perseverance & defense in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — perseverance & defense, intellect/reason/conflict','Negative — blocked perseverance, stagnation'],
-ja:['ソードの7','ソードの7は思考/理性/葛藤の領域における忍耐と防衛を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——忍耐と防衛、思考/理性/葛藤','ネガティブ——忍耐の不足、停滞']},
-57:{zh:['宝剑八','宝剑八象征迅速行动。它是思想/理智/冲突领域的重要卡牌。','积极面——迅速行动、思想/理智/冲突','消极面——缺乏迅速行动、受阻'],
-en:['Eight of Swords','Eight of Swords represents swift action in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — swift action, intellect/reason/conflict','Negative — blocked swift action, stagnation'],
-ja:['ソードの8','ソードの8は思考/理性/葛藤の領域における迅速な行動を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——迅速な行動、思考/理性/葛藤','ネガティブ——迅速な行動の不足、停滞']},
-58:{zh:['宝剑九','宝剑九象征警惕与准备。它是思想/理智/冲突领域的重要卡牌。','积极面——警惕与准备、思想/理智/冲突','消极面——缺乏警惕、受阻'],
-en:['Nine of Swords','Nine of Swords represents vigilance & readiness in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — vigilance & readiness, intellect/reason/conflict','Negative — blocked vigilance, stagnation'],
-ja:['ソードの9','ソードの9は思考/理性/葛藤の領域における警戒と準備を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——警戒と準備、思考/理性/葛藤','ネガティブ——警戒の不足、停滞']},
-59:{zh:['宝剑十','宝剑十提醒我们负担与完成。它是思想/理智/冲突领域的重要卡牌。','积极面——负担与完成、思想/理智/冲突','消极面——缺乏负担、受阻'],
-en:['Ten of Swords','Ten of Swords represents burden & completion in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — burden & completion, intellect/reason/conflict','Negative — blocked burden, stagnation'],
-ja:['ソードの10','ソードの10は思考/理性/葛藤の領域における重荷と完成を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——重荷と完成、思考/理性/葛藤','ネガティブ——重荷の不足、停滞']},
-60:{zh:['宝剑侍从','宝剑侍从代表新的开始与好奇。这张宫廷牌展现了思想/理智/冲突的人格化表达。','积极——新的开始与好奇、思想/理智/冲突','消极——缺乏新的开始、不成熟'],
-en:['Page of Swords','Page of Swords represents new beginnings & curiosity. This court card embodies the personal expression of intellect/reason/conflict.','Positive — new beginnings & curiosity, intellect/reason/conflict','Negative — immaturity, blocked intellect/reason/conflict'],
-ja:['ソードのペイジ','ソードのペイジは新たな始まりと好奇心を表す。このコートカードは思考/理性/葛藤の人格的表現を体現する。','ポジティブ——新たな始まりと好奇心、思考/理性/葛藤','ネガティブ——未熟さ、思考/理性/葛藤の停滞']},
-61:{zh:['宝剑骑士','宝剑骑士代表行动与追求。这张宫廷牌展现了思想/理智/冲突的人格化表达。','积极——行动与追求、思想/理智/冲突','消极——缺乏行动、不成熟'],
-en:['Knight of Swords','Knight of Swords represents action & pursuit. This court card embodies the personal expression of intellect/reason/conflict.','Positive — action & pursuit, intellect/reason/conflict','Negative — immaturity, blocked intellect/reason/conflict'],
-ja:['ソードのナイト','ソードのナイトは行動と追求を表す。このコートカードは思考/理性/葛藤の人格的表現を体現する。','ポジティブ——行動と追求、思考/理性/葛藤','ネガティブ——未熟さ、思考/理性/葛藤の停滞']},
-62:{zh:['宝剑王后','宝剑王后代表成熟与滋养。这张宫廷牌展现了思想/理智/冲突的人格化表达。','积极——成熟与滋养、思想/理智/冲突','消极——缺乏成熟、不成熟'],
-en:['Queen of Swords','Queen of Swords represents maturity & nurturing. This court card embodies the personal expression of intellect/reason/conflict.','Positive — maturity & nurturing, intellect/reason/conflict','Negative — immaturity, blocked intellect/reason/conflict'],
-ja:['ソードのクイーン','ソードのクイーンは成熟と養育を表す。このコートカードは思考/理性/葛藤の人格的表現を体現する。','ポジティブ——成熟と養育、思考/理性/葛藤','ネガティブ——未熟さ、思考/理性/葛藤の停滞']},
-63:{zh:['宝剑国王','宝剑国王代表权威与掌控。这张宫廷牌展现了思想/理智/冲突的人格化表达。','积极——权威与掌控、思想/理智/冲突','消极——缺乏权威、不成熟'],
-en:['King of Swords','King of Swords represents authority & mastery. This court card embodies the personal expression of intellect/reason/conflict.','Positive — authority & mastery, intellect/reason/conflict','Negative — immaturity, blocked intellect/reason/conflict'],
-ja:['ソードのキング','ソードのキングは権威と掌握を表す。このコートカードは思考/理性/葛藤の人格的表現を体現する。','ポジティブ——権威と掌握、思考/理性/葛藤','ネガティブ——未熟さ、思考/理性/葛藤の停滞']},
-64:{zh:['星币一','星币一代表新的开始。它是物质/财富/务实领域的重要卡牌。','积极面——新的开始、物质/财富/务实','消极面——缺乏新的开始、受阻'],
-en:['Ace of Pentacles','Ace of Pentacles represents new beginning in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — new beginning, material/wealth/practicality','Negative — blocked new beginning, stagnation'],
-ja:['ペンタクルのエース','ペンタクルのエースは物質/富/実用性の領域における新たな始まりを表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——新たな始まり、物質/富/実用性','ネガティブ——新たな始まりの不足、停滞']},
-65:{zh:['星币二','星币二代表计划与决策。它是物质/财富/务实领域的重要卡牌。','积极面——计划与决策、物质/财富/务实','消极面——缺乏计划、受阻'],
-en:['Two of Pentacles','Two of Pentacles represents planning & decisions in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — planning & decisions, material/wealth/practicality','Negative — blocked planning, stagnation'],
-ja:['ペンタクルの2','ペンタクルの2は物質/富/実用性の領域における計画と決断を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——計画と決断、物質/富/実用性','ネガティブ——計画の不足、停滞']},
-66:{zh:['星币三','星币三代表扩展与远见。它是物质/财富/务实领域的重要卡牌。','积极面——扩展与远见、物质/财富/务实','消极面——缺乏扩展、受阻'],
-en:['Three of Pentacles','Three of Pentacles represents expansion & foresight in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — expansion & foresight, material/wealth/practicality','Negative — blocked expansion, stagnation'],
-ja:['ペンタクルの3','ペンタクルの3は物質/富/実用性の領域における拡大と先見を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——拡大と先見、物質/富/実用性','ネガティブ——拡大の不足、停滞']},
-67:{zh:['星币四','星币四代表稳定与庆祝。它是物质/财富/务实领域的重要卡牌。','积极面——稳定与庆祝、物质/财富/务实','消极面——缺乏稳定、受阻'],
-en:['Four of Pentacles','Four of Pentacles represents stability & celebration in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — stability & celebration, material/wealth/practicality','Negative — blocked stability, stagnation'],
-ja:['ペンタクルの4','ペンタクルの4は物質/富/実用性の領域における安定と祝福を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——安定と祝福、物質/富/実用性','ネガティブ——安定の不足、停滞']},
-68:{zh:['星币五','星币五代表冲突与挑战。它是物质/财富/务实领域的重要卡牌。','积极面——冲突与挑战、物质/财富/务实','消极面——缺乏冲突、受阻'],
-en:['Five of Pentacles','Five of Pentacles represents conflict & challenge in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — conflict & challenge, material/wealth/practicality','Negative — blocked conflict, stagnation'],
-ja:['ペンタクルの5','ペンタクルの5は物質/富/実用性の領域における葛藤と挑戦を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——葛藤と挑戦、物質/富/実用性','ネガティブ——葛藤の不足、停滞']},
-69:{zh:['星币六','星币六代表胜利与认可。它是物质/财富/务实领域的重要卡牌。','积极面——胜利与认可、物质/财富/务实','消极面——缺乏胜利、受阻'],
-en:['Six of Pentacles','Six of Pentacles represents victory & recognition in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — victory & recognition, material/wealth/practicality','Negative — blocked victory, stagnation'],
-ja:['ペンタクルの6','ペンタクルの6は物質/富/実用性の領域における勝利と承認を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——勝利と承認、物質/富/実用性','ネガティブ——勝利の不足、停滞']},
-70:{zh:['星币七','星币七象征坚持与防御。它是物质/财富/务实领域的重要卡牌。','积极面——坚持与防御、物质/财富/务实','消极面——缺乏坚持、受阻'],
-en:['Seven of Pentacles','Seven of Pentacles represents perseverance & defense in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — perseverance & defense, material/wealth/practicality','Negative — blocked perseverance, stagnation'],
-ja:['ペンタクルの7','ペンタクルの7は物質/富/実用性の領域における忍耐と防衛を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——忍耐と防衛、物質/富/実用性','ネガティブ——忍耐の不足、停滞']},
-71:{zh:['星币八','星币八象征迅速行动。它是物质/财富/务实领域的重要卡牌。','积极面——迅速行动、物质/财富/务实','消极面——缺乏迅速行动、受阻'],
-en:['Eight of Pentacles','Eight of Pentacles represents swift action in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — swift action, material/wealth/practicality','Negative — blocked swift action, stagnation'],
-ja:['ペンタクルの8','ペンタクルの8は物質/富/実用性の領域における迅速な行動を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——迅速な行動、物質/富/実用性','ネガティブ——迅速な行動の不足、停滞']},
-72:{zh:['星币九','星币九象征警惕与准备。它是物质/财富/务实领域的重要卡牌。','积极面——警惕与准备、物质/财富/务实','消极面——缺乏警惕、受阻'],
-en:['Nine of Pentacles','Nine of Pentacles represents vigilance & readiness in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — vigilance & readiness, material/wealth/practicality','Negative — blocked vigilance, stagnation'],
-ja:['ペンタクルの9','ペンタクルの9は物質/富/実用性の領域における警戒と準備を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——警戒と準備、物質/富/実用性','ネガティブ——警戒の不足、停滞']},
-73:{zh:['星币十','星币十提醒我们负担与完成。它是物质/财富/务实领域的重要卡牌。','积极面——负担与完成、物质/财富/务实','消极面——缺乏负担、受阻'],
-en:['Ten of Pentacles','Ten of Pentacles represents burden & completion in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — burden & completion, material/wealth/practicality','Negative — blocked burden, stagnation'],
-ja:['ペンタクルの10','ペンタクルの10は物質/富/実用性の領域における重荷と完成を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——重荷と完成、物質/富/実用性','ネガティブ——重荷の不足、停滞']},
-74:{zh:['星币侍从','星币侍从代表新的开始与好奇。这张宫廷牌展现了物质/财富/务实的人格化表达。','积极——新的开始与好奇、物质/财富/务实','消极——缺乏新的开始、不成熟'],
-en:['Page of Pentacles','Page of Pentacles represents new beginnings & curiosity. This court card embodies the personal expression of material/wealth/practicality.','Positive — new beginnings & curiosity, material/wealth/practicality','Negative — immaturity, blocked material/wealth/practicality'],
-ja:['ペンタクルのペイジ','ペンタクルのペイジは新たな始まりと好奇心を表す。このコートカードは物質/富/実用性の人格的表現を体現する。','ポジティブ——新たな始まりと好奇心、物質/富/実用性','ネガティブ——未熟さ、物質/富/実用性の停滞']},
-75:{zh:['星币骑士','星币骑士代表行动与追求。这张宫廷牌展现了物质/财富/务实的人格化表达。','积极——行动与追求、物质/财富/务实','消极——缺乏行动、不成熟'],
-en:['Knight of Pentacles','Knight of Pentacles represents action & pursuit. This court card embodies the personal expression of material/wealth/practicality.','Positive — action & pursuit, material/wealth/practicality','Negative — immaturity, blocked material/wealth/practicality'],
-ja:['ペンタクルのナイト','ペンタクルのナイトは行動と追求を表す。このコートカードは物質/富/実用性の人格的表現を体現する。','ポジティブ——行動と追求、物質/富/実用性','ネガティブ——未熟さ、物質/富/実用性の停滞']},
-76:{zh:['星币王后','星币王后代表成熟与滋养。这张宫廷牌展现了物质/财富/务实的人格化表达。','积极——成熟与滋养、物质/财富/务实','消极——缺乏成熟、不成熟'],
-en:['Queen of Pentacles','Queen of Pentacles represents maturity & nurturing. This court card embodies the personal expression of material/wealth/practicality.','Positive — maturity & nurturing, material/wealth/practicality','Negative — immaturity, blocked material/wealth/practicality'],
-ja:['ペンタクルのクイーン','ペンタクルのクイーンは成熟と養育を表す。このコートカードは物質/富/実用性の人格的表現を体現する。','ポジティブ——成熟と養育、物質/富/実用性','ネガティブ——未熟さ、物質/富/実用性の停滞']},
-77:{zh:['星币国王','星币国王代表权威与掌控。这张宫廷牌展现了物质/财富/务实的人格化表达。','积极——权威与掌控、物质/财富/务实','消极——缺乏权威、不成熟'],
-en:['King of Pentacles','King of Pentacles represents authority & mastery. This court card embodies the personal expression of material/wealth/practicality.','Positive — authority & mastery, material/wealth/practicality','Negative — immaturity, blocked material/wealth/practicality'],
-ja:['ペンタクルのキング','ペンタクルのキングは権威と掌握を表す。このコートカードは物質/富/実用性の人格的表現を体現する。','ポジティブ——権威と掌握、物質/富/実用性','ネガティブ——未熟さ、物質/富/実用性の停滞']},
+
+// 小阿卡纳 - 权杖 (22-35) 已修正
+22:{zh:['权杖一','权杖王牌象征新的灵感、创造力和行动力的开始。它预示着充满热情的新冒险或机会正在向你走来。','新开始、灵感、创造性、激情、勇气、机会','缺乏激情、延迟、创意枯竭、错失机会、缺乏信心'],
+en:['Ace of Wands','The Ace of Wands symbolizes new inspiration, creativity, and the start of a passionate new venture. It signals a burst of energy and a new opportunity for growth.','New beginnings, inspiration, creativity, passion, courage, opportunity','Lack of passion, delays, creative block, missed chances, lack of confidence'],
+ja:['ワンドのエース','ワンドのエースは新たなインスピレーション、創造性、情熱的な始まりを象徴する。エネルギーに満ちた新たな機会が訪れるサイン。','新たな始まり、インスピレーション、創造性、情熱、勇気、好機','情熱不足、遅延、創造的停滞、機会損失、自信喪失']},
+23:{zh:['权杖二','权杖二代表计划、远见和决策。你手握资源，正权衡未来的方向，准备走出舒适区去探索更大的世界。','计划、远见、决策、个人力量、勇敢、探索','缺乏计划、犹豫不决、害怕改变、受限、短视'],
+en:['Two of Wands','The Two of Wands represents planning, foresight, and making decisions. You hold the world in your hands, weighing options and preparing to step out of your comfort zone.','Planning, foresight, decision, personal power, courage, exploration','Lack of planning, indecision, fear of change, restriction, short-sightedness'],
+ja:['ワンドの2','ワンドの2は計画、先見性、決断を表す。世界を手にし、選択肢を天秤にかけ、快適な領域を出る準備をしている。','計画、先見性、決断、個人的な力、勇気、探求','計画不足、優柔不断、変化への恐れ、制限、近視眼的']},
+24:{zh:['权杖三','权杖三象征扩张、远见和海外事务。你已经建立了稳固的基础，现在正将目光投向远方，准备将计划付诸行动。','扩张、远见、领导力、探索、贸易、旅行','缺乏远见、计划受阻、失败的扩张、犹豫不决、失望'],
+en:['Three of Wands','The Three of Wands symbolizes expansion, foresight, and overseas affairs. Your plans are well underway, and you are looking ahead to broader horizons with confident expectation.','Expansion, foresight, leadership, exploration, trade, travel','Lack of foresight, blocked plans, failed expansion, indecision, disappointment'],
+ja:['ワンドの3','ワンドの3は拡大、先見性、海外との関わりを象徴する。計画は順調に進み、自信を持ってより広い地平線を見据えている。','拡大、先見性、リーダーシップ、探求、貿易、旅','先見性不足、計画の妨害、拡大失敗、優柔不断、失望']},
+25:{zh:['权杖四','权杖四象征稳定、和谐与庆祝。它常代表家庭、社区中的快乐事件，如婚礼或团聚，是努力后获得安全感的时刻。','庆祝、和谐、稳定、家园、归属感、成功','不稳定、缺乏根基、家庭矛盾、不和谐、暂时的成功'],
+en:['Four of Wands','The Four of Wands symbolizes stability, harmony, and celebration. It often represents joyful events like weddings or reunions, bringing a sense of home and accomplishment.','Celebration, harmony, stability, home, belonging, success','Instability, lack of roots, family conflict, disharmony, temporary success'],
+ja:['ワンドの4','ワンドの4は安定、調和、祝福を象徴する。結婚式や同窓会などの喜びのイベントを表し、家庭や達成感をもたらす。','祝福、調和、安定、家庭、所属感、成功','不安定、基盤不足、家族の対立、不調和、一時的な成功']},
+26:{zh:['权杖五','权杖五代表冲突、竞争和意见不合。多个不同的观点在碰撞，虽然混乱，但也激发了创造力和改变的契机。','冲突、竞争、挑战、分歧、活力、运动','避免冲突、和解、合作、达成一致、内心平静'],
+en:['Five of Wands','The Five of Wands represents conflict, competition, and disagreement. Multiple egos clash, creating chaos but also sparking creativity and the drive for change.','Conflict, competition, challenge, disagreement, energy, movement','Avoiding conflict, reconciliation, cooperation, agreement, inner peace'],
+ja:['ワンドの5','ワンドの5は対立、競争、意見の不一致を表す。複数の自我がぶつかり合い、混乱を生むが、創造性と変化への推進力も生み出す。','対立、競争、挑戦、不一致、エネルギー、運動','対立回避、和解、協力、合意、心の平和']},
+27:{zh:['权杖六','权杖六象征胜利、公众认可和进步。你经过努力获得了成功，成为众人瞩目的焦点，自信满满地继续前行。','胜利、认可、成功、自信、进步、赞誉','失败、缺乏认可、自负、骄傲导致失败、延误'],
+en:['Six of Wands','The Six of Wands symbolizes victory, public recognition, and progress. You have achieved a notable success and are being celebrated, moving forward with well-deserved confidence.','Victory, recognition, success, confidence, progress, acclaim','Failure, lack of recognition, egotism, fall from grace, delays'],
+ja:['ワンドの6','ワンドの6は勝利、公的承認、進歩を象徴する。顕著な成功を収め、称賛を浴びながら、当然の自信を持って前進する。','勝利、承認、成功、自信、進歩、賞賛','失敗、承認不足、自己顕示欲、失脚、遅延']},
+28:{zh:['权杖七','权杖七代表坚持、防御和勇气。你正处于有利位置，尽管面临众多对手或挑战，你依然坚守立场，决不退缩。','坚持、防御、勇气、挑战、决心、抵抗','放弃、屈服、被压垮、缺乏自信、失败'],
+en:['Seven of Wands','The Seven of Wands represents perseverance, defense, and courage. You are in a defensive position, holding your ground against many challenges with determination and resilience.','Perseverance, defense, courage, challenge, determination, resistance','Giving up, yielding, overwhelmed, lack of confidence, defeat'],
+ja:['ワンドの7','ワンドの7は忍耐、防御、勇気を表す。多くの挑戦に対して、決意と回復力を持って自分の立場を守り抜く姿勢を示す。','忍耐、防御、勇気、挑戦、決意、抵抗','放棄、屈服、圧倒される、自信不足、敗北']},
+29:{zh:['权杖八','权杖八象征迅速的行动、进展和自由。阻碍被清除，事情高速发展，消息和旅行即将到来，一切都畅通无阻。','迅速行动、进展、自由、旅行、消息、动力','延迟、阻碍、缓慢、停滞、缺乏方向、取消行程'],
+en:['Eight of Wands','The Eight of Wands symbolizes swift action, progress, and freedom. Obstacles are cleared, things are moving fast, and news or travel is imminent – a time of unimpeded momentum.','Swift action, progress, freedom, travel, messages, momentum','Delays, obstacles, slowness, stagnation, lack of direction, cancelled plans'],
+ja:['ワンドの8','ワンドの8は迅速な行動、進展、自由を象徴する。障害が取り除かれ、物事が高速で進み、知らせや旅が差し迫っている――妨げのない勢いの時。','迅速な行動、進展、自由、旅、知らせ、勢い','遅延、障害、遅さ、停滞、方向性不足、計画中止']},
+30:{zh:['权杖九','权杖九代表警惕、防御和最后的坚持。尽管你已疲惫或受伤，但仍保持警惕，准备迎接最后的挑战，显示出韧性和毅力。','警惕、防御、坚持、毅力、谨慎、最后一道防线','筋疲力尽、放弃、过于警惕、偏执、无法放手'],
+en:['Nine of Wands','The Nine of Wands represents vigilance, defense, and the last stand. Despite being weary or wounded, you remain guarded and resilient, ready for the final challenge.','Vigilance, defense, persistence, resilience, caution, last stand','Exhaustion, giving up, over-vigilance, paranoia, inability to let go'],
+ja:['ワンドの9','ワンドの9は警戒、防御、最後の抵抗を表す。疲れ果てたり傷ついていても、なお警戒を怠らず、最終挑戦に備える強靭さを示す。','警戒、防御、粘り強さ、回復力、用心、最後の砦','疲労困憊、放棄、過度の警戒、偏執、手放せない']},
+31:{zh:['权杖十','权杖十象征负担、压力和责任。你承担了太多，感到不堪重负，但仍咬牙坚持。提醒你需要学会分配任务或放下不必要的担子。','负担、责任、压力、过度工作、疲惫、义务','卸下负担、拒绝额外责任、学会说不、减轻压力'],
+en:['Ten of Wands','The Ten of Wands symbolizes burden, pressure, and responsibility. You are carrying a heavy load, perhaps too much, and nearing burnout. It urges delegation or letting go of unnecessary weight.','Burden, responsibility, stress, overwork, fatigue, obligation','Releasing burdens, saying no, delegation, lightening the load'],
+ja:['ワンドの10','ワンドの10は重荷、プレッシャー、責任を象徴する。重すぎる荷物を抱え、燃え尽き寸前。仕事の委任や不要な重荷を手放す必要性を示唆。','重荷、責任、ストレス、過労、疲労、義務','重荷を下ろす、拒否する、委任する、負担軽減']},
+32:{zh:['权杖侍从','权杖侍从代表新的创意、热情和探索精神。他像是一个充满好奇心的信使，带来令人兴奋的消息或一个新冒险的灵感。','新创意、热情、探索、好奇心、好消息、冒险','缺乏创意、坏消息、不成熟、缺乏方向、三分钟热度'],
+en:['Page of Wands','The Page of Wands represents new ideas, enthusiasm, and a spirit of exploration. Like a curious messenger, he brings exciting news or inspiration for a new venture.','New ideas, enthusiasm, exploration, curiosity, good news, adventure','Lack of ideas, bad news, immaturity, lack of direction, short-lived passion'],
+ja:['ワンドのペイジ','ワンドのペイジは新しいアイデア、熱意、探求心を表す。好奇心旺盛な使者のように、刺激的な知らせや新たな冒険のインスピレーションをもたらす。','新アイデア、熱意、探求、好奇心、良い知らせ、冒険','アイデア不足、悪い知らせ、未熟、方向性不足、一時的な情熱']},
+33:{zh:['权杖骑士','权杖骑士代表行动、冲动和冒险。他充满激情地追求目标，行动迅速，但有时也可能因缺乏耐心而导致鲁莽。','行动、冒险、冲动、热情、追求、旅行','缺乏行动、延迟、鲁莽、冲突、缺乏活力、散漫'],
+en:['Knight of Wands','The Knight of Wands represents action, impulsiveness, and adventure. He charges forward with passion and speed, but may also be reckless due to impatience.','Action, adventure, impulsiveness, passion, pursuit, travel','Lack of action, delays, recklessness, conflict, lack of energy, aimlessness'],
+ja:['ワンドのナイト','ワンドのナイトは行動、衝動性、冒険を表す。情熱とスピードで突き進むが、短気ゆえに無謀になることもある。','行動、冒険、衝動性、情熱、追求、旅','行動不足、遅延、無謀、対立、活力不足、方向喪失']},
+34:{zh:['权杖王后','权杖王后代表创造力、热情和自信。她是一位充满魅力的领导者，既能独立完成目标，也能温暖地激励他人。','创造力、热情、自信、领导力、独立、魅力','缺乏自信、创造力受阻、控制欲、冷漠、以自我为中心'],
+en:['Queen of Wands','The Queen of Wands represents creativity, warmth, and confidence. She is a charismatic leader who achieves her goals with passion while inspiring others with her vibrant energy.','Creativity, warmth, confidence, leadership, independence, charisma','Lack of confidence, creative block, controlling, coldness, self-centeredness'],
+ja:['ワンドのクイーン','ワンドのクイーンは創造性、温かさ、自信を表す。カリスマ的なリーダーであり、情熱的に目標を達成し、周囲を活気づける。','創造性、温かさ、自信、リーダーシップ、独立、カリスマ','自信不足、創造的停滞、支配的、冷たさ、自己中心的']},
+35:{zh:['权杖国王','权杖国王代表领导力、远见和权威。他是一位成熟而富有创造力的领袖，能够将大胆的愿景转化为现实，并激励团队共同前进。','领导力、远见、权威、创造力、荣誉、成功','滥用权力、专制、缺乏领导力、不切实际、失败'],
+en:['King of Wands','The King of Wands represents leadership, vision, and authority. He is a mature, creative leader who turns bold visions into reality and inspires others to follow his direction.','Leadership, vision, authority, creativity, honor, success','Abuse of power, tyranny, poor leadership, unrealism, failure'],
+ja:['ワンドのキング','ワンドのキングはリーダーシップ、先見性、権威を表す。成熟した創造的リーダーであり、大胆なビジョンを現実に変え、人々を導く。','リーダーシップ、先見性、権威、創造性、名誉、成功','権力乱用、独裁、リーダーシップ不足、非現実的、失敗']},
+
+// 圣杯 (36-49)
+36:{zh:['圣杯一','圣杯王牌象征新的感情、爱和灵性的涌现。它代表着情感上的丰盈、喜悦和新关系的开始，是一张充满祝福的牌。','新感情、爱、喜悦、直觉、灵性、丰盈','情感空虚、缺乏爱、内心封闭、不快乐、创造受阻'],
+en:['Ace of Cups','The Ace of Cups symbolizes the beginning of love, deep emotion, and spiritual abundance. It represents the overflowing of joy, compassion, and the start of a meaningful new relationship.','New love, joy, intuition, spirituality, abundance, compassion','Emotional emptiness, lack of love, blocked feelings, unhappiness, creative block'],
+ja:['カップのエース','カップのエースは愛、深い感情、霊的豊かさの始まりを象徴する。喜びと慈しみが溢れ出し、意味のある新しい関係の始まりを告げる。','新しい愛、喜び、直感、霊性、豊かさ、思いやり','感情の空虚、愛の欠如、感情の閉塞、不幸、創造的停滞']},
+37:{zh:['圣杯二','圣杯二代表伙伴关系、浪漫的结合和相互尊重。它象征着平等、和谐与深厚的情感连接，通常预示着一段美好的关系。','伙伴关系、爱情、平等、和谐、相互尊重、结合','关系破裂、不平等、分离、不信任、不和谐'],
+en:['Two of Cups','The Two of Cups represents partnership, romantic union, and mutual respect. It symbolizes a balanced, harmonious bond, often indicating a deep and loving relationship.','Partnership, love, equality, harmony, mutual respect, union','Broken relationship, inequality, separation, distrust, disharmony'],
+ja:['カップの2','カップの2はパートナーシップ、恋愛の結びつき、相互尊重を表す。バランスのとれた調和の絆を象徴し、深く愛に満ちた関係を示す。','パートナーシップ、愛、平等、調和、相互尊重、結合','関係破綻、不平等、別離、不信、不調和']},
+38:{zh:['圣杯三','圣杯三象征庆祝、友谊和团队合作。这是与亲朋好友欢聚一堂、分享快乐和成功的时刻，代表情感上的满足和归属感。','庆祝、友谊、团队合作、欢乐、聚会、分享','孤独、过度放纵、八卦、社交疲惫、不和谐'],
+en:['Three of Cups','The Three of Cups symbolizes celebration, friendship, and collaboration. It’s a time of joyful gatherings with loved ones, sharing happiness and success, bringing emotional fulfillment.','Celebration, friendship, collaboration, joy, gathering, sharing','Isolation, overindulgence, gossip, social fatigue, disharmony'],
+ja:['カップの3','カップの3は祝福、友情、協力を象徴する。愛する人々との喜びの集い、幸福と成功の共有、感情的な充足の時。','祝福、友情、協力、喜び、集い、共有','孤立、過剰耽溺、噂話、社交的疲労、不調和']},
+39:{zh:['圣杯四','圣杯四代表冷漠、沉思和不满。你或许对现状感到厌倦或漠不关心，忽略眼前的机会，正在内省并等待新的启发。','沉思、不满、冷漠、重新评估、内省、渴望改变','新动力、接纳、意识到机遇、重新投入、满足'],
+en:['Four of Cups','The Four of Cups represents apathy, contemplation, and discontent. You may be feeling bored or dissatisfied, overlooking what is offered while longing for something more.','Contemplation, discontent, apathy, reevaluation, introspection, longing','New motivation, acceptance, awareness of opportunity, re-engagement, contentment'],
+ja:['カップの4','カップの4は無関心、熟考、不満を表す。現状に退屈や不満を感じ、目の前の機会を見落とし、さらなる何かを切望している。','熟考、不満、無関心、再評価、内省、渇望','新たな意欲、受容、機会への気づき、再参加、満足']},
+40:{zh:['圣杯五','圣杯五代表悲伤、失落和遗憾。你专注于已经失去或破碎的事物，感到痛苦。但牌面提示仍有希望（留下的杯子），需要转换视角。','悲伤、失落、遗憾、哀悼、失望、视角转换','接受、疗愈、向前看、希望、恢复、学习'],
+en:['Five of Cups','The Five of Cups represents grief, loss, and regret. You focus on what has been spilled or lost, but the remaining cups remind you that hope and recovery are still possible.','Grief, loss, regret, mourning, disappointment, perspective shift','Acceptance, healing, moving on, hope, recovery, learning'],
+ja:['カップの5','カップの5は悲しみ、喪失、後悔を表す。こぼれたものに目を奪われがちだが、残ったカップが希望と回復の可能性を示唆する。','悲しみ、喪失、後悔、哀悼、失望、視点転換','受容、癒し、前進、希望、回復、学び']},
+41:{zh:['圣杯六','圣杯六代表怀旧、回忆和纯真。它可能指向过去的美好时光、童年回忆或旧人重逢。也代表给予和接受，充满善意和简单的快乐。','怀旧、回忆、纯真、善意、给予、重逢','沉溺过去、无法前行、失去纯真、不健康的依赖'],
+en:['Six of Cups','The Six of Cups represents nostalgia, memories, and innocence. It may point to happy childhood moments, reunions, or acts of kindness and giving.','Nostalgia, memories, innocence, kindness, giving, reunion','Living in the past, unable to move on, loss of innocence, unhealthy attachment'],
+ja:['カップの6','カップの6は郷愁、思い出、無邪気さを表す。幸せな子供時代や再会、あるいは親切や与える行為を示す。','郷愁、思い出、無邪気、親切、与えること、再会','過去への固執、前進できない、純真喪失、不健全な執着']},
+42:{zh:['圣杯七','圣杯七象征幻想、选择和欲望。眼前有众多诱人的选项，但有些可能只是幻觉。提醒你需要脚踏实地，谨慎抉择，避免沉溺于白日梦。','幻想、选择、欲望、白日梦、可能性、想象力','清晰的选择、现实、目标明确、摆脱幻象、决心'],
+en:['Seven of Cups','The Seven of Cups symbolizes fantasy, choices, and desires. Many tempting options float before you, but some are illusions. It urges clarity and careful decision-making.','Fantasy, choices, desires, daydreams, possibilities, imagination','Clear choices, reality, clear goals, dispelling illusions, determination'],
+ja:['カップの7','カップの7は幻想、選択、欲望を象徴する。多くの魅力的な選択肢が浮かぶが、一部は幻影。現実的な判断と明確な決断を促す。','幻想、選択、欲望、白昼夢、可能性、想像力','明確な選択、現実、明確な目標、幻影払拭、決断']},
+43:{zh:['圣杯八','圣杯八代表离开、寻找更高意义和放下过去。你转身离开熟悉的环境或成就，踏上寻求更深层情感或精神满足的旅程。','离开、寻找意义、放下、疲惫、精神旅程、自我发现','恐惧改变、停滞、缺乏意义、回归、逃避'],
+en:['Eight of Cups','The Eight of Cups represents walking away, seeking higher meaning, and letting go. You turn from the familiar to embark on a journey for deeper emotional or spiritual fulfillment.','Walking away, seeking meaning, letting go, weariness, spiritual journey, self-discovery','Fear of change, stagnation, lack of meaning, return, escapism'],
+ja:['カップの8','カップの8は離別、より高い意味の探求、過去の放棄を表す。慣れ親しんだものから離れ、より深い感情的・精神的充足を求めて旅立つ。','離別、意味探求、手放し、疲弊、精神的旅、自己発見','変化への恐れ、停滞、意味欠如、回帰、逃避']},
+44:{zh:['圣杯九','圣杯九象征愿望实现、满足和幸福感。这是一张“心愿达成”的牌，代表着物质或情感上的丰盛，以及因努力获得的自我满足与自豪。','愿望实现、满足、幸福、成功、自信、享受','不满足、失望、物质主义、虚荣、缺乏成就感'],
+en:['Nine of Cups','The Nine of Cups symbolizes wishes fulfilled, contentment, and emotional satisfaction. Often called the "wish card," it represents abundance and pride in one’s achievements.','Wish fulfillment, contentment, happiness, success, confidence, enjoyment','Dissatisfaction, disappointment, materialism, vanity, lack of fulfillment'],
+ja:['カップの9','カップの9は願望成就、満足、幸福を象徴する。「願いのカード」とも呼ばれ、達成感と豊かさを誇る。','願望成就、満足、幸福、成功、自信、享受','不満、失望、物質主義、虚栄、達成感不足']},
+45:{zh:['圣杯十','圣杯十象征家庭幸福、情感圆满和和谐。彩虹下的家庭场景代表着持久的爱、快乐以及深层次的情感安全感。','家庭幸福、圆满、和谐、喜乐、爱、安全','家庭不和、破碎的梦、不稳定、冲突、疏远'],
+en:['Ten of Cups','The Ten of Cups symbolizes family bliss, emotional fulfillment, and harmony. The rainbow scene depicts lasting love, joy, and deep emotional security within relationships.','Family bliss, fulfillment, harmony, joy, love, security','Family discord, broken dreams, instability, conflict, estrangement'],
+ja:['カップの10','カップの10は家族の幸福、感情的円満、調和を象徴する。虹の下の家族の情景は、永続する愛、喜び、深い安心感を描く。','家族の幸福、円満、調和、喜び、愛、安心','家族不和、壊れた夢、不安定、対立、疎遠']},
+46:{zh:['圣杯侍从','圣杯侍从代表新的情感、创造力和直觉的萌芽。他像一个带来好消息或情感邀请的信使，鼓励你敞开心扉，探索内心世界。','新情感、创造力、直觉、好奇心、好消息、提议','情感不成熟、坏消息、创意枯竭、拒绝表达、冷漠'],
+en:['Page of Cups','The Page of Cups represents a new emotional beginning, creativity, and intuitive message. Like a messenger, he brings an invitation to explore your feelings or a creative opportunity.','New emotions, creativity, intuition, curiosity, good news, proposal','Emotional immaturity, bad news, creative block, refusal to express, coldness'],
+ja:['カップのペイジ','カップのペイジは新たな感情の始まり、創造性、直感的メッセージを表す。使者のように、感情探求や創造的機会への招待をもたらす。','新たな感情、創造性、直感、好奇心、良い知らせ、提案','感情の未熟、悪い知らせ、創造的停滞、表現拒否、冷たさ']},
+47:{zh:['圣杯骑士','圣杯骑士代表浪漫、魅力和理想主义。他是一位为爱或美好理想而前进的追求者，举止优雅，富有想象力和同情心。','浪漫、魅力、理想主义、邀请、追求、同情心','情绪波动、不切实际、嫉妒、欺骗、失望'],
+en:['Knight of Cups','The Knight of Cups represents romance, charm, and idealism. He is a graceful pursuer of love or beauty, filled with imagination and compassion, often bringing an invitation or proposal.','Romance, charm, idealism, invitation, pursuit, compassion','Moodiness, unrealism, jealousy, deception, disappointment'],
+ja:['カップのナイト','カップのナイトはロマンス、魅力、理想主義を表す。愛や美を優雅に追い求める理想家で、想像力と思いやりに溢れ、招待や提案をもたらす。','ロマンス、魅力、理想主義、招待、追求、思いやり','気分屋、非現実的、嫉妬、欺瞞、失望']},
+48:{zh:['圣杯王后','圣杯王后代表情感深度、直觉和关怀。她是情绪世界的守护者，富有同理心和创造力，能够敏锐地感知他人的需求并给予无条件的爱。','情感深度、直觉、同情心、温暖、创造力、关怀','情感依赖、过度敏感、情绪波动、缺乏边界、冷漠'],
+en:['Queen of Cups','The Queen of Cups represents emotional depth, intuition, and nurturing. She is the guardian of the emotional realm, deeply empathetic and creative, offering unconditional love and support.','Emotional depth, intuition, compassion, warmth, creativity, nurturing','Emotional dependency, oversensitivity, moodiness, lack of boundaries, coldness'],
+ja:['カップのクイーン','カップのクイーンは感情の深み、直感、養育を表す。感情領域の守護者であり、深い共感力と創造性を持って無条件の愛を注ぐ。','感情の深み、直感、思いやり、温かさ、創造性、養育','感情依存、過敏、気分変動、境界線欠如、冷たさ']},
+49:{zh:['圣杯国王','圣杯国王代表情感成熟、智慧与宽容。他善于掌控自己的情绪，富有同情心且沉稳，是一位值得信赖的顾问和慈爱的领导者。','情感成熟、智慧、宽容、同情心、稳重、创造力','情绪失控、冷漠、操纵、过于压抑、缺乏同情心'],
+en:['King of Cups','The King of Cups represents emotional maturity, wisdom, and tolerance. He masters his feelings, is deeply compassionate yet calm, acting as a trusted counselor and benevolent leader.','Emotional maturity, wisdom, tolerance, compassion, stability, creativity','Emotional volatility, coldness, manipulation, suppression, lack of empathy'],
+ja:['カップのキング','カップのキングは感情的な成熟、知恵、寛容を表す。感情を制御し、深く思いやりがありながら冷静で、信頼できる助言者、慈悲深いリーダー。','感情的成熟、知恵、寛容、思いやり、安定、創造性','感情不安定、冷酷、操作、抑圧、共感欠如']},
+
+// 宝剑 (50-63)
+50:{zh:['宝剑一','宝剑王牌象征清晰的思维、新思想和真理。它代表突破性的洞察力，用理智之剑斩断迷雾，带来公正的决断和胜利。','清晰、新思想、真理、突破、正义、胜利','混乱、思维不清、失败、不公、错误的决定'],
+en:['Ace of Swords','The Ace of Swords symbolizes clarity of thought, new ideas, and truth. It represents a breakthrough insight, cutting through confusion with logic and bringing just triumph.','Clarity, new ideas, truth, breakthrough, justice, victory','Confusion, mental fog, failure, injustice, wrong decision'],
+ja:['ソードのエース','ソードのエースは明晰な思考、新しいアイデア、真実を象徴する。混乱を断ち切る突破的な洞察力をもたらし、正義の勝利を示す。','明晰さ、新アイデア、真実、突破、正義、勝利','混乱、思考の霧、失敗、不正、誤った決断']},
+51:{zh:['宝剑二','宝剑二代表僵局、犹豫不决和逃避。你紧闭双眼，手握两把剑，拒绝做出选择或面对真相。需要摘下眼罩，勇敢正视问题。','僵局、犹豫不决、逃避、平衡、对峙','做出决定、打破僵局、信息过载、面对真相'],
+en:['Two of Swords','The Two of Swords represents a stalemate, indecision, and avoidance. You sit with two swords crossed, blindfolded, refusing to choose or face the truth. It’s time to remove the blindfold.','Stalemate, indecision, avoidance, balance, standoff','Decision made, breaking stalemate, information overload, facing truth'],
+ja:['ソードの2','ソードの2は行き詰まり、優柔不断、回避を表す。両手に剣を交差させ、目隠しをして選択を拒んでいる。真実と向き合う時。','行き詰まり、優柔不断、回避、バランス、対峙','決断、行き詰まり打破、情報過多、真実との対面']},
+52:{zh:['宝剑三','宝剑三象征心碎、悲伤和痛苦。三把剑刺穿心脏，代表情感上的创伤、分离或背叛。承认痛苦是治愈的第一步。','心碎、悲伤、痛苦、分离、背叛、释放','治愈、恢复、原谅、释怀、希望'],
+en:['Three of Swords','The Three of Swords symbolizes heartbreak, sorrow, and pain. Three swords pierce a heart, representing emotional wounding, separation, or betrayal. Acknowledging the pain is the first step to healing.','Heartbreak, sorrow, pain, separation, betrayal, release','Healing, recovery, forgiveness, letting go, hope'],
+ja:['ソードの3','ソードの3は失恋、悲しみ、痛みを象徴する。三本の剣が心臓を貫き、感情的な傷、別離、裏切りを表す。痛みを受け入れることが癒しの第一歩。','失恋、悲しみ、痛み、別離、裏切り、解放','癒し、回復、許し、手放し、希望']},
+53:{zh:['宝剑四','宝剑四代表休息、恢复和沉思。在经历战斗或精神压力后，你需要暂时退避，寻找安静的地方进行疗愈和反思。','休息、恢复、沉思、安宁、暂时撤退、冥想','恢复活力、重新投入、不安静宁、无法休息、焦虑'],
+en:['Four of Swords','The Four of Swords represents rest, recovery, and contemplation. After a period of stress or conflict, you need a retreat to recharge and find inner peace through rest and meditation.','Rest, recovery, contemplation, peace, retreat, meditation','Reawakening, re-engagement, restlessness, anxiety, burnout'],
+ja:['ソードの4','ソードの4は休息、回復、熟考を表す。ストレスや争いの後、静かな場所で休息と瞑想により内なる平和を取り戻す必要を示す。','休息、回復、熟考、平安、退却、瞑想','再覚醒、再参加、落ち着きのなさ、不安、燃え尽き']},
+54:{zh:['宝剑五','宝剑五代表冲突、胜利和损失。你或许在争论中获胜，但代价惨重，留下怨恨和孤独。提醒你思考胜利的真正价值。','冲突、胜利、损失、争吵、自私、空虚的胜利','和解、妥协、原谅、和平、吸取教训'],
+en:['Five of Swords','The Five of Swords represents conflict, victory, and loss. You may have won the argument, but at a heavy cost, leaving resentment and isolation. It asks you to consider the true value of winning.','Conflict, victory, loss, arguments, selfishness, hollow victory','Reconciliation, compromise, forgiveness, peace, learning from mistakes'],
+ja:['ソードの5','ソードの5は対立、勝利、損失を表す。議論に勝っても、その代償は大きく、恨みや孤立を残す。勝利の真の価値を問いかける。','対立、勝利、損失、口論、利己、虚ろな勝利','和解、妥協、許し、平和、教訓']},
+55:{zh:['宝剑六','宝剑六象征过渡、疗愈和前进。你正在离开困难时期，虽然心中仍有悲伤，但已踏上缓慢而稳定的恢复之旅。','过渡、疗愈、前进、移动、放下、平静','停滞、拒绝改变、后退、无法疗愈、负担沉重'],
+en:['Six of Swords','The Six of Swords symbolizes transition, healing, and moving forward. You are leaving a difficult situation behind, embarking on a slow but steady journey toward calmer waters.','Transition, healing, moving forward, journey, letting go, calm','Stagnation, refusing change, retreating, unable to heal, heavy burden'],
+ja:['ソードの6','ソードの6は移行、癒し、前進を象徴する。困難な状況を後にし、穏やかな場所へ向かうゆっくりだが着実な旅に出る。','移行、癒し、前進、旅、手放し、穏やかさ','停滞、変化拒否、後退、癒せない、重い負担']},
+56:{zh:['宝剑七','宝剑七代表策略、欺骗和机智。你或许在采取非传统手段解决问题，甚至可能隐瞒真相。需要审视动机，确保手段正当。','策略、机智、狡猾、偷偷摸摸、逃避、另类思考','暴露、坦白、诚实、被抓、重新评估策略'],
+en:['Seven of Swords','The Seven of Swords represents strategy, deception, and cunning. You may be using unconventional methods to achieve your aims, perhaps even hiding the truth. Examine your motives.','Strategy, cunning, stealth, evasion, unconventional thinking','Exposure, confession, honesty, caught, strategy reassessment'],
+ja:['ソードの7','ソードの7は策略、欺瞞、狡猾さを表す。目的達成のために型破りな方法を用い、真実を隠しているかも。動機を吟味する必要がある。','策略、狡猾、隠密、回避、型破りな思考','暴露、告白、正直、捕まる、戦略見直し']},
+57:{zh:['宝剑八','宝剑八代表限制、束缚和无力感。你感觉被困境束缚，但许多限制只是思维上的。事实上你并非完全无助，可以挣脱自我设限。','限制、束缚、无力感、自我设限、孤立','自由、突破、新的视角、释放、自我赋权'],
+en:['Eight of Swords','The Eight of Swords represents restriction, entrapment, and powerlessness. You feel bound by circumstances, but many limitations are mental. In truth, you can free yourself from self-imposed bonds.','Restriction, entrapment, powerlessness, self-imposed limits, isolation','Freedom, breakthrough, new perspective, release, self-empowerment'],
+ja:['ソードの8','ソードの8は制限、束縛、無力感を表す。状況に縛られていると感じるが、制限の多くは思い込み。実際には自ら解放できる。','制限、束縛、無力感、自己制限、孤立','自由、突破、新たな視点、解放、自己権限']},
+58:{zh:['宝剑九','宝剑九代表焦虑、恐惧和噩梦。深夜里，你被负面思绪和担忧折磨，无法入眠。提醒你面对内心的恶魔，寻求支持和安慰。','焦虑、恐惧、噩梦、失眠、内疚、过度担忧','放下焦虑、希望、寻找帮助、恢复、内心平静'],
+en:['Nine of Swords','The Nine of Swords represents anxiety, fear, and nightmares. You are plagued by negative thoughts and worries in the dark hours, unable to sleep. Confront your inner demons and seek support.','Anxiety, fear, nightmares, insomnia, guilt, overthinking','Releasing anxiety, hope, seeking help, recovery, inner peace'],
+ja:['ソードの9','ソードの9は不安、恐怖、悪夢を表す。暗闇の中で否定的な思考や心配に苛まれ、眠れない。内なる悪魔と向き合い、支援を求めよう。','不安、恐怖、悪夢、不眠、罪悪感、考え過ぎ','不安の解放、希望、助けを求める、回復、心の平和']},
+59:{zh:['宝剑十','宝剑十象征结束、底线和彻底的失败。十把剑刺入身体，暗示一个痛苦周期的终结。虽然惨烈，但也意味着重生和新的可能即将到来。','结束、失败、痛苦、背叛、底线、重生','恢复、幸存、新开始、吸取教训、重燃希望'],
+en:['Ten of Swords','The Ten of Swords symbolizes an ending, rock bottom, and painful but final closure. Though devastating, it signals the end of a painful cycle and the inevitability of a new beginning.','Ending, failure, pain, betrayal, rock bottom, rebirth','Recovery, survival, new beginning, lessons learned, renewed hope'],
+ja:['ソードの10','ソードの10は終焉、どん底、痛みを伴うが最終的な終止符を象徴する。破壊的だが、苦しいサイクルの終わりと新たな始まりの必然を示す。','終焉、失敗、痛み、裏切り、どん底、再生','回復、生存、新たな始まり、教訓、希望の再燃']},
+60:{zh:['宝剑侍从','宝剑侍从代表新的思想、好奇心和机智。他是一位敏捷的思想者，渴望知识，但可能因缺乏经验而显得不成熟或言辞犀利。','新思想、好奇心、机智、警觉、沟通、探索','不成熟、言辞伤人等、轻率、缺乏深度、智力傲慢'],
+en:['Page of Swords','The Page of Swords represents new ideas, curiosity, and mental agility. He is an eager thinker, hungry for knowledge, but may be immature or sharp-tongued due to inexperience.','New ideas, curiosity, wit, alertness, communication, exploration','Immaturity, sharp words, rashness, lack of depth, intellectual arrogance'],
+ja:['ソードのペイジ','ソードのペイジは新しいアイデア、好奇心、頭の回転の速さを表す。知識欲旺盛な思考家だが、未熟さゆえに言葉が鋭くなることがある。','新アイデア、好奇心、機知、警戒、コミュニケーション、探求','未熟、鋭い言葉、軽率、深み不足、知的傲慢']},
+61:{zh:['宝剑骑士','宝剑骑士代表迅速的行动、冲动和强烈的决心。他像一个冲锋陷阵的战士，思维敏捷，但可能因过于急躁而导致混乱或冲突。','行动迅速、决心、冲动、逻辑思维、勇敢','鲁莽、混乱、缺乏耐心、攻击性、延迟'],
+en:['Knight of Swords','The Knight of Swords represents swift action, impulsiveness, and fierce determination. He charges forward like a warrior, quick in mind but potentially rash, causing chaos or conflict.','Swift action, determination, impulsiveness, logic, bravery','Recklessness, chaos, impatience, aggression, delays'],
+ja:['ソードのナイト','ソードのナイトは迅速な行動、衝動性、激しい決意を表す。戦士のように突進し、頭脳明晰だが、性急で混乱や対立を引き起こすことも。','迅速な行動、決意、衝動性、論理、勇敢','無謀、混乱、短気、攻撃性、遅延']},
+62:{zh:['宝剑王后','宝剑王后代表清晰的思维、智慧和独立性。她善于理性分析，明辨是非，是一位公正且经验丰富的决策者，但可能显得疏离或过于理智。','清晰、智慧、独立、理性、公正、经验丰富','冷酷、过于理智、疏离、偏见、固执'],
+en:['Queen of Swords','The Queen of Swords represents clear thinking, wisdom, and independence. She is perceptive, fair, and experienced, making decisions with sharp intellect, though she may appear distant or overly analytical.','Clarity, wisdom, independence, rationality, fairness, experience','Coldness, over-analytical, distant, biased, rigid'],
+ja:['ソードのクイーン','ソードのクイーンは明晰な思考、知恵、独立を表す。鋭い知性で公正な判断を下す経験豊かな人物だが、時に冷淡で分析的過ぎる面も。','明晰、知恵、独立、理性、公正、経験','冷酷、分析的過剰、距離感、偏見、頑固']},
+63:{zh:['宝剑国王','宝剑国王代表智力权威、清晰的逻辑和公正。他是一位成熟、理性的领导者，擅长运用智慧和经验进行判断和决策，是真理和正义的代言人。','智力权威、逻辑、公正、成熟、真理、领导力','滥用权力、不公、冷酷、不道德、精神暴力'],
+en:['King of Swords','The King of Swords represents intellectual authority, clear logic, and justice. He is a mature, rational leader who excels in judgment and decision-making, embodying truth and ethical power.','Intellectual authority, logic, justice, maturity, truth, leadership','Abuse of power, injustice, coldness, unethical, mental abuse'],
+ja:['ソードのキング','ソードのキングは知的権威、明確な論理、正義を表す。成熟した理性的リーダーであり、真理と倫理的な力を体現し、判断力に優れる。','知的権威、論理、正義、成熟、真理、リーダーシップ','権力乱用、不正、冷酷、非倫理的、精神的虐待']},
+
+// 星币 (64-77)
+64:{zh:['星币一','星币王牌代表新的财务机会、繁荣和物质稳定。它象征着脚踏实地的新开始，如新工作、投资或商业冒险，带来实在的收益。','新机会、繁荣、物质、稳定、新工作、投资','错失机会、财务损失、不稳定、贪婪、计划失败'],
+en:['Ace of Pentacles','The Ace of Pentacles represents a new financial opportunity, prosperity, and material stability. It signals a grounded new beginning such as a job, investment, or business venture with tangible rewards.','New opportunity, prosperity, material, stability, new job, investment','Missed chance, financial loss, instability, greed, failed plan'],
+ja:['ペンタクルのエース','ペンタクルのエースは新たな金銭的機会、繁栄、物質的安定を象徴する。仕事、投資、事業などの具体的な利益を伴う、地に足のついた新たな始まりを示す。','新たな機会、繁栄、物質、安定、新しい仕事、投資','機会損失、金銭的損失、不安定、強欲、計画失敗']},
+65:{zh:['星币二','星币二代表平衡、灵活和多任务处理。你正在处理多项事务或财务，需要像杂耍一样保持平衡。也提示适应变化，明智地管理资源。','平衡、灵活、适应、多任务、变动、决策','失衡、超负荷、缺乏组织、财务困难、无法变通'],
+en:['Two of Pentacles','The Two of Pentacles represents balance, adaptability, and juggling priorities. You are managing multiple affairs or finances, needing to stay flexible. It suggests wise resource management amid change.','Balance, adaptability, multi-tasking, change, decisions','Imbalance, overload, disorganization, financial troubles, inflexibility'],
+ja:['ペンタクルの2','ペンタクルの2はバランス、適応性、優先順位のやりくりを表す。複数の用事や財務を管理し、柔軟性が求められる。変化の中で賢明な資源管理を示唆。','バランス、適応性、マルチタスク、変化、決断','不均衡、過負荷、混乱、財政難、融通が利かない']},
+66:{zh:['星币三','星币三象征团队合作、规划和精湛的技能。它是关于学习、合作和建造，通过共同努力来创造高质量成果的牌。','团队合作、规划、技能、合作、学习、建造','缺乏合作、技能不足、计划混乱、低质量、不和谐'],
+en:['Three of Pentacles','The Three of Pentacles symbolizes teamwork, planning, and mastery. It focuses on collaboration, skill-building, and creating quality work through combined effort and dedication.','Teamwork, planning, skill, collaboration, learning, building','Lack of cooperation, poor skills, disorganized planning, low quality, disharmony'],
+ja:['ペンタクルの3','ペンタクルの3はチームワーク、計画、熟練を象徴する。協力、スキル向上、献身的な共同作業による質の高い成果を重視する。','チームワーク、計画、技能、協力、学習、構築','協力不足、スキル不足、計画不全、低品質、不調和']},
+67:{zh:['星币四','星币四代表守财、控制和安全感。你紧紧抓着自己的资源，不愿分享或冒险。虽然稳定，但也可能因过度保守而阻碍成长。','守财、控制、安全感、保守、吝啬、稳定','分享、慷慨、放手、财务开放、风险投资'],
+en:['Four of Pentacles','The Four of Pentacles represents hoarding, control, and security. You cling tightly to your resources, unwilling to share or take risks. Stability is valued but may become stagnation.','Hoarding, control, security, conservatism, greed, stability','Sharing, generosity, letting go, financial openness, risk-taking'],
+ja:['ペンタクルの4','ペンタクルの4は蓄財、支配、安心感を表す。資源にしがみつき、共有やリスクを避ける。安定は評価されるが、停滞を招くことも。','蓄財、支配、安心感、保守、貪欲、安定','共有、寛大、手放し、財務的開放、リスクテイク']},
+68:{zh:['星币五','星币五代表贫困、困苦和失落。它可能暗示经济困难、失业或身体欠佳，也象征精神上的孤独和被排斥感。但希望之窗仍存。','贫困、困苦、失落、孤立、艰难时期、缺乏','恢复、找到出路、新工作、精神富足、希望'],
+en:['Five of Pentacles','The Five of Pentacles represents poverty, hardship, and loss. It may indicate financial troubles, unemployment, or poor health, also symbolizing spiritual loneliness and exclusion. Yet hope remains.','Poverty, hardship, loss, isolation, tough times, scarcity','Recovery, finding a way out, new job, spiritual wealth, hope'],
+ja:['ペンタクルの5','ペンタクルの5は貧困、困苦、喪失を表す。経済的困難、失業、健康不良を示すことがあり、精神的な孤独や排除も象徴する。それでも希望は残る。','貧困、困苦、喪失、孤立、苦難の時、欠乏','回復、出口を見つける、新しい仕事、精神的豊かさ、希望']},
+69:{zh:['星币六','星币六代表给予、接受和慷慨。它是一张关于慈善、分享资源和公平分配的牌，可能暗示你处于付出或接受的一方，强调平衡的互助。','给予、接受、慷慨、慈善、公平、分享','自私、不平等、债务、吝啬、依赖'],
+en:['Six of Pentacles','The Six of Pentacles represents giving, receiving, and generosity. It is about charity, sharing resources, and fair distribution. You may be on either side of the exchange, emphasizing balanced support.','Giving, receiving, generosity, charity, fairness, sharing','Selfishness, inequality, debt, stinginess, dependency'],
+ja:['ペンタクルの6','ペンタクルの6は与えること、受け取ること、寛大さを表す。慈善、資源の共有、公平な分配についてのカード。支え合いのバランスを重視する。','与える、受け取る、寛大、慈善、公平、共有','利己的、不平等、借金、けち、依存']},
+70:{zh:['星币七','星币七代表耐心、评估和长期投资。你正在等待之前的努力开花结果，并对进展进行评估。需要耐心，成果即将显现，但可能需要调整策略。','耐心、评估、投资、等待、成长、回报','缺乏耐心、失败的投资、浪费努力、急躁、亏损'],
+en:['Seven of Pentacles','The Seven of Pentacles represents patience, assessment, and long-term investment. You are waiting for your efforts to bear fruit, evaluating progress. Patience is required; results are near, but adjustments may be needed.','Patience, assessment, investment, waiting, growth, reward','Impatience, failed investment, wasted effort, rashness, loss'],
+ja:['ペンタクルの7','ペンタクルの7は忍耐、評価、長期的投資を表す。努力の成果を待ち、進捗を評価する。忍耐が必要であり、結果は近いが調整が必要かもしれない。','忍耐、評価、投資、待機、成長、報酬','短気、投資失敗、努力の無駄、性急、損失']},
+71:{zh:['星币八','星币八象征勤奋、技能和专注。你正在埋头苦干，磨练技艺，专注于细节，通过不懈努力逐步积累成就。这是精益求精的工匠精神。','勤奋、技能、专注、成就、学习、进步','懒惰、粗心、技能不足、低质量、缺乏动力'],
+en:['Eight of Pentacles','The Eight of Pentacles symbolizes diligence, skill, and focus. You are hard at work, honing your craft and paying attention to detail, steadily building success through dedicated effort.','Diligence, skill, focus, achievement, learning, progress','Laziness, carelessness, poor skill, low quality, lack of motivation'],
+ja:['ペンタクルの8','ペンタクルの8は勤勉、技能、集中を象徴する。技を磨き、細部に注意を払いながら、ひたむきな努力で成功を築く。職人精神の表れ。','勤勉、技能、集中、達成、学習、進歩','怠惰、不注意、技能不足、低品質、意欲欠如']},
+72:{zh:['星币九','星币九代表独立、财富和享受。你通过努力获得了物质富足和自我满足，可以在优雅的环境中享受成果，并拥有自由的闲暇时光。','独立、财富、享受、自足、自信、优雅','依赖、贫穷、不满足、缺乏自信、挥霍'],
+en:['Nine of Pentacles','The Nine of Pentacles represents independence, wealth, and enjoyment. You have achieved material comfort and self-sufficiency through your own efforts, able to enjoy the finer things in life with grace.','Independence, wealth, enjoyment, self-sufficiency, confidence, grace','Dependency, poverty, dissatisfaction, lack of confidence, wastefulness'],
+ja:['ペンタクルの9','ペンタクルの9は独立、富、享受を表す。自らの努力で物質的な豊かさと自給自足を達成し、優雅に人生の上質なものを楽しむ。','独立、富、享受、自給自足、自信、優雅','依存、貧困、不満、自信不足、浪費']},
+73:{zh:['星币十','星币十象征财富、传承和家族繁荣。它代表着长久的成功、物质遗产和家庭的稳定，是多代努力的积累和共享的丰裕。','财富、传承、家族、稳定、成功、遗产','家庭问题、财务损失、不稳定、冲突、遗产纷争'],
+en:['Ten of Pentacles','The Ten of Pentacles symbolizes wealth, legacy, and family prosperity. It represents long-term success, material inheritance, and the stability of a multi-generational achievement shared among loved ones.','Wealth, legacy, family, stability, success, inheritance','Family problems, financial loss, instability, conflict, inheritance disputes'],
+ja:['ペンタクルの10','ペンタクルの10は富、遺産、家族の繁栄を象徴する。長期的な成功、物質的遺産、多世代の努力が結実した安定と共有の豊かさを表す。','富、遺産、家族、安定、成功、相続','家族問題、財政損失、不安定、対立、遺産争い']},
+74:{zh:['星币侍从','星币侍从代表新的学习机会、务实和勤奋。他像一位踏实的学生，专注于技能和知识的学习，带来关于金钱或新工作的好消息。','学习、务实、新机会、勤奋、责任、好消息','无知、懒惰、不负责任、坏消息、不切实际'],
+en:['Page of Pentacles','The Page of Pentacles represents new learning opportunities, practicality, and diligence. Like a studious apprentice, he focuses on acquiring skills and knowledge, often bringing news of money or a new job.','Learning, practicality, new opportunity, diligence, responsibility, good news','Ignorance, laziness, irresponsibility, bad news, lack of practicality'],
+ja:['ペンタクルのペイジ','ペンタクルのペイジは新たな学習機会、実用性、勤勉さを表す。勤勉な見習いのように、スキルと知識の習得に専念し、金銭や仕事に関する良い知らせをもたらす。','学習、実用性、新たな機会、勤勉、責任、良い知らせ','無知、怠惰、無責任、悪い知らせ、非実用的']},
+75:{zh:['星币骑士','星币骑士代表勤奋、可靠和务实。他稳步前进，极度负责，是值得信赖的实干家。虽然可能缺乏想象力，但总能按时完成任务。','勤奋、可靠、务实、耐心、稳步前进、责任感','懒惰、不可靠、停滞、不切实际、乏味'],
+en:['Knight of Pentacles','The Knight of Pentacles represents diligence, reliability, and practicality. He moves steadily, is extremely responsible, and is a trustworthy worker. Though lacking imagination, he always gets the job done.','Diligence, reliability, practicality, patience, steady progress, responsibility','Laziness, unreliability, stagnation, lack of practicality, boredom'],
+ja:['ペンタクルのナイト','ペンタクルのナイトは勤勉、信頼性、実践性を表す。着実に前進し、極めて責任感が強く、信頼できる働き手。想像力に欠けるが、必ず仕事を完遂する。','勤勉、信頼性、実践性、忍耐、着実な進歩、責任感','怠惰、信頼できない、停滞、非実用的、退屈']},
+76:{zh:['星币王后','星币王后代表繁荣、务实和母性温暖。她是一位成功的女性（或拥有这些品质的人），善于经营家庭与财务，慷慨而可靠，为周围人提供稳定的支持。','繁荣、务实、关怀、慷慨、可靠、自然','不切实际、自私、不可靠、财务问题、缺乏安全感'],
+en:['Queen of Pentacles','The Queen of Pentacles represents prosperity, practicality, and nurturing warmth. She is a successful figure who manages home and finances with ease, generous and reliable, providing stable support to those around her.','Prosperity, practicality, nurturing, generosity, reliability, nature','Impractical, selfish, unreliable, financial problems, insecurity'],
+ja:['ペンタクルのクイーン','ペンタクルのクイーンは繁栄、実践性、育む温かさを表す。家庭と財務を上手に管理する成功者であり、寛大で信頼でき、周囲に安定した支えを与える。','繁栄、実践性、養育、寛大、信頼性、自然','非実用的、利己的、信頼できない、財政問題、不安感']},
+77:{zh:['星币国王','星币国王代表物质成功、权威和务实。他是一位财富和事业的建造者，成熟且稳健，通过经验和智慧创造持久的繁荣，是值得信赖的商业领袖。','财富、权威、成功、务实、稳健、企业家精神','财务失败、腐败、贪婪、不擅理财、顽固'],
+en:['King of Pentacles','The King of Pentacles represents material success, authority, and practicality. He is a mature builder of wealth and enterprise, creating lasting prosperity through experience and wisdom, a trusted business leader.','Wealth, authority, success, practicality, stability, entrepreneurship','Financial failure, corruption, greed, poor money management, stubbornness'],
+ja:['ペンタクルのキング','ペンタクルのキングは物質的成功、権威、実践性を表す。富と事業を築き上げる成熟した人物であり、経験と知恵で永続的繁栄を創り出す、信頼できるビジネスリーダー。','富、権威、成功、実践性、安定、起業家精神','財政失敗、腐敗、強欲、金銭管理不足、頑固']},
 },
 ui:{
 zh:{
@@ -969,67 +952,58 @@ function updateLangButtons() {
 function updateAllUIText() {
   const u = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = _ui(key); };
   const h = (id, key, pre, post) => { const el = document.getElementById(id); if (el) el.innerHTML = (pre || '') + _ui(key) + (post || ''); };
-  // Header
   u('headerTitle', 'title');
-  // Steps
   u('step1Label', 'step1'); u('step2Label', 'step2'); u('step3Label', 'step3');
   u('step1Title', 'step1Title'); u('step2Title', 'step2Title'); u('step3Title', 'resultTitle');
-  // Footer
   u('footer1', 'footer1'); u('footer2', 'footer2');
-  // Catalog
   u('catalogTitle', 'catalogTitle');
   u('majorCatalogHeader', 'majorCatalog'); u('minorCatalogHeader', 'minorCatalog');
   u('suitWandsHeader', 'suitWands'); u('suitCupsHeader', 'suitCups');
   u('suitSwordsHeader', 'suitSwords'); u('suitPentaclesHeader', 'suitPentacles');
-  // Buttons
   h('confirmDeckBtn', 'confirmDeck', '', ' <i class="fa fa-check ml-1"></i>');
-    // AI toggle: pick key by current AI mode state, and use the CORRECT id ("toggleAiText", not "aiToggleText")
-    const aiToggleEl = document.getElementById('toggleAiText');
-    if (aiToggleEl) aiToggleEl.textContent = _ui(TarotApp.state.aiModeActive ? 'aiToggleOn' : 'aiToggleOff');
-    h('aiStepTitle', 'aiStepTitle', '<i class="fa fa-magic mr-1"></i> ', '');
-      u('aiQuestionLabel', 'aiQuestionLabel'); u('aiGenerateBtn', 'aiGenerateBtn');
-      u('aiCopyBtn', 'aiCopyBtn');
-      // 黄色提示框（之前写死中文、漏绑定）
-      h('aiPromptTip', 'aiTipText', '<i class="fa fa-lightbulb-o mr-1"></i> ', '');
-  // 抽牌设置 (Draw Options) step — previously hardcoded / missing bindings
+  const aiToggleEl = document.getElementById('toggleAiText');
+  if (aiToggleEl) aiToggleEl.textContent = _ui(TarotApp.state.aiModeActive ? 'aiToggleOn' : 'aiToggleOff');
+  h('aiStepTitle', 'aiStepTitle', '<i class="fa fa-magic mr-1"></i> ', '');
+  u('aiQuestionLabel', 'aiQuestionLabel'); u('aiGenerateBtn', 'aiGenerateBtn');
+  u('aiCopyBtn', 'aiCopyBtn');
+  h('aiPromptTip', 'aiTipText', '<i class="fa fa-lightbulb-o mr-1"></i> ', '');
   u('rangeText', 'rangeText'); u('rangeUnit', 'rangeUnit');
   u('manualLabel', 'manualLabel');
   u('manualCountSubmitBtn', 'manualConfirm');
   u('invalidCountText', 'invalidCount');
   u('backToStep1Text', 'backBtn');
   u('drawCardsText', 'drawBtn');
-  // placeholders (set attribute, not textContent)
   const ph = (id, key) => { const el = document.getElementById(id); if (el) el.setAttribute('placeholder', _ui(key)); };
   ph('manualCountInput', 'manualPlaceholder');
   ph('userQuestion', 'aiQuestionPlaceholder');
   ph('promptOutput', 'aiPromptPlaceholder');
-  // quantity title also depends on AI mode (mirrors toggleAiMode logic)
   const qEl = document.getElementById('quantityTitle');
   if (qEl) qEl.textContent = _ui(TarotApp.state.aiModeActive ? 'quantityTitleAi' : 'quantityTitle');
-  // Welcome
   u('welcomeTitle', 'welcomeTitle'); u('welcomeSubtitle', 'welcomeSubtitle');
   u('welcomeMusicTip', 'welcomeMusicTip'); u('welcomeAuthor', 'welcomeAuthor');
   u('welcomeBilibili', 'welcomeBilibili'); u('welcomeThanks', 'welcomeThanks');
   u('welcomeAiNote', 'welcomeAiNote'); u('welcomeStartBtn', 'welcomeStartBtn');
   u('preloadStatus', 'preloadText');
-  // Help
   u('helpTitle', 'helpTitle'); u('helpStep1Title', 'helpStep1Title');
   u('helpStep1Text', 'helpStep1Text'); u('helpStep2Title', 'helpStep2Title');
   u('helpStep2Text1', 'helpStep2Text1'); u('helpStep2Text2', 'helpStep2Text2');
   u('helpStep3Title', 'helpStep3Title'); u('helpStep3Text', 'helpStep3Text');
   u('helpCardDetailTitle', 'helpCardDetailTitle'); u('helpCardDetailText', 'helpCardDetailText');
   u('helpCloseBtn', 'helpCloseBtn');
-  // Card detail
   u('cardNameLabel', 'cardNameLabel'); u('cardGroupLabel', 'cardGroupLabel');
   u('cardDescLabel', 'cardDescLabel'); u('cardUprightLabel', 'cardUprightLabel');
   u('cardReversedLabel', 'cardReversedLabel'); u('cardCloseBtn', 'cardCloseBtn');
-  // Deck options + catalog
   TarotApp.refreshDeckOptions();
   TarotApp.rerenderCatalog();
+  const backToStep2Btn = document.getElementById('backToStep2Btn');
+  if (backToStep2Btn) backToStep2Btn.innerHTML = '<i class="fa fa-arrow-left mr-1"></i> ' + _ui('backToSelect');
+  const restartBtn = document.getElementById('restartBtn');
+  if (restartBtn) restartBtn.innerHTML = _ui('restartBtn') + ' <i class="fa fa-refresh ml-1"></i>';
+  const copyBtnTextEl = document.getElementById('copyBtnText');
+  if (copyBtnTextEl) copyBtnTextEl.textContent = _ui(TarotApp.state.aiModeActive ? 'copyResultsAi' : 'copyResults');
 }
 
   const TAROT_DATA = [
-    // 大阿卡纳 (0-21)
     { id: 0, name: "愚者", type: "major", image: "https://static.shenpowang.com/img/taluopai/0.gif", description: "愚者代表新的开始、冒险精神和纯真无邪。他站在悬崖边，象征着对未来的无限可能敞开心扉，勇敢地追求梦想而不畏惧风险。", upright: "新的开始、自由、冒险、天真、灵感、创造力、无拘无束", reversed: "鲁莽、缺乏方向、不负责任、冒险过度、天真幼稚、逃避现实" },
     { id: 1, name: "魔术师", type: "major", image: "https://static.shenpowang.com/img/taluopai/1.gif", description: "魔术师代表创造、行动力和资源的掌控。他拥有无限的潜力，能够将想法转化为现实，展现出自信和决心。", upright: "创造力、行动力、自信、技能、资源、决心、新机会", reversed: "缺乏自信、能力不足、错失机会、操纵、犹豫、资源浪费" },
     { id: 2, name: "女祭司", type: "major", image: "https://static.shenpowang.com/img/taluopai/2.gif", description: "女祭司象征直觉、智慧和神秘的知识。她代表内在的声音和潜意识，提醒我们要相信自己的直觉和内在指引。", upright: "直觉、智慧、神秘、内省、精神力量、冷静、洞察力", reversed: "直觉失灵、隐秘、沉默、缺乏洞察力、忽视内心声音" },
@@ -1052,121 +1026,92 @@ function updateAllUIText() {
     { id: 19, name: "太阳", type: "major", image: "https://static.shenpowang.com/img/taluopai/19.gif", description: "太阳象征光明、快乐和成功。它代表着积极的能量、创造力、生命力，是一张充满希望和喜悦的牌。", upright: "快乐、成功、光明、活力、创造力、温暖、幸福", reversed: "抑郁、失败、黑暗、缺乏活力、创造力受阻、不快乐" },
     { id: 20, name: "审判", type: "major", image: "https://static.shenpowang.com/img/taluopai/20.gif", description: "审判代表重生、觉醒和评估。它象征着对过去的反思和新的开始，提醒我们要对自己的行为负责。", upright: "重生、觉醒、评估、原谅、责任、新开始、召唤", reversed: "拒绝改变、悔恨、指责、拖延、缺乏责任感、忽视召唤" },
     { id: 21, name: "世界", type: "major", image: "https://static.shenpowang.com/img/taluopai/21.gif", description: "世界代表完成、圆满和成就。它象征着一个循环的结束和新的开始，标志着成功和满足。", upright: "完成、圆满、成就、成功、旅行、整合、实现", reversed: "未完成、不圆满、失败、停滞、缺乏整合、未实现" },
-
-    // 小阿卡纳 - 权杖 (22-35)
-    { id: 22, name: "权杖一", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_1.jpg", description: "权杖一代表新的创意、灵感和行动力的开始。它象征着新的机会和冒险即将来临。", upright: "新开始、创意、灵感、行动力、冒险、机会", reversed: "缺乏创意、行动力不足、错失机会、犹豫不决" },
-    { id: 23, name: "权杖二", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_2.jpg", description: "权杖二象征计划、远见和决策。它代表着对未来的展望和为实现目标做准备。", upright: "计划、远见、决策、准备、自信、扩张", reversed: "缺乏计划、短视、犹豫不决、缺乏自信、限制" },
-    { id: 24, name: "权杖三", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_3.jpg", description: "权杖三代表远见、探索和扩展。它象征着通过探索新领域来实现成长和进步。", upright: "远见、探索、扩展、进步、旅行、成功", reversed: "短视、停滞、限制、失败、保守、缺乏进展" },
-    { id: 25, name: "权杖四", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_4.jpg", description: "权杖四象征稳定、和谐和庆祝。它代表着在完成一项任务后的满足感和安全感。", upright: "稳定、和谐、庆祝、安全、成就、家庭", reversed: "不稳定、冲突、不满足、不安全、失败、家庭问题" },
-    { id: 26, name: "权杖五", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_5.jpg", description: "权杖五代表冲突、竞争和挑战。它象征着在追求目标过程中遇到的阻力和斗争。", upright: "冲突、竞争、挑战、阻力、斗争、分歧", reversed: "和解、合作、克服挑战、和谐、妥协、一致" },
-    { id: 27, name: "权杖六", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_6.jpg", description: "权杖六象征胜利、成功和认可。它代表着通过努力和坚持获得的成就和荣誉。", upright: "胜利、成功、认可、荣誉、自信、进展", reversed: "失败、挫折、不被认可、缺乏自信、停滞" },
-    { id: 28, name: "权杖七", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_7.jpg", description: "权杖七代表坚持、防御和勇气。它象征着在面对挑战时保持坚定和不屈不挠的精神。", upright: "坚持、防御、勇气、不屈不挠、抵抗、决心", reversed: "放弃、退缩、懦弱、屈服、缺乏决心、失败" },
-    { id: 29, name: "权杖八", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_8.jpg", description: "权杖八象征迅速行动、进展和自由。它代表着事情顺利进行，没有阻碍。", upright: "迅速行动、进展、自由、顺利、旅行、消息", reversed: "延迟、阻碍、限制、缓慢、停滞、延迟的消息" },
-    { id: 30, name: "权杖九", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_9.jpg", description: "权杖九代表警惕、防御和准备。它象征着在经历挑战后保持警惕，防止未来的问题。", upright: "警惕、防御、准备、谨慎、经验、恢复", reversed: "疏忽、无准备、鲁莽、过度警惕、恐惧、无法恢复" },
-    { id: 31, name: "权杖十", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_10.jpg", description: "权杖十象征负担、压力和责任。它代表着承担过多的责任和压力，需要学会放下。", upright: "负担、压力、责任、过度工作、疲惫、义务", reversed: "卸下负担、减轻压力、拒绝责任、休息、平衡" },
-    { id: 32, name: "权杖侍从", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_sc.jpg", description: "权杖侍从代表新的创意、热情和冒险精神。它象征着对新事物的好奇和探索欲望。", upright: "新创意、热情、冒险、好奇、探索、消息", reversed: "缺乏创意、冷漠、鲁莽、迟钝、坏消息、缺乏热情" },
-    { id: 33, name: "权杖骑士", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_qs.jpg", description: "权杖骑士象征行动、冲动和活力。他代表着充满活力地追求目标，但也可能缺乏耐心。", upright: "行动、活力、冲动、追求、旅行、热情", reversed: "缺乏行动、延迟、鲁莽、冲突、缺乏活力、失败" },
-    { id: 34, name: "权杖王后", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_wh.jpg", description: "权杖王后代表创造力、热情和自信。她象征着通过创造力和热情实现目标的能力。", upright: "创造力、热情、自信、领导力、独立、灵感", reversed: "缺乏创造力、冷漠、自卑、控制欲、依赖、缺乏灵感" },
-    { id: 35, name: "权杖国王", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_gw.jpg", description: "权杖国王象征领导力、创造力和权威。他代表着通过创造力和远见实现成功的领导者。", upright: "领导力、创造力、权威、远见、成功、自信", reversed: "滥用权力、缺乏创造力、无能、短视、失败、自卑" },
-
-    // 小阿卡纳 - 圣杯 (36-49)
-    { id: 36, name: "圣杯一", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_1.jpg", description: "圣杯一代表新的情感、爱和灵性的开始。它象征着情感的开放和新的关系的可能性。", upright: "新情感、爱、灵性、喜悦、和谐、新关系", reversed: "情感封闭、冷漠、灵性空虚、不和谐、关系问题" },
-    { id: 37, name: "圣杯二", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_2.jpg", description: "圣杯二象征伙伴关系、爱情和和谐。它代表着平等和相互尊重的关系。", upright: "伙伴关系、爱情、和谐、平等、合作、友谊", reversed: "关系问题、不平等、冲突、不和谐、背叛、竞争" },
-    { id: 38, name: "圣杯三", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_3.jpg", description: "圣杯三代表庆祝、友谊和合作。它象征着与他人分享快乐和成功的时刻。", upright: "庆祝、友谊、合作、分享、快乐、成功", reversed: "孤独、冲突、竞争、嫉妒、不满足、失败" },
-    { id: 39, name: "圣杯四", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_4.jpg", description: "圣杯四象征不满、冷漠和反思。它代表着对现状的不满和对新机会的期待。", upright: "不满、冷漠、反思、期待、选择、新机会", reversed: "满足、热情、行动、接受、感恩、错失机会" },
-    { id: 40, name: "圣杯五", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_5.jpg", description: "圣杯五代表失落、悲伤和遗憾。它象征着对过去的失去感到悲伤，但也暗示着新的希望。", upright: "失落、悲伤、遗憾、哀悼、失望、变化", reversed: "接受、疗愈、希望、放下、恢复、新开始" },
-    { id: 41, name: "圣杯六", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_6.jpg", description: "圣杯六象征给予、接受和互惠。它代表着在关系中的平衡和相互支持。", upright: "给予、接受、互惠、支持、关怀、平衡", reversed: "自私、不平等、依赖、忽视、不平衡、缺乏支持" },
-    { id: 42, name: "圣杯七", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_7.jpg", description: "圣杯七象征梦想、幻想和欲望。它代表着对未来的希望和期待，但也提醒我们要区分现实和幻想。", upright: "梦想、幻想、欲望、希望、期待、选择", reversed: "幻灭、缺乏方向、不切实际、混乱、失望、缺乏选择" },
-    { id: 43, name: "圣杯八", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_8.jpg", description: "圣杯八象征放弃、探索和离开。它代表着为了寻找更深的意义而放弃物质财富和现状。", upright: "放弃、探索、离开、寻找意义、精神旅程、独立", reversed: "停滞、恐惧改变、物质主义、缺乏意义、依赖、回头" },
-    { id: 44, name: "圣杯九", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_9.jpg", description: "圣杯九象征满足、幸福和愿望实现。它代表着通过努力和坚持获得的成就和满足感。", upright: "满足、幸福、愿望实现、成就、自信、成功", reversed: "不满足、失望、失败、缺乏自信、贪婪、虚荣" },
-    { id: 45, name: "圣杯十", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_10.jpg", description: "圣杯十象征家庭、社区和圆满。它代表着家庭的幸福和社区的和谐。", upright: "家庭、社区、圆满、幸福、和谐、安全", reversed: "家庭问题、冲突、不和谐、不安全、失败、孤独" },
-    { id: 46, name: "圣杯侍从", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_sc.jpg", description: "圣杯侍从代表新的情感、好奇心和灵感。它象征着对情感世界的好奇和探索欲望。", upright: "新情感、好奇心、灵感、探索、消息、机会", reversed: "缺乏情感、冷漠、无知、沟通不良、迟钝、保守" },
-    { id: 47, name: "圣杯骑士", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_qs.jpg", description: "圣杯骑士象征浪漫、理想主义和邀请。他代表着充满浪漫和理想主义的追求，但也可能缺乏实际行动。", upright: "浪漫、理想主义、邀请、追求、机会、灵感", reversed: "缺乏浪漫、失望、失败、缺乏行动、不切实际、保守" },
-    { id: 48, name: "圣杯王后", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_wh.jpg", description: "圣杯王后代表情感、直觉和同情。她象征着通过情感和直觉来实现目标的能力。", upright: "情感、直觉、同情、关怀、爱、灵感", reversed: "缺乏情感、冷漠、无情、自私、缺乏灵感" },
-    { id: 49, name: "圣杯国王", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_gw.jpg", description: "圣杯国王象征情感、智慧和权威。他代表着通过情感和智慧实现成功的领导者。", upright: "情感、智慧、权威、成功、同情、领导力", reversed: "缺乏情感、冷漠、无能、自私、缺乏领导力" },
-
-    // 小阿卡纳 - 宝剑 (50-63)
-    { id: 50, name: "宝剑一", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_1.jpg", description: "宝剑一代表新的思想、清晰和胜利。它象征着通过清晰的思维和决心获得的胜利。", upright: "新思想、清晰、胜利、决心、突破、力量", reversed: "缺乏思想、混乱、失败、犹豫不决、限制" },
-    { id: 51, name: "宝剑二", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_2.jpg", description: "宝剑二象征平衡、和平和犹豫。它代表着在做出决定前需要保持平衡和冷静。", upright: "平衡、和平、犹豫、冷静、等待、选择", reversed: "不平衡、冲突、决定、行动、焦虑、混乱" },
-    { id: 52, name: "宝剑三", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_3.jpg", description: "宝剑三象征心碎、悲伤和痛苦。它代表着在经历痛苦后，需要接受现实并寻找疗愈。", upright: "心碎、悲伤、痛苦、失落、分离、伤害", reversed: "疗愈、接受、恢复、希望、新开始、克服痛苦" },
-    { id: 53, name: "宝剑四", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_4.jpg", description: "宝剑四象征休息、恢复和宁静。它代表着在经历挑战后，需要休息和恢复精力。", upright: "休息、恢复、宁静、和平、冥想、反思", reversed: "疲惫、过度工作、无法休息、焦虑、活跃" },
-    { id: 54, name: "宝剑五", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_5.jpg", description: "宝剑五象征冲突、胜利和损失。它代表着通过冲突获得的胜利，但也伴随着损失。", upright: "冲突、胜利、损失、竞争、分歧、争吵", reversed: "和解、妥协、失败、放弃、和平、合作" },
-    { id: 55, name: "宝剑六", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_6.jpg", description: "宝剑六象征过渡、疗愈和前进。它代表着在经历困难后慢慢恢复和前进。", upright: "过渡、疗愈、前进、恢复、旅程、平静", reversed: "停滞、无法疗愈、后退、困境、动荡、延迟" },
-    { id: 56, name: "宝剑七", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_7.jpg", description: "宝剑七象征策略、欺骗和隐藏。它代表着通过策略和欺骗获得的暂时胜利。", upright: "策略、欺骗、隐藏、机智、狡猾、暂时胜利", reversed: "诚实、公开、失败、天真、被欺骗、长期损失" },
-    { id: 57, name: "宝剑八", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_8.jpg", description: "宝剑八象征限制、恐惧和束缚。它代表着被自己的恐惧和信念所束缚。", upright: "限制、恐惧、束缚、无知、困境、自我设限", reversed: "自由、勇气、释放、知识、突破、自我解放" },
-    { id: 58, name: "宝剑九", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_9.jpg", description: "宝剑九象征恐惧、焦虑和噩梦。它代表着被恐惧和焦虑所困扰的状态。", upright: "恐惧、焦虑、噩梦、失眠、内疚、痛苦", reversed: "勇气、平静、疗愈、释怀、安心、希望" },
-    { id: 59, name: "宝剑十", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_10.jpg", description: "宝剑十象征结束、损失和转变。它代表着一个艰难时期的结束和新的开始的可能性。", upright: "结束、损失、转变、痛苦、失败、结论", reversed: "新开始、恢复、希望、转变、部分胜利、延续" },
-    { id: 60, name: "宝剑侍从", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_sc.jpg", description: "宝剑侍从代表新的思想、好奇心和学习。它象征着对知识和新思想的渴望。", upright: "新思想、好奇心、学习、沟通、机智、探索", reversed: "缺乏思想、冷漠、无知、沟通不良、迟钝、保守" },
-    { id: 61, name: "宝剑骑士", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_qs.jpg", description: "宝剑骑士象征行动、冲动和速度。他代表着充满活力地追求目标，但也可能缺乏耐心和谨慎。", upright: "行动、冲动、速度、追求、思考、决心", reversed: "缺乏行动、延迟、鲁莽、冲突、缺乏活力、失败" },
-    { id: 62, name: "宝剑王后", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_wh.jpg", description: "宝剑王后代表清晰、智慧和独立。她象征着通过清晰的思维和独立性来实现目标的能力。", upright: "清晰、智慧、独立、洞察力、理性、果断", reversed: "缺乏清晰、混乱、依赖、无知、不理性、犹豫不决" },
-    { id: 63, name: "宝剑国王", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_gw.jpg", description: "宝剑国王象征清晰、权威和智慧。他代表着通过清晰的思维和智慧实现成功的领导者。", upright: "清晰、权威、智慧、成功、理性、领导力", reversed: "缺乏清晰、混乱、无能、愚蠢、不理性、缺乏领导力" },
-
-    // 小阿卡纳 - 星币 (64-77)
-    { id: 64, name: "星币一", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_1.jpg", description: "星币一代表新的财务、机会和繁荣。它象征着新的财务机会和物质世界的成功。", upright: "新财务、机会、繁荣、成功、稳定、安全", reversed: "缺乏财务、错失机会、不稳定、失败、不安全" },
-    { id: 65, name: "星币二", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_2.jpg", description: "星币二象征平衡、适应和灵活。它代表着在财务和生活之间找到平衡的能力。", upright: "平衡、适应、灵活、变动、选择、机会", reversed: "不平衡、僵化、缺乏灵活、停滞、选择困难" },
-    { id: 66, name: "星币三", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_3.jpg", description: "星币三象征团队合作、技能和认可。它代表着通过团队合作和技能获得的成就。", upright: "团队合作、技能、认可、成就、学习、成功", reversed: "缺乏团队合作、技能不足、不被认可、失败、缺乏学习" },
-    { id: 67, name: "星币四", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_4.jpg", description: "星币四象征稳定、安全和控制。它代表着对财务和物质世界的控制和安全感。", upright: "稳定、安全、控制、保守、财产、积累", reversed: "不稳定、不安全、失控、浪费、缺乏积累" },
-    { id: 68, name: "星币五", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_5.jpg", description: "星币五象征贫穷、失落和孤独。它代表着在物质和情感上的失落和孤独。", upright: "贫穷、失落、孤独、困境、需要帮助", reversed: "恢复、希望、帮助、新开始、克服困境" },
-    { id: 69, name: "星币六", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_6.jpg", description: "星币六象征给予、接受和慷慨。它代表着在财务上的平衡和慷慨。", upright: "给予、接受、慷慨、平衡、互助、成功", reversed: "自私、贪婪、不平衡、缺乏互助、失败" },
-    { id: 70, name: "星币七", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_7.jpg", description: "星币七象征耐心、评估和投资。它代表着在等待结果时需要保持耐心和评估投资。", upright: "耐心、评估、投资、等待、成长、回报", reversed: "缺乏耐心、失败、浪费、急躁、缺乏回报" },
-    { id: 71, name: "星币八", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_8.jpg", description: "星币八象征勤奋、技能和专注。它代表着通过勤奋和专注获得的成就。", upright: "勤奋、技能、专注、成就、学习、进步", reversed: "懒惰、粗心、技能不足、无知、保守、失败" },
-    { id: 72, name: "星币九", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_9.jpg", description: "星币九象征独立、财富和享受。它代表着通过独立和努力获得的财富和享受。", upright: "独立、财富、享受、成功、自足、自信", reversed: "依赖、贫穷、失败、不满足、缺乏自信" },
-    { id: 73, name: "星币十", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_10.jpg", description: "星币十象征财富、传承和家庭。它代表着家庭的财富和稳定，以及代代相传的价值观。", upright: "财富、传承、家庭、稳定、成功、安全", reversed: "贫穷、断裂、家庭问题、不稳定、失败、不安全" },
-    { id: 74, name: "星币侍从", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_sc.jpg", description: "星币侍从代表新的机会、学习和实践。它象征着对财务和物质世界的好奇和学习欲望。", upright: "新机会、学习、实践、好奇、勤奋、责任", reversed: "错失机会、无知、懒惰、冷漠、不负责任、浪费" },
-    { id: 75, name: "星币骑士", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_qs.jpg", description: "星币骑士象征勤奋、耐心和可靠。他代表着通过勤奋和耐心来实现财务目标的能力。", upright: "勤奋、耐心、可靠、务实、进步、责任感", reversed: "懒惰、急躁、不可靠、不切实际、停滞、不负责任" },
-    { id: 76, name: "星币王后", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_wh.jpg", description: "星币王后代表丰饶、务实和关怀。她象征着对家庭和财务的关怀和管理能力。", upright: "丰饶、务实、关怀、慷慨、稳定、可靠", reversed: "贫瘠、不切实际、冷漠、吝啬、不稳定、不可靠" },
-    { id: 77, name: "星币国王", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_gw.jpg", description: "星币国王象征财富、权威和成功。他代表着通过智慧和努力工作获得的财务成功和权威。", upright: "财富、权威、成功、智慧、务实、领导力", reversed: "贫穷、无能、失败、愚蠢、不切实际、缺乏领导力" }
+    { id: 22, name: "权杖一", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_1.jpg" },
+    { id: 23, name: "权杖二", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_2.jpg" },
+    { id: 24, name: "权杖三", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_3.jpg" },
+    { id: 25, name: "权杖四", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_4.jpg" },
+    { id: 26, name: "权杖五", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_5.jpg" },
+    { id: 27, name: "权杖六", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_6.jpg" },
+    { id: 28, name: "权杖七", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_7.jpg" },
+    { id: 29, name: "权杖八", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_8.jpg" },
+    { id: 30, name: "权杖九", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_9.jpg" },
+    { id: 31, name: "权杖十", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_10.jpg" },
+    { id: 32, name: "权杖侍从", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_sc.jpg" },
+    { id: 33, name: "权杖骑士", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_qs.jpg" },
+    { id: 34, name: "权杖王后", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_wh.jpg" },
+    { id: 35, name: "权杖国王", type: "minor", suit: "wands", image: "https://static.shenpowang.com/img/taluopai/qz_gw.jpg" },
+    { id: 36, name: "圣杯一", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_1.jpg" },
+    { id: 37, name: "圣杯二", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_2.jpg" },
+    { id: 38, name: "圣杯三", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_3.jpg" },
+    { id: 39, name: "圣杯四", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_4.jpg" },
+    { id: 40, name: "圣杯五", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_5.jpg" },
+    { id: 41, name: "圣杯六", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_6.jpg" },
+    { id: 42, name: "圣杯七", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_7.jpg" },
+    { id: 43, name: "圣杯八", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_8.jpg" },
+    { id: 44, name: "圣杯九", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_9.jpg" },
+    { id: 45, name: "圣杯十", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_10.jpg" },
+    { id: 46, name: "圣杯侍从", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_sc.jpg" },
+    { id: 47, name: "圣杯骑士", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_qs.jpg" },
+    { id: 48, name: "圣杯王后", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_wh.jpg" },
+    { id: 49, name: "圣杯国王", type: "minor", suit: "cups", image: "https://static.shenpowang.com/img/taluopai/sb_gw.jpg" },
+    { id: 50, name: "宝剑一", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_1.jpg" },
+    { id: 51, name: "宝剑二", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_2.jpg" },
+    { id: 52, name: "宝剑三", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_3.jpg" },
+    { id: 53, name: "宝剑四", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_4.jpg" },
+    { id: 54, name: "宝剑五", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_5.jpg" },
+    { id: 55, name: "宝剑六", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_6.jpg" },
+    { id: 56, name: "宝剑七", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_7.jpg" },
+    { id: 57, name: "宝剑八", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_8.jpg" },
+    { id: 58, name: "宝剑九", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_9.jpg" },
+    { id: 59, name: "宝剑十", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_10.jpg" },
+    { id: 60, name: "宝剑侍从", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_sc.jpg" },
+    { id: 61, name: "宝剑骑士", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_qs.jpg" },
+    { id: 62, name: "宝剑王后", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_wh.jpg" },
+    { id: 63, name: "宝剑国王", type: "minor", suit: "swords", image: "https://static.shenpowang.com/img/taluopai/bj_gw.jpg" },
+    { id: 64, name: "星币一", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_1.jpg" },
+    { id: 65, name: "星币二", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_2.jpg" },
+    { id: 66, name: "星币三", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_3.jpg" },
+    { id: 67, name: "星币四", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_4.jpg" },
+    { id: 68, name: "星币五", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_5.jpg" },
+    { id: 69, name: "星币六", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_6.jpg" },
+    { id: 70, name: "星币七", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_7.jpg" },
+    { id: 71, name: "星币八", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_8.jpg" },
+    { id: 72, name: "星币九", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_9.jpg" },
+    { id: 73, name: "星币十", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_10.jpg" },
+    { id: 74, name: "星币侍从", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_sc.jpg" },
+    { id: 75, name: "星币骑士", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_qs.jpg" },
+    { id: 76, name: "星币王后", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_wh.jpg" },
+    { id: 77, name: "星币国王", type: "minor", suit: "pentacles", image: "https://static.shenpowang.com/img/taluopai/qb_gw.jpg" }
   ];
 
-  /* ============================================================
-   * 第二层：图片预加载器 (ImagePreloader)
-   * 并发控制 + 进度回调 + 失败兜底
-   * ============================================================ */
   const ImagePreloader = {
-    _cache: new Map(),       // url -> HTMLImageElement
-    _failed: new Set(),      // 加载失败的 url 集合
-
-    /**
-     * 预加载一批图片
-     * @param {string[]} urls - 图片 URL 列表
-     * @param {object} callbacks
-     * @param {function} callbacks.onProgress  - (loaded, total) => void
-     * @param {function} callbacks.onComplete  - (loaded, failed, total) => void
-     * @param {number}   concurrency - 并发数，默认 6
-     */
+    _cache: new Map(),
+    _failed: new Set(),
     preload(urls, { onProgress, onComplete } = {}, concurrency = 6) {
       const total = urls.length;
       let loaded = 0;
       let failedCount = 0;
       let index = 0;
-
       const loadNext = () => {
         if (index >= total) return;
         const url = urls[index++];
         const img = new Image();
-
         img.onload = () => {
           this._cache.set(url, img);
           loaded++;
           onProgress?.(loaded + failedCount, total);
           loadNext();
         };
-
         img.onerror = () => {
           this._failed.add(url);
           failedCount++;
           onProgress?.(loaded + failedCount, total);
           loadNext();
         };
-
         img.src = url;
       };
-
-      // 启动并发
       const workers = Math.min(concurrency, total);
       for (let i = 0; i < workers; i++) loadNext();
-
-      // 完成检测（轮询，因为无法在闭包内精确判断）
       return new Promise(resolve => {
         const check = setInterval(() => {
           if (loaded + failedCount >= total) {
@@ -1177,25 +1122,16 @@ function updateAllUIText() {
         }, 50);
       });
     },
-
-    /** 从缓存获取图片，失败时返回 null */
     get(url) {
       if (this._failed.has(url)) return null;
       return this._cache.get(url) || null;
     },
-
-    /** 判断图片是否已缓存 */
     isReady(url) {
       return this._cache.has(url);
     }
   };
 
-  /* ============================================================
-   * 第三层：应用控制器 (TarotApp)
-   * 状态管理 + DOM 操作 + 业务逻辑
-   * ============================================================ */
   const TarotApp = {
-    /* --- 状态 --- */
     state: {
       selectedDeck: null,
       maxCards: 78,
@@ -1205,10 +1141,7 @@ function updateAllUIText() {
       imagesReady: false,
       bgMusic: new Audio('https://link.hhtjim.com/163/1960595909.mp3')
     },
-
     dom: {},
-
-    /* --- 初始化 --- */
     init() {
       this.cacheDOM();
       this.bindEvents();
@@ -1216,45 +1149,39 @@ function updateAllUIText() {
       this.renderCatalog();
       this.updateCardCountUI();
       this.startPreload();
-      // Apply saved language
       document.documentElement.lang = {zh:'zh-CN',en:'en',ja:'ja'}[currentLang];
       document.title = _ui('pageTitle');
       updateLangButtons();
       updateAllUIText();
     },
     refreshUI() {
-          // Refresh all dynamic UI after language switch
-          this.refreshDeckOptions();
-          this.updateStepUI();
-          // Re-render catalog
-          this.rerenderCatalog();
-          // Re-render drawn cards if any
-          if (this.state.drawnCards.length > 0) {
-            this.dom.resultContainer.innerHTML = '';
-            if (this.state.aiModeActive) {
-              const tip = document.createElement('div');
-              tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
-              tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> ' + _ui('aiReadyTip');
-              this.dom.resultContainer.appendChild(tip);
-            }
-            this.addCardOneByOne(this.state.drawnCards, 0);
-          }
-        },
-        rerenderCatalog() {
-          // Clear existing catalog items
-          ['majorArcanaList','wandsList','cupsList','swordsList','pentaclesList'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.innerHTML = '';
-          });
-          this.renderCatalog();
-        },
-        updateStepUI() {
-          const u = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = _ui(key); };
-          u('step1Label', 'step1'); u('step2Label', 'step2'); u('step3Label', 'step3');
-          u('footer1', 'footer1'); u('footer2', 'footer2');
-        },
+      this.refreshDeckOptions();
+      this.updateStepUI();
+      this.rerenderCatalog();
+      if (this.state.drawnCards.length > 0) {
+        this.dom.resultContainer.innerHTML = '';
+        if (this.state.aiModeActive) {
+          const tip = document.createElement('div');
+          tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
+          tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> ' + _ui('aiReadyTip');
+          this.dom.resultContainer.appendChild(tip);
+        }
+        this.addCardOneByOne(this.state.drawnCards, 0);
+      }
+    },
+    rerenderCatalog() {
+      ['majorArcanaList','wandsList','cupsList','swordsList','pentaclesList'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = '';
+      });
+      this.renderCatalog();
+    },
+    updateStepUI() {
+      const u = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = _ui(key); };
+      u('step1Label', 'step1'); u('step2Label', 'step2'); u('step3Label', 'step3');
+      u('footer1', 'footer1'); u('footer2', 'footer2');
+    },
     refreshDeckOptions() {
-      // Update deck option text
       const options = document.querySelectorAll('.deck-option');
       options.forEach(opt => {
         const deck = opt.dataset.deck;
@@ -1264,8 +1191,6 @@ function updateAllUIText() {
         if (p) p.textContent = _ui(deck === 'major' ? 'majorDesc' : (deck === 'minor' ? 'minorDesc' : 'allDesc'));
       });
     },
-
-    /* --- DOM 缓存 --- */
     cacheDOM() {
       const $ = (id) => document.getElementById(id);
       this.dom = {
@@ -1305,26 +1230,19 @@ function updateAllUIText() {
         avatarImage: $('avatarImage'),
         helpModal: $('helpModal'),
         cardDetailModal: $('cardDetailModal'),
-        // 预加载相关
         preloadIcon: $('preloadIcon'),
         preloadStatus: $('preloadStatus'),
         preloadProgressBar: $('preloadProgressBar'),
         preloadCount: $('preloadCount')
       };
     },
-
-    /* --- 事件绑定 --- */
     bindEvents() {
       const { dom } = this;
-
-      // 欢迎页：开始使用
       dom.startAppBtn.addEventListener('click', () => {
         this.state.bgMusic.pause();
         dom.avatarImage.classList.remove('spin-blur', 'animate-full-spin');
         dom.welcomeModal.classList.add('hidden');
       });
-
-      // 头像点击：播放/暂停音乐
       dom.authorAvatar.addEventListener('click', () => {
         if (this.state.bgMusic.paused) {
           this.state.bgMusic.play();
@@ -1334,8 +1252,6 @@ function updateAllUIText() {
           dom.avatarImage.classList.remove('spin-blur', 'animate-full-spin');
         }
       });
-
-      // 牌组选择
       dom.deckOptions.forEach(option => {
         option.addEventListener('click', () => {
           dom.deckOptions.forEach(opt => opt.classList.remove('deck-selected'));
@@ -1343,42 +1259,29 @@ function updateAllUIText() {
           this.setDeck(option.dataset.deck);
         });
       });
-
-      // 步骤导航
       dom.confirmDeckBtn.addEventListener('click', () => this.goToStep(2));
       dom.backToStep1Btn.addEventListener('click', () => this.goToStep(1));
       dom.backToStep2Btn.addEventListener('click', () => this.goToStep(2));
-
-      // 数量控制
       dom.decreaseBtn.addEventListener('click', () => this.setCount(this.state.selectedCount - 1));
       dom.increaseBtn.addEventListener('click', () => this.setCount(this.state.selectedCount + 1));
       dom.manualCountSubmitBtn.addEventListener('click', () => {
         this.setCount(parseInt(dom.manualCountInput.value));
       });
-
-      // AI 模式
       dom.toggleAiBtn.addEventListener('click', () => this.toggleAiMode());
       dom.generatePromptBtn.addEventListener('click', () => this.generateAIPrompt());
       dom.copyPromptBtn.addEventListener('click', () => this.copyPromptToClipboard());
-
-      // 抽牌 & 结果
       dom.drawCardsBtn.addEventListener('click', () => this.executeDraw());
       dom.copyResultsBtn.addEventListener('click', () => this.copyResultsToClipboard());
       dom.restartBtn.addEventListener('click', () => window.location.reload());
-
-      // 弹窗
       $('helpBtn').addEventListener('click', () => dom.helpModal.classList.remove('hidden'));
       $('closeHelpBtn').addEventListener('click', () => dom.helpModal.classList.add('hidden'));
       $('closeHelpBtn2').addEventListener('click', () => dom.helpModal.classList.add('hidden'));
       $('closeCardDetailBtn').addEventListener('click', () => dom.cardDetailModal.classList.add('hidden'));
       $('closeCardDetailBtn2').addEventListener('click', () => dom.cardDetailModal.classList.add('hidden'));
     },
-
-    /* --- 图片预加载 --- */
     startPreload() {
       const { dom } = this;
       const urls = TAROT_DATA.map(c => c.image).filter(Boolean);
-
       ImagePreloader.preload(urls, {
         onProgress: (done, total) => {
           const pct = Math.round((done / total) * 100);
@@ -1388,26 +1291,22 @@ function updateAllUIText() {
         onComplete: (loaded, failed, total) => {
           this.state.imagesReady = true;
           dom.startAppBtn.disabled = false;
-
           if (failed > 0) {
-                      dom.preloadIcon.className = 'fa fa-exclamation-triangle text-yellow-400';
-                      dom.preloadStatus.textContent = _ui('preloadFail').replace('{n}', failed);
-                      dom.preloadStatus.className = 'text-sm text-yellow-400';
-                    } else {
-                      dom.preloadIcon.className = 'fa fa-check-circle text-green-500';
-                      dom.preloadStatus.textContent = _ui('preloadDone');
+            dom.preloadIcon.className = 'fa fa-exclamation-triangle text-yellow-400';
+            dom.preloadStatus.textContent = _ui('preloadFail').replace('{n}', failed);
+            dom.preloadStatus.className = 'text-sm text-yellow-400';
+          } else {
+            dom.preloadIcon.className = 'fa fa-check-circle text-green-500';
+            dom.preloadStatus.textContent = _ui('preloadDone');
             dom.preloadStatus.className = 'text-sm text-green-500';
           }
           dom.preloadProgressBar.classList.remove('preload-shimmer');
         }
       }, 8);
     },
-
-    /* --- 数量控制 --- */
     updateCardCountUI() {
       this.setCount(this.state.selectedCount);
     },
-
     setDeck(deckType) {
       this.state.selectedDeck = deckType;
       this.dom.confirmDeckBtn.disabled = false;
@@ -1419,7 +1318,6 @@ function updateAllUIText() {
       this.dom.maxCardsSpan.textContent = this.state.maxCards;
       this.setCount(Math.min(this.state.selectedCount, this.state.maxCards));
     },
-
     setCount(newCount) {
       const { state, dom } = this;
       if (isNaN(newCount) || newCount < 1 || newCount > state.maxCards) {
@@ -1434,8 +1332,6 @@ function updateAllUIText() {
       dom.manualCountInput.max = state.maxCards;
       dom.countErrorMessage.classList.add('hidden');
     },
-
-    /* --- AI 模式切换 --- */
     toggleAiMode() {
       const { state, dom } = this;
       state.aiModeActive = !state.aiModeActive;
@@ -1444,108 +1340,82 @@ function updateAllUIText() {
         dom.toggleAiIcon.classList.replace('fa-toggle-off', 'fa-toggle-on');
         dom.toggleAiIcon.classList.replace('text-gray-500', 'text-primary');
         dom.toggleAiText.textContent = _ui('aiToggleOn');
-                dom.toggleAiText.classList.add('text-primary');
-                dom.quantityTitle.textContent = _ui('quantityTitleAi');
-              } else {
-                dom.aiSection.classList.add('hidden');
-                dom.toggleAiIcon.classList.replace('fa-toggle-on', 'fa-toggle-off');
-                dom.toggleAiIcon.classList.replace('text-primary', 'text-gray-500');
-                dom.toggleAiText.textContent = _ui('aiToggleOff');
-                dom.toggleAiText.classList.remove('text-primary');
-                dom.quantityTitle.textContent = _ui('quantityTitle');
+        dom.toggleAiText.classList.add('text-primary');
+        dom.quantityTitle.textContent = _ui('quantityTitleAi');
+      } else {
+        dom.aiSection.classList.add('hidden');
+        dom.toggleAiIcon.classList.replace('fa-toggle-on', 'fa-toggle-off');
+        dom.toggleAiIcon.classList.replace('text-primary', 'text-gray-500');
+        dom.toggleAiText.textContent = _ui('aiToggleOff');
+        dom.toggleAiText.classList.remove('text-primary');
+        dom.quantityTitle.textContent = _ui('quantityTitle');
       }
     },
-
-    /* --- 核心业务：执行抽牌 --- */
     executeDraw() {
       const { state } = this;
       if (state.selectedCount < 1 || state.selectedCount > state.maxCards) {
         this.dom.countErrorMessage.classList.remove('hidden');
         return;
       }
-
       let pool = [];
       if (state.selectedDeck === 'major') pool = TAROT_DATA.filter(c => c.type === 'major');
       else if (state.selectedDeck === 'minor') pool = TAROT_DATA.filter(c => c.type === 'minor');
       else pool = [...TAROT_DATA];
-
-      // Fisher-Yates 洗牌
       for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [pool[i], pool[j]] = [pool[j], pool[i]];
       }
-
-      // 抽取并随机正逆位
       state.drawnCards = pool.slice(0, state.selectedCount).map(card => ({
         ...card,
-        isUpright: Math.random() >= 0.5, position: Math.random() >= 0.5 ? '正位' : '逆位'
+        isUpright: Math.random() >= 0.5
       }));
-
       this.goToStep(3);
       this.dom.resultContainer.innerHTML = '';
       this.dom.copySuccess.classList.add('hidden');
       this.dom.copyBtnText.textContent = state.aiModeActive ? _ui('copyResultsAi') : _ui('copyResults');
-
-            // AI 模式提示
-            if (state.aiModeActive) {
-              const tip = document.createElement('div');
-              tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
-              tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> ' + _ui('aiReadyTip');
+      if (state.aiModeActive) {
+        const tip = document.createElement('div');
+        tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
+        tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> ' + _ui('aiReadyTip');
         this.dom.resultContainer.appendChild(tip);
       }
-
-      // 逐张发牌动画
       this.addCardOneByOne(state.drawnCards, 0);
     },
-
-    /* --- 递归发牌动画 --- */
     addCardOneByOne(cardArray, index) {
       if (index >= cardArray.length) return;
-
       const card = cardArray[index];
       const isUpright = card.isUpright;
-
       const cardDiv = document.createElement('div');
       cardDiv.className = 'flex items-center p-3 bg-dark rounded-md border border-primary/20 shadow-md card-animate-item hover:border-accent transition-all cursor-pointer mb-4';
       cardDiv.addEventListener('click', () => this.showCardDetail(card));
-
       const colorMap = { 'wands': 'text-red-500', 'cups': 'text-blue-500', 'swords': 'text-gray-300', 'pentacles': 'text-yellow-500' };
       const cardColor = colorMap[card.suit] || 'text-primary';
       const positionColor = card.isUpright ? 'text-green-500' : 'text-red-500';
-
-      // 优先使用预加载缓存中的图片，否则 fallback 到 src
-            const cachedImg = ImagePreloader.get(card.image);
-            const imgSrc = cachedImg ? cachedImg.src : card.image;
-            const idxLabel = _ui('cardIndex');
-            const failLabel = _ui('loadFail');
-
-            cardDiv.innerHTML = `
-              <div class="flex-shrink-0 w-16 h-24 bg-secondary rounded overflow-hidden border border-primary/40 mr-4">
-                <img src="${imgSrc}" class="w-full h-full object-contain ${isUpright ? '' : 'rotate-180'}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-gray-600 text-xs\'>${failLabel}</div>'">
-              </div>
-              <div class="flex-grow">
-                <div class="flex justify-between items-center mb-1">
-                   <h3 class="font-bold ${cardColor}">${__(card, 0)}</h3>
-                   <span class="px-2 py-1 rounded-full font-bold text-[10px] ${positionColor} bg-dark/70">${_pos(card.isUpright)}</span>
-                </div>
-                <p class="text-xs text-gray-400">${idxLabel}: #${index + 1}</p>
-          <p class="text-[11px] text-gray-500 mt-1 italic line-clamp-1">"${card.isUpright ? __(card, 2) : __(card, 3)}"</p>
+      const cachedImg = ImagePreloader.get(card.image);
+      const imgSrc = cachedImg ? cachedImg.src : card.image;
+      const idxLabel = _ui('cardIndex');
+      const failLabel = _ui('loadFail');
+      cardDiv.innerHTML = `
+        <div class="flex-shrink-0 w-16 h-24 bg-secondary rounded overflow-hidden border border-primary/40 mr-4">
+          <img src="${imgSrc}" class="w-full h-full object-contain ${isUpright ? '' : 'rotate-180'}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-gray-600 text-xs\'>${failLabel}</div>'">
         </div>
-      `;
-
+        <div class="flex-grow">
+          <div class="flex justify-between items-center mb-1">
+            <h3 class="font-bold ${cardColor}">${__(card, 0)}</h3>
+            <span class="px-2 py-1 rounded-full font-bold text-[10px] ${positionColor} bg-dark/70">${_pos(card.isUpright)}</span>
+          </div>
+          <p class="text-xs text-gray-400">${idxLabel}: #${index + 1}</p>
+          <p class="text-[11px] text-gray-500 mt-1 italic line-clamp-1">"${card.isUpright ? __(card, 2) : __(card, 3)}"</p>
+        </div>`;
       this.dom.resultContainer.appendChild(cardDiv);
       this.dom.resultContainer.scrollTop = this.dom.resultContainer.scrollHeight;
-
       setTimeout(() => this.addCardOneByOne(cardArray, index + 1), 500);
     },
-
-    /* --- 步骤导航 --- */
     goToStep(stepNumber) {
       const { dom } = this;
       this.updateStepUI();
       dom.steps.forEach(sec => sec.classList.add('hidden'));
       dom.steps[stepNumber - 1].classList.remove('hidden');
-
       const updateIndicator = (index, isActive) => {
         const circle = dom.indicators[index].querySelector('.step-circle');
         if (isActive) {
@@ -1556,25 +1426,20 @@ function updateAllUIText() {
           circle.classList.replace('text-dark', 'text-light');
         }
       };
-
       if (stepNumber === 1) {
         updateIndicator(0, true); updateIndicator(1, false); updateIndicator(2, false);
-        dom.progressBars[0].style.width = '0%';
-        dom.progressBars[1].style.width = '0%';
+        dom.progressBars[0].style.width = '0%'; dom.progressBars[1].style.width = '0%';
         this.dom.userQuestion.value = '';
         this.dom.promptOutput.value = '';
         this.dom.aiPromptTip.classList.add('hidden');
       } else if (stepNumber === 2) {
         updateIndicator(0, false); updateIndicator(1, true); updateIndicator(2, false);
-        dom.progressBars[0].style.width = '100%';
-        dom.progressBars[1].style.width = '0%';
+        dom.progressBars[0].style.width = '100%'; dom.progressBars[1].style.width = '0%';
       } else if (stepNumber === 3) {
         updateIndicator(1, false); updateIndicator(2, true);
         dom.progressBars[1].style.width = '100%';
       }
     },
-
-    /* --- 牌组目录渲染 --- */
     renderCatalog() {
       const createCardDiv = (card) => {
         const div = document.createElement('div');
@@ -1593,36 +1458,26 @@ function updateAllUIText() {
       mapToContainer(c => c.suit === 'swords', 'swordsList');
       mapToContainer(c => c.suit === 'pentacles', 'pentaclesList');
     },
-
-    /* --- 牌详情弹窗 --- */
     showCardDetail(card) {
-      const { dom } = this;
       $('cardDetailTitle').textContent = `${__(card, 0)} ${_ui('cardDetailTitleSuffix')}`;
       $('cardNumber').textContent = card.id;
       $('cardName').textContent = __(card, 0);
       $('cardDescription').textContent = __(card, 1) || _ui('noInfo');
       $('cardUpright').textContent = __(card, 2) || _ui('noInfo');
       $('cardReversed').textContent = __(card, 3) || _ui('noInfo');
-
       const img = $('cardImage');
       if (card.image) {
-        // 优先使用预加载缓存
         const cached = ImagePreloader.get(card.image);
         img.src = cached ? cached.src : card.image;
         img.style.display = 'block';
-        img.onerror = () => {
-          img.style.display = 'none';
-        };
+        img.onerror = () => { img.style.display = 'none'; };
       } else {
         img.style.display = 'none';
       }
-
       const groupKey = card.type || card.suit || 'unknown'; const groupName = _deck(groupKey);
       $('cardGroup').textContent = groupName;
-      dom.cardDetailModal.classList.remove('hidden');
+      this.dom.cardDetailModal.classList.remove('hidden');
     },
-
-    /* --- AI 提示词生成 --- */
     generateAIPrompt() {
       const question = this.dom.userQuestion.value.trim();
       if (!question) { this.dom.promptOutput.value = _ui('aiPromptError'); return; }
@@ -1630,8 +1485,6 @@ function updateAllUIText() {
       this.dom.promptOutput.value = prompt;
       this.dom.aiPromptTip.classList.remove('hidden');
     },
-
-    /* --- 剪贴板操作 --- */
     copyPromptToClipboard() {
       const text = this.dom.promptOutput.value;
       if (!text) return;
@@ -1640,26 +1493,27 @@ function updateAllUIText() {
         this.dom.aiPromptTip.className = 'text-sm text-center bg-green-500/10 p-2 rounded border border-green-500/30 text-green-500';
       });
     },
-
     copyResultsToClipboard() {
-      const resultsText = this.state.drawnCards.map((card, idx) => `牌位${idx + 1}: ${__(card, 0)} (${_pos(card.isUpright)})`).join('，');
+      const positionLabel = _ui('cardIndex');
+      const separator = currentLang === 'zh' ? '，' : ', ';
+      const resultsText = this.state.drawnCards.map((card, idx) =>
+        `${positionLabel}${idx + 1}: ${__(card, 0)} (${_pos(card.isUpright)})`
+      ).join(separator);
       const fullText = this.state.aiModeActive
         ? `${currentLang === 'zh' ? '【我抽到的牌面】' : (currentLang === 'en' ? '[My Drawn Cards]' : '【引いたカード】')}:\n${resultsText}${currentLang === 'ja' ? '。\n先ほどのスプレッド定義に基づいて解釈を始めてください。' : (currentLang === 'en' ? '.\nPlease begin your interpretation based on the spread definition.' : '。\n请根据之前的牌阵定义开始解读。')}`
         : `${currentLang === 'zh' ? '塔罗牌抽取结果' : (currentLang === 'en' ? 'Tarot Draw Results' : 'タロット抽選結果')}:\n${resultsText}`;
       navigator.clipboard.writeText(fullText).then(() => {
         this.dom.copySuccess.innerHTML = this.state.aiModeActive
-                  ? '<i class="fa fa-check-circle mr-1"></i> ' + _ui('resultCopiedAi')
-                  : '<i class="fa fa-check-circle mr-1"></i> ' + _ui('resultCopied');
-                this.dom.copySuccess.classList.remove('hidden');
-                setTimeout(() => this.dom.copySuccess.classList.add('hidden'), 3000);
-              }).catch(() => alert(_ui('copyFail')));
+          ? '<i class="fa fa-check-circle mr-1"></i> ' + _ui('resultCopiedAi')
+          : '<i class="fa fa-check-circle mr-1"></i> ' + _ui('resultCopied');
+        this.dom.copySuccess.classList.remove('hidden');
+        setTimeout(() => this.dom.copySuccess.classList.add('hidden'), 3000);
+      }).catch(() => alert(_ui('copyFail')));
     }
   };
 
-  /* --- 辅助函数 --- */
   function $(id) { return document.getElementById(id); }
 
-  /* --- 启动 --- */
   document.addEventListener('DOMContentLoaded', () => TarotApp.init());
   </script>
 </body>
