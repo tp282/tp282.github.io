@@ -80,34 +80,39 @@
   <header class="bg-secondary py-4 px-6 border-b border-primary/30">
     <div class="container mx-auto flex justify-between items-center">
       <h1 class="text-2xl md:text-3xl font-bold text-glow">
-        <i class="fa fa-star mr-2 text-accent"></i>塔罗牌抽取程序
+        <i class="fa fa-star mr-2 text-accent"></i><span id="headerTitle">塔罗牌抽取程序</span>
       </h1>
+            <div id="langSwitcher" class="flex items-center space-x-1 mr-4">
+        <button class="lang-btn px-2 py-1 rounded text-xs font-medium border transition-all duration-200" data-lang="zh" onclick="switchLanguage('zh')">🇨🇳 <span class="hidden sm:inline">中</span></button>
+        <button class="lang-btn px-2 py-1 rounded text-xs font-medium border transition-all duration-200" data-lang="en" onclick="switchLanguage('en')">🇺🇸 <span class="hidden sm:inline">EN</span></button>
+        <button class="lang-btn px-2 py-1 rounded text-xs font-medium border transition-all duration-200" data-lang="ja" onclick="switchLanguage('ja')">🇯🇵 <span class="hidden sm:inline">日</span></button>
+      </div>
       <button id="helpBtn" class="text-primary hover:text-accent transition-colors">
         <i class="fa fa-question-circle text-xl"></i>
       </button>
     </div>
   </header>
 
-  <main class="flex-grow container mx-auto px-4 py-8">
+  <main class="flex-grow container mx-auto px-4 py-8" style="transition: opacity 0.2s ease;">
     <!-- 步骤指示器 -->
     <div class="flex justify-between mb-8 max-w-2xl mx-auto">
       <div id="step1Indicator" class="flex flex-col items-center">
         <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-dark font-bold step-circle">1</div>
-        <p class="mt-2 text-sm">选择牌组</p>
+        <p class="mt-2 text-sm" id="step1Label">选择牌组</p>
       </div>
       <div class="flex-grow h-1 bg-secondary mx-2 mt-5 relative">
         <div id="progressBar" class="absolute top-0 left-0 h-full bg-primary transition-all duration-500 w-0"></div>
       </div>
       <div id="step2Indicator" class="flex flex-col items-center">
         <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-light font-bold step-circle">2</div>
-        <p class="mt-2 text-sm">抽牌设置</p>
+        <p class="mt-2 text-sm" id="step2Label">抽牌设置</p>
       </div>
       <div class="flex-grow h-1 bg-secondary mx-2 mt-5 relative">
         <div id="progressBar2" class="absolute top-0 left-0 h-full bg-primary transition-all duration-500 w-0"></div>
       </div>
       <div id="step3Indicator" class="flex flex-col items-center">
         <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-light font-bold step-circle">3</div>
-        <p class="mt-2 text-sm">结果与解读</p>
+        <p class="mt-2 text-sm" id="step3Label">结果与解读</p>
       </div>
     </div>
 
@@ -115,7 +120,7 @@
       <!-- 步骤1：选择牌组 -->
       <section id="step1" class="animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
-          <h2 class="text-xl font-bold mb-4 text-center">选择要抽取的牌组区域</h2>
+          <h2 id="step1Title" class="text-xl font-bold mb-4 text-center">选择要抽取的牌组区域</h2>
           <div class="space-y-4">
             <div class="deck-option flex items-center p-3 bg-dark rounded-md border border-primary/20 hover:border-primary transition-colors cursor-pointer" data-deck="major">
               <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3"><i class="fa fa-star text-primary"></i></div>
@@ -141,7 +146,7 @@
       <!-- 步骤2：抽牌设置 -->
       <section id="step2" class="hidden animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
-          <h2 class="text-xl font-bold mb-2 text-center">设置抽牌选项</h2>
+          <h2 id="step2Title" class="text-xl font-bold mb-2 text-center">设置抽牌选项</h2>
 
           <div class="flex justify-center mb-6">
              <button id="toggleAiBtn" class="group flex items-center space-x-3 bg-dark border border-primary/30 px-5 py-2 rounded-full text-gray-400 hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 shadow-md">
@@ -151,21 +156,21 @@
           </div>
 
           <div id="aiSection" class="hidden mb-8 bg-dark/40 rounded-lg p-4 border border-primary/30 animate-fade-in">
-            <h3 class="text-lg font-bold text-accent mb-3 text-center">
-              <i class="fa fa-magic mr-1"></i> 第一步：生成 AI 占卜指令
-            </h3>
-            <div class="space-y-3">
-              <div>
-                <label class="block text-xs text-gray-400 mb-1">你心中的困惑/问题：</label>
-                <input type="text" id="userQuestion" class="w-full bg-secondary border border-primary/30 rounded px-3 py-2 text-light focus:outline-none focus:border-primary transition-colors" placeholder="例如：我这段感情未来的发展如何？">
-              </div>
-              <button id="generatePromptBtn" class="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 px-4 py-2 rounded-md transition-colors flex items-center justify-center font-medium">
-                <i class="fa fa-terminal mr-2"></i> 生成指令 (复制给AI)
-              </button>
+            <h3 id="aiStepTitle" class="text-lg font-bold text-accent mb-3 text-center">
+                          <i class="fa fa-magic mr-1"></i> 第一步：生成 AI 占卜指令
+                        </h3>
+                        <div class="space-y-3">
+                          <div>
+                            <label id="aiQuestionLabel" class="block text-xs text-gray-400 mb-1">你心中的困惑/问题：</label>
+                            <input type="text" id="userQuestion" class="w-full bg-secondary border border-primary/30 rounded px-3 py-2 text-light focus:outline-none focus:border-primary transition-colors" placeholder="例如：我这段感情未来的发展如何？">
+                          </div>
+                          <button id="generatePromptBtn" class="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 px-4 py-2 rounded-md transition-colors flex items-center justify-center font-medium">
+                            <i class="fa fa-terminal mr-2"></i> <span id="aiGenerateBtn">生成指令 (复制给AI)</span>
+                          </button>
               <div class="relative">
                 <textarea id="promptOutput" class="w-full h-32 bg-secondary border border-primary/30 rounded px-3 py-2 text-xs text-gray-300 focus:outline-none resize-none font-mono" readonly placeholder="点击生成按钮，获取发送给AI的指令..."></textarea>
                 <button id="copyPromptBtn" class="absolute top-2 right-2 text-gray-400 hover:text-white bg-dark/50 rounded px-2 py-1 text-xs border border-gray-600">
-                  <i class="fa fa-clipboard"></i> 复制
+                                  <i class="fa fa-clipboard"></i> <span id="aiCopyBtn">复制</span>
                 </button>
               </div>
               <div id="aiPromptTip" class="text-sm text-yellow-400 text-center hidden bg-yellow-400/10 p-2 rounded border border-yellow-400/30">
@@ -177,7 +182,7 @@
 
           <div class="mb-4 pt-4 border-t border-primary/20">
             <p class="text-center mb-2 font-bold text-primary" id="quantityTitle">设置抽牌数量</p>
-            <p class="text-center text-sm text-gray-400 mb-4">当前牌组可抽取 <span id="minCards">1</span> - <span id="maxCards">78</span> 张牌</p>
+            <p class="text-center text-sm text-gray-400 mb-4"><span id="rangeText">当前牌组可抽取</span> <span id="minCards">1</span> - <span id="maxCards">78</span> <span id="rangeUnit">张牌</span></p>
 
             <div class="flex items-center justify-center space-x-4">
               <button id="decreaseBtn" class="w-10 h-10 rounded-full bg-dark border border-primary/30 flex items-center justify-center hover:bg-primary/10 transition-colors">
@@ -191,22 +196,22 @@
 
             <div class="mt-4">
               <div class="flex justify-center items-center">
-                <label for="manualCountInput" class="text-sm font-medium mr-2">或手动输入：</label>
+                <label for="manualCountInput" id="manualLabel" class="text-sm font-medium mr-2">或手动输入：</label>
                 <input type="number" id="manualCountInput" class="w-20 bg-dark border border-primary/30 rounded-l-md px-2 py-1 focus:outline-none focus:border-primary" min="1" placeholder="数量">
                 <button id="manualCountSubmitBtn" class="bg-primary hover:bg-primary/80 text-white px-3 py-1 rounded-r-md transition-colors text-sm">确认</button>
               </div>
             </div>
             <div id="countErrorMessage" class="mt-4 text-red-500 text-center hidden">
-              <i class="fa fa-exclamation-circle mr-1"></i> 请输入有效的数量
+              <i class="fa fa-exclamation-circle mr-1"></i> <span id="invalidCountText">请输入有效的数量</span>
             </div>
           </div>
 
           <div class="mt-6 flex justify-between">
             <button id="backToStep1Btn" class="bg-dark hover:bg-dark/80 border border-primary/30 text-light px-4 py-2 rounded-md transition-colors">
-              <i class="fa fa-arrow-left mr-1"></i> 返回
+              <i class="fa fa-arrow-left mr-1"></i> <span id="backToStep1Text">返回</span>
             </button>
             <button id="drawCardsBtn" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
-              抽取塔罗牌 <i class="fa fa-random ml-1"></i>
+              <span id="drawCardsText">抽取塔罗牌</span> <i class="fa fa-random ml-1"></i>
             </button>
           </div>
         </div>
@@ -215,7 +220,7 @@
       <!-- 步骤3：结果与解读 -->
       <section id="step3" class="hidden animate-fade-in">
         <div class="bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
-          <h2 class="text-xl font-bold mb-4 text-center">塔罗牌抽取结果</h2>
+          <h2 id="step3Title" class="text-xl font-bold mb-4 text-center">塔罗牌抽取结果</h2>
           <div id="resultContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2 scroll-smooth"></div>
 
           <div id="copySuccess" class="mt-4 text-green-500 text-center hidden p-2 bg-green-500/10 rounded border border-green-500/30">
@@ -241,19 +246,19 @@
 
     <!-- 牌组信息目录 -->
     <div class="mt-8 max-w-4xl mx-auto bg-secondary rounded-lg p-6 border border-primary/30 shadow-lg">
-      <h2 class="text-xl font-bold mb-4 text-center">塔罗牌组信息</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h3 class="text-lg font-medium mb-2 text-primary">大阿卡纳 (22张)</h3>
-          <div id="majorArcanaList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div>
-        </div>
-        <div>
-          <h3 class="text-lg font-medium mb-2 text-primary">小阿卡纳 (56张)</h3>
-          <div class="space-y-3">
-            <div><h4 class="font-medium text-accent">权杖</h4><div id="wandsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
-            <div><h4 class="font-medium text-accent">圣杯</h4><div id="cupsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
-            <div><h4 class="font-medium text-accent">宝剑</h4><div id="swordsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
-            <div><h4 class="font-medium text-accent">星币</h4><div id="pentaclesList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+      <h2 id="catalogTitle" class="text-xl font-bold mb-4 text-center">塔罗牌组信息</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 id="majorCatalogHeader" class="text-lg font-medium mb-2 text-primary">大阿卡纳 (22张)</h3>
+                <div id="majorArcanaList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div>
+              </div>
+              <div>
+                <h3 id="minorCatalogHeader" class="text-lg font-medium mb-2 text-primary">小阿卡纳 (56张)</h3>
+                <div class="space-y-3">
+                  <div><h4 id="suitWandsHeader" class="font-medium text-accent">权杖</h4><div id="wandsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+                  <div><h4 id="suitCupsHeader" class="font-medium text-accent">圣杯</h4><div id="cupsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+                  <div><h4 id="suitSwordsHeader" class="font-medium text-accent">宝剑</h4><div id="swordsList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
+                  <div><h4 id="suitPentaclesHeader" class="font-medium text-accent">星币</h4><div id="pentaclesList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm"></div></div>
           </div>
         </div>
       </div>
@@ -262,8 +267,8 @@
 
   <footer class="bg-secondary py-4 px-6 border-t border-primary/30 mt-auto">
     <div class="container mx-auto text-center text-sm text-gray-400">
-      <p>塔罗牌抽取程序 &copy; 2025 | 仅供娱乐</p>
-      <p class="mt-1">塔罗牌是一种古老的占卜工具</p>
+      <p id="footer1">塔罗牌抽取程序 &copy; 2025 | 仅供娱乐</p>
+      <p class="mt-1" id="footer2">塔罗牌是一种古老的占卜工具</p>
     </div>
   </footer>
 
@@ -271,21 +276,21 @@
   <div id="helpModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
     <div class="bg-secondary rounded-lg p-6 max-w-md w-full mx-4 border border-primary/30 shadow-lg animate-slide-up">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-primary">使用帮助</h2>
-        <button id="closeHelpBtn" class="text-gray-400 hover:text-white"><i class="fa fa-times text-xl"></i></button>
-      </div>
-      <div class="space-y-4">
-        <div><h3 class="font-medium text-accent">步骤1：选择牌组</h3><p class="text-sm">选择您想要抽取的塔罗牌组区域：大阿卡纳、小阿卡纳或全部牌组。</p></div>
-        <div>
-          <h3 class="font-medium text-accent">步骤2：抽牌设置</h3>
-          <p class="text-sm">1. 您可以直接设置抽牌数量。</p>
-          <p class="text-sm">2. <strong>（可选）开启 AI 占卜助手</strong>：生成专业指令发给 AI，获取牌阵和张数建议，再调整下方数量。</p>
-        </div>
-        <div><h3 class="font-medium text-accent">步骤3：抽取与解读</h3><p class="text-sm">抽取塔罗牌。如果开启了 AI 助手，请复制结果给 AI 进行专业解读。</p></div>
-        <div><h3 class="font-medium text-accent">查看牌详情</h3><p class="text-sm">在牌组信息区域点击任意牌名，可以查看该牌的详细解释。</p></div>
-      </div>
-      <button id="closeHelpBtn2" class="mt-6 w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
-        我知道了
+        <h2 id="helpTitle" class="text-xl font-bold text-primary">使用帮助</h2>
+                <button id="closeHelpBtn" class="text-gray-400 hover:text-white"><i class="fa fa-times text-xl"></i></button>
+              </div>
+              <div class="space-y-4">
+                <div><h3 id="helpStep1Title" class="font-medium text-accent">步骤1：选择牌组</h3><p id="helpStep1Text" class="text-sm">选择您想要抽取的塔罗牌组区域：大阿卡纳、小阿卡纳或全部牌组。</p></div>
+                <div>
+                  <h3 id="helpStep2Title" class="font-medium text-accent">步骤2：抽牌设置</h3>
+                  <p id="helpStep2Text1" class="text-sm">1. 您可以直接设置抽牌数量。</p>
+                  <p id="helpStep2Text2" class="text-sm">2. <strong>（可选）开启 AI 占卜助手</strong>：生成专业指令发给 AI，获取牌阵和张数建议，再调整下方数量。</p>
+                </div>
+                <div><h3 id="helpStep3Title" class="font-medium text-accent">步骤3：抽取与解读</h3><p id="helpStep3Text" class="text-sm">抽取塔罗牌。如果开启了 AI 助手，请复制结果给 AI 进行专业解读。</p></div>
+                <div><h3 id="helpCardDetailTitle" class="font-medium text-accent">查看牌详情</h3><p id="helpCardDetailText" class="text-sm">在牌组信息区域点击任意牌名，可以查看该牌的详细解释。</p></div>
+              </div>
+              <button id="closeHelpBtn2" class="mt-6 w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">
+                <span id="helpCloseBtn">我知道了</span>
       </button>
     </div>
   </div>
@@ -305,17 +310,17 @@
           </div>
         </div>
         <div class="space-y-4">
-          <div><h3 class="text-lg font-medium text-accent mb-1">牌名</h3><p id="cardName" class="text-light text-lg">愚者</p></div>
-          <div><h3 class="text-lg font-medium text-accent mb-1">牌组</h3><p id="cardGroup" class="text-light">大阿卡纳</p></div>
-          <div><h3 class="text-lg font-medium text-accent mb-1">牌意</h3><p id="cardDescription" class="text-light text-sm leading-relaxed">...</p></div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div><h3 class="text-md font-medium text-green-500 mb-1">正位含义</h3><p id="cardUpright" class="text-light text-xs leading-relaxed">...</p></div>
-            <div><h3 class="text-md font-medium text-red-500 mb-1">逆位含义</h3><p id="cardReversed" class="text-light text-xs leading-relaxed">...</p></div>
+          <div><h3 id="cardNameLabel" class="text-lg font-medium text-accent mb-1">牌名</h3><p id="cardName" class="text-light text-lg">愚者</p></div>
+                    <div><h3 id="cardGroupLabel" class="text-lg font-medium text-accent mb-1">牌组</h3><p id="cardGroup" class="text-light">大阿卡纳</p></div>
+                    <div><h3 id="cardDescLabel" class="text-lg font-medium text-accent mb-1">牌意</h3><p id="cardDescription" class="text-light text-sm leading-relaxed">...</p></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div><h3 id="cardUprightLabel" class="text-md font-medium text-green-500 mb-1">正位含义</h3><p id="cardUpright" class="text-light text-xs leading-relaxed">...</p></div>
+                      <div><h3 id="cardReversedLabel" class="text-md font-medium text-red-500 mb-1">逆位含义</h3><p id="cardReversed" class="text-light text-xs leading-relaxed">...</p></div>
           </div>
         </div>
       </div>
       <div class="mt-6 flex justify-end">
-        <button id="closeCardDetailBtn2" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors">关闭</button>
+        <button id="closeCardDetailBtn2" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors"><span id="cardCloseBtn">关闭</span></button>
       </div>
     </div>
   </div>
@@ -327,30 +332,30 @@
         <img id="avatarImage" src="https://avatars.githubusercontent.com/u/244422201?u=4198b680c0c1279889dabc2c19167d011ebbeb10&v=4" class="w-20 h-20 rounded-full border-2 border-accent transition-transform duration-300">
         <div class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-75"></div>
       </div>
-      <h2 class="text-2xl font-bold text-accent mb-1">欢迎使用</h2>
-      <p class="text-sm font-medium text-light mb-1">塔罗牌抽取程序</p>
-      <p class="text-xs font-medium text-gray-400 mb-4">点击头像播放/暂停背景音乐</p>
+      <h2 id="welcomeTitle" class="text-2xl font-bold text-accent mb-1">欢迎使用</h2>
+            <p id="welcomeSubtitle" class="text-sm font-medium text-light mb-1">塔罗牌抽取程序</p>
+            <p id="welcomeMusicTip" class="text-xs font-medium text-gray-400 mb-4">点击头像播放/暂停背景音乐</p>
 
-      <!-- 预加载进度区域 -->
-      <div id="preloadSection" class="mb-4">
-        <div class="flex items-center justify-center space-x-2 mb-2">
-          <i id="preloadIcon" class="fa fa-spinner fa-spin text-primary"></i>
-          <span id="preloadStatus" class="text-sm text-gray-400">正在预加载塔罗牌图片...</span>
-        </div>
-        <div class="w-full bg-dark rounded-full h-2 overflow-hidden border border-primary/20">
-          <div id="preloadProgressBar" class="h-full bg-primary rounded-full transition-all duration-300 preload-shimmer" style="width: 0%"></div>
-        </div>
-        <p id="preloadCount" class="text-xs text-gray-500 mt-1">0 / 78</p>
-      </div>
+            <!-- 预加载进度区域 -->
+            <div id="preloadSection" class="mb-4">
+              <div class="flex items-center justify-center space-x-2 mb-2">
+                <i id="preloadIcon" class="fa fa-spinner fa-spin text-primary"></i>
+                <span id="preloadStatus" class="text-sm text-gray-400">正在预加载塔罗牌图片...</span>
+              </div>
+              <div class="w-full bg-dark rounded-full h-2 overflow-hidden border border-primary/20">
+                <div id="preloadProgressBar" class="h-full bg-primary rounded-full transition-all duration-300 preload-shimmer" style="width: 0%"></div>
+              </div>
+              <p id="preloadCount" class="text-xs text-gray-500 mt-1">0 / 78</p>
+            </div>
 
-      <p class="text-sm font-medium text-primary mb-1">作者：嘟嘟可教主</p>
-      <a href="https://space.bilibili.com/425320157" target="_blank" class="text-blue-400 hover:text-blue-300 mb-4 flex items-center justify-center">
-        <i class="fa fa-external-link mr-1"></i> B站主页
-      </a>
-      <p class="text-sm text-gray-400 mb-2">感谢使用塔罗牌抽取程序</p>
-      <p class="text-xs text-gray-500 mb-6">该网页使用ai进行开发</p>
-      <button id="startAppBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-        开始使用 <i class="fa fa-arrow-right ml-1"></i>
+            <p id="welcomeAuthor" class="text-sm font-medium text-primary mb-1">作者：嘟嘟可教主</p>
+            <a href="https://space.bilibili.com/425320157" target="_blank" class="text-blue-400 hover:text-blue-300 mb-4 flex items-center justify-center">
+              <i class="fa fa-external-link mr-1"></i> <span id="welcomeBilibili">B站主页</span>
+            </a>
+            <p id="welcomeThanks" class="text-sm text-gray-400 mb-2">感谢使用塔罗牌抽取程序</p>
+            <p id="welcomeAiNote" class="text-xs text-gray-500 mb-6">该网页使用ai进行开发</p>
+            <button id="startAppBtn" class="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              <span id="welcomeStartBtn">开始使用</span> <i class="fa fa-arrow-right ml-1"></i>
       </button>
     </div>
   </div>
@@ -360,6 +365,669 @@
    * 第一层：数据层 (Data)
    * 78 张塔罗牌的完整数据
    * ============================================================ */
+/* I18N Data: zh/en/ja for all 78 Tarot cards + UI text */
+const I18N = {
+c:{
+0:{zh:['愚者','愚者代表新的开始、冒险精神和纯真无邪。他站在悬崖边，象征着对未来的无限可能敞开心扉，勇敢地追求梦想而不畏惧风险。','新的开始、自由、冒险、天真、灵感、创造力、无拘无束','鲁莽、缺乏方向、不负责任、冒险过度、天真幼稚、逃避现实'],
+en:['The Fool','The Fool represents new beginnings, adventure, and innocence. Standing at the edge of a cliff, he symbolizes opening oneself to infinite possibilities, courageously pursuing dreams without fear of risk.','New beginnings, freedom, adventure, innocence, inspiration, creativity, spontaneity','Recklessness, lack of direction, irresponsibility, excessive risk-taking, naivety, escapism'],
+ja:['愚者','愚者は新たな始まり、冒険心、純真さを表す。崖の上に立つ愚者は、無限の可能性に心を開き、リスクを恐れず夢を追い求めることを象徴している。','新たな始まり、自由、冒険、純真、インスピレーション、創造性、自由奔放','無謀、方向性の欠如、無責任、過度のリスク、幼稚さ、現実逃避']},
+1:{zh:['魔术师','魔术师代表创造、行动力和资源的掌控。他拥有无限的潜力，能够将想法转化为现实，展现出自信和决心。','创造力、行动力、自信、技能、资源、决心、新机会','缺乏自信、能力不足、错失机会、操纵、犹豫、资源浪费'],
+en:['The Magician','The Magician represents creativity, action, and mastery of resources. He possesses infinite potential, able to manifest ideas into reality with confidence and determination.','Creativity, action, confidence, skill, resources, determination, new opportunities','Lack of confidence, incompetence, missed opportunities, manipulation, hesitation, wasted resources'],
+ja:['魔術師','魔術師は創造性、行動力、資源の掌握を表す。無限の可能性を持ち、アイデアを現実化する力と自信を示している。','創造性、行動力、自信、スキル、資源、決意、新たな機会','自信不足、能力不足、機会損失、操作、ためらい、資源の浪費']},
+2:{zh:['女祭司','女祭司象征直觉、智慧和神秘的知识。她代表内在的声音和潜意识，提醒我们要相信自己的直觉和内在指引。','直觉、智慧、神秘、内省、精神力量、冷静、洞察力','直觉失灵、隐秘、沉默、缺乏洞察力、忽视内心声音'],
+en:['The High Priestess','The High Priestess symbolizes intuition, wisdom, and esoteric knowledge. She represents the inner voice and the subconscious, reminding us to trust our intuition and inner guidance.','Intuition, wisdom, mystery, introspection, spiritual power, calm, insight','Blocked intuition, secrecy, silence, lack of insight, ignoring inner voice'],
+ja:['女教皇','女教皇は直感、知恵、神秘的な知識を象徴する。内なる声と潜在意識を表し、直感と内なる導きを信じるよう促す。','直感、知恵、神秘、内省、精神的な力、冷静、洞察力','直感の遮断、秘密、沈黙、洞察力不足、内なる声の無視']},
+3:{zh:['女皇','女皇代表丰饶、母性、创造力和滋养。她象征着生命的繁荣和自然的丰盛，鼓励我们拥抱生活的美好。','丰饶、创造力、母性、滋养、繁荣、美丽、享受生活','不孕不育、缺乏创造力、依赖、过度放纵、忽视自我需求'],
+en:['The Empress','The Empress represents abundance, motherhood, creativity, and nurturing. She symbolizes the prosperity of life and the bounty of nature, encouraging us to embrace life\'s beauty.','Abundance, creativity, motherhood, nurturing, prosperity, beauty, enjoying life','Infertility, creative block, dependence, overindulgence, neglecting self-needs'],
+ja:['女帝','女帝は豊穣、母性、創造性、養育を表す。生命の繁栄と自然の豊かさを象徴し、人生の美しさを受け入れるよう励ます。','豊穣、創造性、母性、養育、繁栄、美、人生の享受','不妊、創造性の欠如、依存、過度の放縦、自己ニーズの無視']},
+4:{zh:['皇帝','皇帝象征权威、结构和控制。他代表着理性思维和领导力，提醒我们要建立稳固的基础和秩序。','权威、领导力、结构、控制、纪律、理性、保护','滥用权力、独裁、缺乏纪律、失控、僵化、缺乏领导力'],
+en:['The Emperor','The Emperor symbolizes authority, structure, and control. He represents rational thinking and leadership, reminding us to build solid foundations and order.','Authority, leadership, structure, control, discipline, rationality, protection','Abuse of power, tyranny, lack of discipline, loss of control, rigidity, poor leadership'],
+ja:['皇帝','皇帝は権威、構造、支配を象徴する。合理的思考とリーダーシップを表し、確固たる基盤と秩序を築くよう促す。','権威、リーダーシップ、構造、支配、規律、合理性、保護','権力乱用、独裁、規律不足、制御不能、硬直、リーダーシップ不足']},
+5:{zh:['教皇','教皇代表传统、灵性指导和道德价值观。他象征着宗教信仰和社会规范，提醒我们要尊重传统并寻求智慧的指引。','传统、灵性、指导、道德、教育、信仰、社区','教条、僵化、盲目信仰、反叛、缺乏道德、错误的指导'],
+en:['The Hierophant','The Hierophant represents tradition, spiritual guidance, and moral values. He symbolizes religious belief and social norms, reminding us to respect tradition and seek wise counsel.','Tradition, spirituality, guidance, morality, education, faith, community','Dogma, rigidity, blind faith, rebellion, lack of ethics, misguided advice'],
+ja:['教皇','教皇は伝統、精神的指導、道徳的価値観を表す。宗教信仰と社会規範を象徴し、伝統を尊重し賢明な導きを求めるよう促す。','伝統、精神性、指導、道徳、教育、信仰、コミュニティ','教条主義、硬直、盲信、反逆、道徳の欠如、誤った指導']},
+6:{zh:['恋人','恋人代表爱、选择和关系。这张牌象征着重要的决定和灵魂的连接，提醒我们要在爱与关系中保持真实和忠诚。','爱情、关系、选择、和谐、吸引力、灵魂连接、价值观','关系问题、错误的选择、不和谐、背叛、缺乏选择、价值观冲突'],
+en:['The Lovers','The Lovers represent love, choice, and relationships. This card symbolizes important decisions and soul connections, reminding us to stay true and loyal in love and relationships.','Love, relationships, choice, harmony, attraction, soul connection, values','Relationship issues, wrong choices, disharmony, betrayal, lack of options, value conflicts'],
+ja:['恋人','恋人は愛、選択、関係を表す。重要な決断と魂の繋がりを象徴し、愛と関係において誠実であるよう促す。','愛、関係、選択、調和、魅力、魂の繋がり、価値観','関係の問題、誤った選択、不調和、裏切り、選択肢不足、価値観の衝突']},
+7:{zh:['战车','战车象征意志、控制和胜利。它代表着通过自律和决心克服障碍，达成目标的能力。','意志、控制、胜利、决心、自律、前进、成功','缺乏控制、意志薄弱、失败、冲突、犹豫不决、停滞不前'],
+en:['The Chariot','The Chariot symbolizes willpower, control, and victory. It represents the ability to overcome obstacles through self-discipline and determination to achieve goals.','Willpower, control, victory, determination, self-discipline, progress, success','Lack of control, weak will, failure, conflict, indecision, stagnation'],
+ja:['戦車','戦車は意志、制御、勝利を象徴する。自己規律と決意によって障害を克服し、目標を達成する力を表す。','意志、制御、勝利、決意、自己規律、前進、成功','制御不足、意志薄弱、失敗、衝突、優柔不断、停滞']},
+8:{zh:['力量','力量代表内在的力量、勇气和温柔。它象征着通过爱和耐心而非暴力来克服挑战的能力。','勇气、力量、耐心、信心、温柔、毅力、控制激情','软弱、缺乏勇气、犹豫不决、滥用力量、恐惧、自我怀疑'],
+en:['Strength','Strength represents inner strength, courage, and gentleness. It symbolizes the ability to overcome challenges through love and patience rather than force.','Courage, strength, patience, confidence, gentleness, perseverance, mastering passion','Weakness, lack of courage, indecision, abuse of power, fear, self-doubt'],
+ja:['力','力は内なる強さ、勇気、優しさを表す。暴力ではなく愛と忍耐によって困難を克服する力を象徴する。','勇気、強さ、忍耐、自信、優しさ、粘り強さ、情熱の制御','弱さ、勇気不足、優柔不断、力の乱用、恐怖、自己不信']},
+9:{zh:['隐者','隐者象征内省、智慧和孤独。他代表着通过独处和反思来寻找生命的意义和答案的过程。','内省、智慧、孤独、反思、指引、谨慎、寻求真理','孤独、隔绝、缺乏方向、过度内省、逃避现实、拒绝帮助'],
+en:['The Hermit','The Hermit symbolizes introspection, wisdom, and solitude. He represents the process of seeking life\'s meaning and answers through solitude and reflection.','Introspection, wisdom, solitude, reflection, guidance, prudence, seeking truth','Isolation, disconnection, lack of direction, excessive introspection, escapism, refusing help'],
+ja:['隠者','隠者は内省、知恵、孤独を象徴する。孤独と内省を通じて人生の意味と答えを探求する過程を表す。','内省、知恵、孤独、熟考、導き、慎重、真理の探究','孤立、断絶、方向性欠如、過度の内省、現実逃避、助けの拒否']},
+10:{zh:['命运之轮','命运之轮代表变化、命运和机遇。它象征着生命的循环和无常，提醒我们要接受变化并顺应自然的流动。','变化、命运、机遇、循环、好运、转折点、进步','停滞、坏运、抗拒变化、重复模式、延迟、挫折'],
+en:['Wheel of Fortune','The Wheel of Fortune represents change, destiny, and opportunity. It symbolizes life\'s cycles and impermanence, reminding us to accept change and flow with nature.','Change, destiny, opportunity, cycles, good fortune, turning point, progress','Stagnation, bad luck, resisting change, repeating patterns, delays, setbacks'],
+ja:['運命の輪','運命の輪は変化、運命、機会を表す。人生の循環と無常を象徴し、変化を受け入れ自然の流れに従うよう促す。','変化、運命、機会、循環、幸運、転換点、進歩','停滞、不運、変化への抵抗、パターンの繰り返し、遅延、挫折']},
+11:{zh:['正义','正义象征公平、平衡和责任。它代表着因果报应和道德原则，提醒我们要为自己的行为负责。','公平、正义、平衡、责任、法律、真理、因果','不公平、偏见、失衡、逃避责任、法律问题、不公正'],
+en:['Justice','Justice symbolizes fairness, balance, and responsibility. It represents karma and moral principles, reminding us to take responsibility for our actions.','Fairness, justice, balance, responsibility, law, truth, cause and effect','Unfairness, bias, imbalance, avoiding responsibility, legal issues, injustice'],
+ja:['正義','正義は公正、バランス、責任を象徴する。因果応報と道徳的原則を表し、自分の行動に責任を持つよう促す。','公正、正義、バランス、責任、法、真理、因果','不公平、偏見、不均衡、責任回避、法的問題、不正']},
+12:{zh:['倒吊人','倒吊人代表牺牲、视角转变和等待。它象征着从不同的角度看待问题，以及为了更高的目标而做出牺牲。','牺牲、耐心、视角转变、等待、冥想、灵性成长','不必要的牺牲、固执、徒劳的等待、缺乏远见、不愿改变'],
+en:['The Hanged Man','The Hanged Man represents sacrifice, shift in perspective, and waiting. It symbolizes seeing things from a different angle and making sacrifices for a higher purpose.','Sacrifice, patience, shift in perspective, waiting, meditation, spiritual growth','Unnecessary sacrifice, stubbornness, futile waiting, lack of foresight, resistance to change'],
+ja:['吊るされた男','吊るされた男は犠牲、視点の転換、待機を表す。異なる角度から物事を見ること、より高次の目的のための犠牲を象徴する。','犠牲、忍耐、視点転換、待機、瞑想、精神的成長','不必要な犠牲、頑固、無駄な待機、先見性不足、変化への抵抗']},
+13:{zh:['死神','死神象征结束、转变和重生。它代表着旧事物的终结和新事物的开始，提醒我们要接受变化并放下过去。','结束、转变、重生、变革、放下、新开始、转型','抗拒变化、恐惧结束、停滞不前、旧模式延续、延迟'],
+en:['Death','Death symbolizes endings, transformation, and rebirth. It represents the end of the old and the beginning of the new, reminding us to accept change and let go of the past.','Endings, transformation, rebirth, change, letting go, new beginnings, transition','Resisting change, fear of endings, stagnation, old patterns persisting, delays'],
+ja:['死神','死神は終焉、変容、再生を象徴する。古きものの終わりと新しきものの始まりを表し、変化を受け入れ過去を手放すよう促す。','終焉、変容、再生、変革、手放し、新たな始まり、転換','変化への抵抗、終焉への恐怖、停滞、古いパターンの持続、遅延']},
+14:{zh:['节制','节制代表平衡、和谐和适度。它象征着在生活的各个方面寻找平衡，以及通过适度和调和来实现内心的平静。','平衡、和谐、适度、调和、耐心、灵性成长、自我控制','失衡、过度、冲突、不耐烦、缺乏控制、不和谐'],
+en:['Temperance','Temperance represents balance, harmony, and moderation. It symbolizes finding equilibrium in all aspects of life, achieving inner peace through moderation and integration.','Balance, harmony, moderation, integration, patience, spiritual growth, self-control','Imbalance, excess, conflict, impatience, lack of control, disharmony'],
+ja:['節制','節制はバランス、調和、中庸を表す。人生のあらゆる側面で均衡を見出し、中庸と統合によって内なる平和を達成することを象徴する。','バランス、調和、中庸、統合、忍耐、精神的成長、自己制御','不均衡、過剰、衝突、短気、制御不足、不調和']},
+15:{zh:['恶魔','恶魔象征诱惑、束缚和物质主义。它代表着我们被欲望和恐惧所束缚的状态，提醒我们要摆脱物质的枷锁。','诱惑、束缚、欲望、物质主义、成瘾、恐惧、限制','解放、摆脱束缚、克服恐惧、打破成瘾、自由、觉醒'],
+en:['The Devil','The Devil symbolizes temptation, bondage, and materialism. It represents being shackled by desires and fears, reminding us to break free from material chains.','Temptation, bondage, desire, materialism, addiction, fear, limitation','Liberation, breaking free, overcoming fear, breaking addiction, freedom, awakening'],
+ja:['悪魔','悪魔は誘惑、束縛、物質主義を象徴する。欲望と恐怖に縛られた状態を表し、物質的な鎖から解放されるよう促す。','誘惑、束縛、欲望、物質主義、依存、恐怖、制限','解放、束縛からの脱却、恐怖克服、依存打破、自由、覚醒']},
+16:{zh:['塔','塔代表突然的变化、崩溃和觉醒。它象征着旧有结构的崩塌，虽然痛苦，但为新的开始创造了空间。','突然变化、崩溃、觉醒、灾难、解放、真相揭露、颠覆','避免变化、延迟崩溃、抗拒觉醒、恐惧变革、内部冲突'],
+en:['The Tower','The Tower represents sudden change, collapse, and awakening. It symbolizes the crumbling of old structures — painful but creating space for new beginnings.','Sudden change, collapse, awakening, disaster, liberation, revelation, upheaval','Avoiding change, delayed collapse, resisting awakening, fear of transformation, internal conflict'],
+ja:['塔','塔は突然の変化、崩壊、覚醒を表す。古い構造の崩壊は苦痛だが、新たな始まりのための空間を創り出す。','突然の変化、崩壊、覚醒、災害、解放、真実の露呈、激変','変化回避、崩壊の遅延、覚醒への抵抗、変革への恐怖、内的葛藤']},
+17:{zh:['星星','星星象征希望、灵感和灵性。它代表着在黑暗中寻找光明，以及对未来的乐观和信念。','希望、灵感、灵性、梦想、乐观、信仰、指引','绝望、缺乏灵感、失去希望、幻灭、悲观、灵性空虚'],
+en:['The Star','The Star symbolizes hope, inspiration, and spirituality. It represents finding light in darkness and unwavering optimism and faith in the future.','Hope, inspiration, spirituality, dreams, optimism, faith, guidance','Despair, lack of inspiration, loss of hope, disillusionment, pessimism, spiritual emptiness'],
+ja:['星','星は希望、インスピレーション、精神性を象徴する。闇の中で光を見出し、未来への揺るぎない楽観と信念を表す。','希望、インスピレーション、精神性、夢、楽観、信仰、導き','絶望、インスピレーション不足、希望喪失、幻滅、悲観、精神的空虚']},
+18:{zh:['月亮','月亮代表潜意识、直觉和不确定性。它象征着我们内心的恐惧和隐藏的情感，提醒我们要相信自己的直觉。','潜意识、直觉、恐惧、幻觉、不确定性、神秘、情感','清晰、克服恐惧、揭开真相、摆脱幻觉、明确方向'],
+en:['The Moon','The Moon represents the subconscious, intuition, and uncertainty. It symbolizes our inner fears and hidden emotions, reminding us to trust our intuition.','Subconscious, intuition, fear, illusion, uncertainty, mystery, emotion','Clarity, overcoming fear, revealing truth, dispelling illusion, clear direction'],
+ja:['月','月は潜在意識、直感、不確実性を表す。内なる恐怖と隠れた感情を象徴し、直感を信じるよう促す。','潜在意識、直感、恐怖、幻想、不確実性、神秘、感情','明晰、恐怖克服、真実の露呈、幻想からの脱却、明確な方向性']},
+19:{zh:['太阳','太阳象征光明、快乐和成功。它代表着积极的能量、创造力、生命力，是一张充满希望和喜悦的牌。','快乐、成功、光明、活力、创造力、温暖、幸福','抑郁、失败、黑暗、缺乏活力、创造力受阻、不快乐'],
+en:['The Sun','The Sun symbolizes light, joy, and success. It represents positive energy, creativity, and vitality — a card brimming with hope and happiness.','Joy, success, light, vitality, creativity, warmth, happiness','Depression, failure, darkness, lack of vitality, creative block, unhappiness'],
+ja:['太陽','太陽は光、喜び、成功を象徴する。ポジティブなエネルギー、創造性、生命力を表し、希望と幸福感に満ちたカード。','喜び、成功、光、活力、創造性、温かさ、幸福','抑鬱、失敗、闇、活力不足、創造的停滞、不幸']},
+20:{zh:['审判','审判代表重生、觉醒和评估。它象征着对过去的反思和新的开始，提醒我们要对自己的行为负责。','重生、觉醒、评估、原谅、责任、新开始、召唤','拒绝改变、悔恨、指责、拖延、缺乏责任感、忽视召唤'],
+en:['Judgement','Judgement represents rebirth, awakening, and evaluation. It symbolizes reflecting on the past and embracing new beginnings, reminding us to take responsibility for our actions.','Rebirth, awakening, evaluation, forgiveness, responsibility, new beginning, calling','Refusing change, regret, blame, procrastination, lack of accountability, ignoring calling'],
+ja:['審判','審判は再生、覚醒、評価を表す。過去を振り返り新たな始まりを受け入れることを象徴し、自分の行動に責任を持つよう促す。','再生、覚醒、評価、許し、責任、新たな始まり、召命','変化拒否、後悔、非難、先延ばし、責任感欠如、召命の無視']},
+21:{zh:['世界','世界代表完成、圆满和成就。它象征着一个循环的结束和新的开始，标志着成功和满足。','完成、圆满、成就、成功、旅行、整合、实现','未完成、不圆满、失败、停滞、缺乏整合、未实现'],
+en:['The World','The World represents completion, fulfillment, and achievement. It symbolizes the end of a cycle and new beginnings, marking success and satisfaction.','Completion, fulfillment, achievement, success, travel, integration, realization','Incompletion, unfulfillment, failure, stagnation, lack of integration, unrealized'],
+ja:['世界','世界は完成、円満、達成を表す。一つのサイクルの終わりと新たな始まりを象徴し、成功と満足を示す。','完成、円満、達成、成功、旅、統合、実現','未完成、不円満、失敗、停滞、統合不足、未実現']},
+22:{zh:['权杖一','权杖一代表新的开始。它是创意/行动/热情领域的重要卡牌。','积极面——新的开始、创意/行动/热情','消极面——缺乏新的开始、受阻'],
+en:['Ace of Wands','Ace of Wands represents new beginning in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — new beginning, creativity/action/passion','Negative — blocked new beginning, stagnation'],
+ja:['ワンドのエース','ワンドのエースは創造性/行動/情熱の領域における新たな始まりを表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——新たな始まり、創造性/行動/情熱','ネガティブ——新たな始まりの不足、停滞']},
+23:{zh:['权杖二','权杖二代表计划与决策。它是创意/行动/热情领域的重要卡牌。','积极面——计划与决策、创意/行动/热情','消极面——缺乏计划、受阻'],
+en:['Two of Wands','Two of Wands represents planning & decisions in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — planning & decisions, creativity/action/passion','Negative — blocked planning, stagnation'],
+ja:['ワンドの2','ワンドの2は創造性/行動/情熱の領域における計画と決断を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——計画と決断、創造性/行動/情熱','ネガティブ——計画の不足、停滞']},
+24:{zh:['权杖三','权杖三代表扩展与远见。它是创意/行动/热情领域的重要卡牌。','积极面——扩展与远见、创意/行动/热情','消极面——缺乏扩展、受阻'],
+en:['Three of Wands','Three of Wands represents expansion & foresight in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — expansion & foresight, creativity/action/passion','Negative — blocked expansion, stagnation'],
+ja:['ワンドの3','ワンドの3は創造性/行動/情熱の領域における拡大と先見を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——拡大と先見、創造性/行動/情熱','ネガティブ——拡大の不足、停滞']},
+25:{zh:['权杖四','权杖四代表稳定与庆祝。它是创意/行动/热情领域的重要卡牌。','积极面——稳定与庆祝、创意/行动/热情','消极面——缺乏稳定、受阻'],
+en:['Four of Wands','Four of Wands represents stability & celebration in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — stability & celebration, creativity/action/passion','Negative — blocked stability, stagnation'],
+ja:['ワンドの4','ワンドの4は創造性/行動/情熱の領域における安定と祝福を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——安定と祝福、創造性/行動/情熱','ネガティブ——安定の不足、停滞']},
+26:{zh:['权杖五','权杖五代表冲突与挑战。它是创意/行动/热情领域的重要卡牌。','积极面——冲突与挑战、创意/行动/热情','消极面——缺乏冲突、受阻'],
+en:['Five of Wands','Five of Wands represents conflict & challenge in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — conflict & challenge, creativity/action/passion','Negative — blocked conflict, stagnation'],
+ja:['ワンドの5','ワンドの5は創造性/行動/情熱の領域における葛藤と挑戦を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——葛藤と挑戦、創造性/行動/情熱','ネガティブ——葛藤の不足、停滞']},
+27:{zh:['权杖六','权杖六代表胜利与认可。它是创意/行动/热情领域的重要卡牌。','积极面——胜利与认可、创意/行动/热情','消极面——缺乏胜利、受阻'],
+en:['Six of Wands','Six of Wands represents victory & recognition in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — victory & recognition, creativity/action/passion','Negative — blocked victory, stagnation'],
+ja:['ワンドの6','ワンドの6は創造性/行動/情熱の領域における勝利と承認を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——勝利と承認、創造性/行動/情熱','ネガティブ——勝利の不足、停滞']},
+28:{zh:['权杖七','权杖七象征坚持与防御。它是创意/行动/热情领域的重要卡牌。','积极面——坚持与防御、创意/行动/热情','消极面——缺乏坚持、受阻'],
+en:['Seven of Wands','Seven of Wands represents perseverance & defense in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — perseverance & defense, creativity/action/passion','Negative — blocked perseverance, stagnation'],
+ja:['ワンドの7','ワンドの7は創造性/行動/情熱の領域における忍耐と防衛を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——忍耐と防衛、創造性/行動/情熱','ネガティブ——忍耐の不足、停滞']},
+29:{zh:['权杖八','权杖八象征迅速行动。它是创意/行动/热情领域的重要卡牌。','积极面——迅速行动、创意/行动/热情','消极面——缺乏迅速行动、受阻'],
+en:['Eight of Wands','Eight of Wands represents swift action in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — swift action, creativity/action/passion','Negative — blocked swift action, stagnation'],
+ja:['ワンドの8','ワンドの8は創造性/行動/情熱の領域における迅速な行動を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——迅速な行動、創造性/行動/情熱','ネガティブ——迅速な行動の不足、停滞']},
+30:{zh:['权杖九','权杖九象征警惕与准备。它是创意/行动/热情领域的重要卡牌。','积极面——警惕与准备、创意/行动/热情','消极面——缺乏警惕、受阻'],
+en:['Nine of Wands','Nine of Wands represents vigilance & readiness in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — vigilance & readiness, creativity/action/passion','Negative — blocked vigilance, stagnation'],
+ja:['ワンドの9','ワンドの9は創造性/行動/情熱の領域における警戒と準備を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——警戒と準備、創造性/行動/情熱','ネガティブ——警戒の不足、停滞']},
+31:{zh:['权杖十','权杖十提醒我们负担与完成。它是创意/行动/热情领域的重要卡牌。','积极面——负担与完成、创意/行动/热情','消极面——缺乏负担、受阻'],
+en:['Ten of Wands','Ten of Wands represents burden & completion in the realm of creativity/action/passion. A significant card for understanding this suit\'s energy.','Positive — burden & completion, creativity/action/passion','Negative — blocked burden, stagnation'],
+ja:['ワンドの10','ワンドの10は創造性/行動/情熱の領域における重荷と完成を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——重荷と完成、創造性/行動/情熱','ネガティブ——重荷の不足、停滞']},
+32:{zh:['权杖侍从','权杖侍从代表新的开始与好奇。这张宫廷牌展现了创意/行动/热情的人格化表达。','积极——新的开始与好奇、创意/行动/热情','消极——缺乏新的开始、不成熟'],
+en:['Page of Wands','Page of Wands represents new beginnings & curiosity. This court card embodies the personal expression of creativity/action/passion.','Positive — new beginnings & curiosity, creativity/action/passion','Negative — immaturity, blocked creativity/action/passion'],
+ja:['ワンドのペイジ','ワンドのペイジは新たな始まりと好奇心を表す。このコートカードは創造性/行動/情熱の人格的表現を体現する。','ポジティブ——新たな始まりと好奇心、創造性/行動/情熱','ネガティブ——未熟さ、創造性/行動/情熱の停滞']},
+33:{zh:['权杖骑士','权杖骑士代表行动与追求。这张宫廷牌展现了创意/行动/热情的人格化表达。','积极——行动与追求、创意/行动/热情','消极——缺乏行动、不成熟'],
+en:['Knight of Wands','Knight of Wands represents action & pursuit. This court card embodies the personal expression of creativity/action/passion.','Positive — action & pursuit, creativity/action/passion','Negative — immaturity, blocked creativity/action/passion'],
+ja:['ワンドのナイト','ワンドのナイトは行動と追求を表す。このコートカードは創造性/行動/情熱の人格的表現を体現する。','ポジティブ——行動と追求、創造性/行動/情熱','ネガティブ——未熟さ、創造性/行動/情熱の停滞']},
+34:{zh:['权杖王后','权杖王后代表成熟与滋养。这张宫廷牌展现了创意/行动/热情的人格化表达。','积极——成熟与滋养、创意/行动/热情','消极——缺乏成熟、不成熟'],
+en:['Queen of Wands','Queen of Wands represents maturity & nurturing. This court card embodies the personal expression of creativity/action/passion.','Positive — maturity & nurturing, creativity/action/passion','Negative — immaturity, blocked creativity/action/passion'],
+ja:['ワンドのクイーン','ワンドのクイーンは成熟と養育を表す。このコートカードは創造性/行動/情熱の人格的表現を体現する。','ポジティブ——成熟と養育、創造性/行動/情熱','ネガティブ——未熟さ、創造性/行動/情熱の停滞']},
+35:{zh:['权杖国王','权杖国王代表权威与掌控。这张宫廷牌展现了创意/行动/热情的人格化表达。','积极——权威与掌控、创意/行动/热情','消极——缺乏权威、不成熟'],
+en:['King of Wands','King of Wands represents authority & mastery. This court card embodies the personal expression of creativity/action/passion.','Positive — authority & mastery, creativity/action/passion','Negative — immaturity, blocked creativity/action/passion'],
+ja:['ワンドのキング','ワンドのキングは権威と掌握を表す。このコートカードは創造性/行動/情熱の人格的表現を体現する。','ポジティブ——権威と掌握、創造性/行動/情熱','ネガティブ——未熟さ、創造性/行動/情熱の停滞']},
+36:{zh:['圣杯一','圣杯一代表新的开始。它是情感/爱/直觉领域的重要卡牌。','积极面——新的开始、情感/爱/直觉','消极面——缺乏新的开始、受阻'],
+en:['Ace of Cups','Ace of Cups represents new beginning in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — new beginning, emotions/love/intuition','Negative — blocked new beginning, stagnation'],
+ja:['カップのエース','カップのエースは感情/愛/直感の領域における新たな始まりを表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——新たな始まり、感情/愛/直感','ネガティブ——新たな始まりの不足、停滞']},
+37:{zh:['圣杯二','圣杯二代表计划与决策。它是情感/爱/直觉领域的重要卡牌。','积极面——计划与决策、情感/爱/直觉','消极面——缺乏计划、受阻'],
+en:['Two of Cups','Two of Cups represents planning & decisions in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — planning & decisions, emotions/love/intuition','Negative — blocked planning, stagnation'],
+ja:['カップの2','カップの2は感情/愛/直感の領域における計画と決断を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——計画と決断、感情/愛/直感','ネガティブ——計画の不足、停滞']},
+38:{zh:['圣杯三','圣杯三代表扩展与远见。它是情感/爱/直觉领域的重要卡牌。','积极面——扩展与远见、情感/爱/直觉','消极面——缺乏扩展、受阻'],
+en:['Three of Cups','Three of Cups represents expansion & foresight in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — expansion & foresight, emotions/love/intuition','Negative — blocked expansion, stagnation'],
+ja:['カップの3','カップの3は感情/愛/直感の領域における拡大と先見を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——拡大と先見、感情/愛/直感','ネガティブ——拡大の不足、停滞']},
+39:{zh:['圣杯四','圣杯四代表稳定与庆祝。它是情感/爱/直觉领域的重要卡牌。','积极面——稳定与庆祝、情感/爱/直觉','消极面——缺乏稳定、受阻'],
+en:['Four of Cups','Four of Cups represents stability & celebration in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — stability & celebration, emotions/love/intuition','Negative — blocked stability, stagnation'],
+ja:['カップの4','カップの4は感情/愛/直感の領域における安定と祝福を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——安定と祝福、感情/愛/直感','ネガティブ——安定の不足、停滞']},
+40:{zh:['圣杯五','圣杯五代表冲突与挑战。它是情感/爱/直觉领域的重要卡牌。','积极面——冲突与挑战、情感/爱/直觉','消极面——缺乏冲突、受阻'],
+en:['Five of Cups','Five of Cups represents conflict & challenge in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — conflict & challenge, emotions/love/intuition','Negative — blocked conflict, stagnation'],
+ja:['カップの5','カップの5は感情/愛/直感の領域における葛藤と挑戦を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——葛藤と挑戦、感情/愛/直感','ネガティブ——葛藤の不足、停滞']},
+41:{zh:['圣杯六','圣杯六代表胜利与认可。它是情感/爱/直觉领域的重要卡牌。','积极面——胜利与认可、情感/爱/直觉','消极面——缺乏胜利、受阻'],
+en:['Six of Cups','Six of Cups represents victory & recognition in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — victory & recognition, emotions/love/intuition','Negative — blocked victory, stagnation'],
+ja:['カップの6','カップの6は感情/愛/直感の領域における勝利と承認を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——勝利と承認、感情/愛/直感','ネガティブ——勝利の不足、停滞']},
+42:{zh:['圣杯七','圣杯七象征坚持与防御。它是情感/爱/直觉领域的重要卡牌。','积极面——坚持与防御、情感/爱/直觉','消极面——缺乏坚持、受阻'],
+en:['Seven of Cups','Seven of Cups represents perseverance & defense in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — perseverance & defense, emotions/love/intuition','Negative — blocked perseverance, stagnation'],
+ja:['カップの7','カップの7は感情/愛/直感の領域における忍耐と防衛を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——忍耐と防衛、感情/愛/直感','ネガティブ——忍耐の不足、停滞']},
+43:{zh:['圣杯八','圣杯八象征迅速行动。它是情感/爱/直觉领域的重要卡牌。','积极面——迅速行动、情感/爱/直觉','消极面——缺乏迅速行动、受阻'],
+en:['Eight of Cups','Eight of Cups represents swift action in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — swift action, emotions/love/intuition','Negative — blocked swift action, stagnation'],
+ja:['カップの8','カップの8は感情/愛/直感の領域における迅速な行動を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——迅速な行動、感情/愛/直感','ネガティブ——迅速な行動の不足、停滞']},
+44:{zh:['圣杯九','圣杯九象征警惕与准备。它是情感/爱/直觉领域的重要卡牌。','积极面——警惕与准备、情感/爱/直觉','消极面——缺乏警惕、受阻'],
+en:['Nine of Cups','Nine of Cups represents vigilance & readiness in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — vigilance & readiness, emotions/love/intuition','Negative — blocked vigilance, stagnation'],
+ja:['カップの9','カップの9は感情/愛/直感の領域における警戒と準備を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——警戒と準備、感情/愛/直感','ネガティブ——警戒の不足、停滞']},
+45:{zh:['圣杯十','圣杯十提醒我们负担与完成。它是情感/爱/直觉领域的重要卡牌。','积极面——负担与完成、情感/爱/直觉','消极面——缺乏负担、受阻'],
+en:['Ten of Cups','Ten of Cups represents burden & completion in the realm of emotions/love/intuition. A significant card for understanding this suit\'s energy.','Positive — burden & completion, emotions/love/intuition','Negative — blocked burden, stagnation'],
+ja:['カップの10','カップの10は感情/愛/直感の領域における重荷と完成を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——重荷と完成、感情/愛/直感','ネガティブ——重荷の不足、停滞']},
+46:{zh:['圣杯侍从','圣杯侍从代表新的开始与好奇。这张宫廷牌展现了情感/爱/直觉的人格化表达。','积极——新的开始与好奇、情感/爱/直觉','消极——缺乏新的开始、不成熟'],
+en:['Page of Cups','Page of Cups represents new beginnings & curiosity. This court card embodies the personal expression of emotions/love/intuition.','Positive — new beginnings & curiosity, emotions/love/intuition','Negative — immaturity, blocked emotions/love/intuition'],
+ja:['カップのペイジ','カップのペイジは新たな始まりと好奇心を表す。このコートカードは感情/愛/直感の人格的表現を体現する。','ポジティブ——新たな始まりと好奇心、感情/愛/直感','ネガティブ——未熟さ、感情/愛/直感の停滞']},
+47:{zh:['圣杯骑士','圣杯骑士代表行动与追求。这张宫廷牌展现了情感/爱/直觉的人格化表达。','积极——行动与追求、情感/爱/直觉','消极——缺乏行动、不成熟'],
+en:['Knight of Cups','Knight of Cups represents action & pursuit. This court card embodies the personal expression of emotions/love/intuition.','Positive — action & pursuit, emotions/love/intuition','Negative — immaturity, blocked emotions/love/intuition'],
+ja:['カップのナイト','カップのナイトは行動と追求を表す。このコートカードは感情/愛/直感の人格的表現を体現する。','ポジティブ——行動と追求、感情/愛/直感','ネガティブ——未熟さ、感情/愛/直感の停滞']},
+48:{zh:['圣杯王后','圣杯王后代表成熟与滋养。这张宫廷牌展现了情感/爱/直觉的人格化表达。','积极——成熟与滋养、情感/爱/直觉','消极——缺乏成熟、不成熟'],
+en:['Queen of Cups','Queen of Cups represents maturity & nurturing. This court card embodies the personal expression of emotions/love/intuition.','Positive — maturity & nurturing, emotions/love/intuition','Negative — immaturity, blocked emotions/love/intuition'],
+ja:['カップのクイーン','カップのクイーンは成熟と養育を表す。このコートカードは感情/愛/直感の人格的表現を体現する。','ポジティブ——成熟と養育、感情/愛/直感','ネガティブ——未熟さ、感情/愛/直感の停滞']},
+49:{zh:['圣杯国王','圣杯国王代表权威与掌控。这张宫廷牌展现了情感/爱/直觉的人格化表达。','积极——权威与掌控、情感/爱/直觉','消极——缺乏权威、不成熟'],
+en:['King of Cups','King of Cups represents authority & mastery. This court card embodies the personal expression of emotions/love/intuition.','Positive — authority & mastery, emotions/love/intuition','Negative — immaturity, blocked emotions/love/intuition'],
+ja:['カップのキング','カップのキングは権威と掌握を表す。このコートカードは感情/愛/直感の人格的表現を体現する。','ポジティブ——権威と掌握、感情/愛/直感','ネガティブ——未熟さ、感情/愛/直感の停滞']},
+50:{zh:['宝剑一','宝剑一代表新的开始。它是思想/理智/冲突领域的重要卡牌。','积极面——新的开始、思想/理智/冲突','消极面——缺乏新的开始、受阻'],
+en:['Ace of Swords','Ace of Swords represents new beginning in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — new beginning, intellect/reason/conflict','Negative — blocked new beginning, stagnation'],
+ja:['ソードのエース','ソードのエースは思考/理性/葛藤の領域における新たな始まりを表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——新たな始まり、思考/理性/葛藤','ネガティブ——新たな始まりの不足、停滞']},
+51:{zh:['宝剑二','宝剑二代表计划与决策。它是思想/理智/冲突领域的重要卡牌。','积极面——计划与决策、思想/理智/冲突','消极面——缺乏计划、受阻'],
+en:['Two of Swords','Two of Swords represents planning & decisions in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — planning & decisions, intellect/reason/conflict','Negative — blocked planning, stagnation'],
+ja:['ソードの2','ソードの2は思考/理性/葛藤の領域における計画と決断を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——計画と決断、思考/理性/葛藤','ネガティブ——計画の不足、停滞']},
+52:{zh:['宝剑三','宝剑三代表扩展与远见。它是思想/理智/冲突领域的重要卡牌。','积极面——扩展与远见、思想/理智/冲突','消极面——缺乏扩展、受阻'],
+en:['Three of Swords','Three of Swords represents expansion & foresight in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — expansion & foresight, intellect/reason/conflict','Negative — blocked expansion, stagnation'],
+ja:['ソードの3','ソードの3は思考/理性/葛藤の領域における拡大と先見を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——拡大と先見、思考/理性/葛藤','ネガティブ——拡大の不足、停滞']},
+53:{zh:['宝剑四','宝剑四代表稳定与庆祝。它是思想/理智/冲突领域的重要卡牌。','积极面——稳定与庆祝、思想/理智/冲突','消极面——缺乏稳定、受阻'],
+en:['Four of Swords','Four of Swords represents stability & celebration in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — stability & celebration, intellect/reason/conflict','Negative — blocked stability, stagnation'],
+ja:['ソードの4','ソードの4は思考/理性/葛藤の領域における安定と祝福を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——安定と祝福、思考/理性/葛藤','ネガティブ——安定の不足、停滞']},
+54:{zh:['宝剑五','宝剑五代表冲突与挑战。它是思想/理智/冲突领域的重要卡牌。','积极面——冲突与挑战、思想/理智/冲突','消极面——缺乏冲突、受阻'],
+en:['Five of Swords','Five of Swords represents conflict & challenge in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — conflict & challenge, intellect/reason/conflict','Negative — blocked conflict, stagnation'],
+ja:['ソードの5','ソードの5は思考/理性/葛藤の領域における葛藤と挑戦を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——葛藤と挑戦、思考/理性/葛藤','ネガティブ——葛藤の不足、停滞']},
+55:{zh:['宝剑六','宝剑六代表胜利与认可。它是思想/理智/冲突领域的重要卡牌。','积极面——胜利与认可、思想/理智/冲突','消极面——缺乏胜利、受阻'],
+en:['Six of Swords','Six of Swords represents victory & recognition in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — victory & recognition, intellect/reason/conflict','Negative — blocked victory, stagnation'],
+ja:['ソードの6','ソードの6は思考/理性/葛藤の領域における勝利と承認を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——勝利と承認、思考/理性/葛藤','ネガティブ——勝利の不足、停滞']},
+56:{zh:['宝剑七','宝剑七象征坚持与防御。它是思想/理智/冲突领域的重要卡牌。','积极面——坚持与防御、思想/理智/冲突','消极面——缺乏坚持、受阻'],
+en:['Seven of Swords','Seven of Swords represents perseverance & defense in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — perseverance & defense, intellect/reason/conflict','Negative — blocked perseverance, stagnation'],
+ja:['ソードの7','ソードの7は思考/理性/葛藤の領域における忍耐と防衛を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——忍耐と防衛、思考/理性/葛藤','ネガティブ——忍耐の不足、停滞']},
+57:{zh:['宝剑八','宝剑八象征迅速行动。它是思想/理智/冲突领域的重要卡牌。','积极面——迅速行动、思想/理智/冲突','消极面——缺乏迅速行动、受阻'],
+en:['Eight of Swords','Eight of Swords represents swift action in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — swift action, intellect/reason/conflict','Negative — blocked swift action, stagnation'],
+ja:['ソードの8','ソードの8は思考/理性/葛藤の領域における迅速な行動を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——迅速な行動、思考/理性/葛藤','ネガティブ——迅速な行動の不足、停滞']},
+58:{zh:['宝剑九','宝剑九象征警惕与准备。它是思想/理智/冲突领域的重要卡牌。','积极面——警惕与准备、思想/理智/冲突','消极面——缺乏警惕、受阻'],
+en:['Nine of Swords','Nine of Swords represents vigilance & readiness in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — vigilance & readiness, intellect/reason/conflict','Negative — blocked vigilance, stagnation'],
+ja:['ソードの9','ソードの9は思考/理性/葛藤の領域における警戒と準備を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——警戒と準備、思考/理性/葛藤','ネガティブ——警戒の不足、停滞']},
+59:{zh:['宝剑十','宝剑十提醒我们负担与完成。它是思想/理智/冲突领域的重要卡牌。','积极面——负担与完成、思想/理智/冲突','消极面——缺乏负担、受阻'],
+en:['Ten of Swords','Ten of Swords represents burden & completion in the realm of intellect/reason/conflict. A significant card for understanding this suit\'s energy.','Positive — burden & completion, intellect/reason/conflict','Negative — blocked burden, stagnation'],
+ja:['ソードの10','ソードの10は思考/理性/葛藤の領域における重荷と完成を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——重荷と完成、思考/理性/葛藤','ネガティブ——重荷の不足、停滞']},
+60:{zh:['宝剑侍从','宝剑侍从代表新的开始与好奇。这张宫廷牌展现了思想/理智/冲突的人格化表达。','积极——新的开始与好奇、思想/理智/冲突','消极——缺乏新的开始、不成熟'],
+en:['Page of Swords','Page of Swords represents new beginnings & curiosity. This court card embodies the personal expression of intellect/reason/conflict.','Positive — new beginnings & curiosity, intellect/reason/conflict','Negative — immaturity, blocked intellect/reason/conflict'],
+ja:['ソードのペイジ','ソードのペイジは新たな始まりと好奇心を表す。このコートカードは思考/理性/葛藤の人格的表現を体現する。','ポジティブ——新たな始まりと好奇心、思考/理性/葛藤','ネガティブ——未熟さ、思考/理性/葛藤の停滞']},
+61:{zh:['宝剑骑士','宝剑骑士代表行动与追求。这张宫廷牌展现了思想/理智/冲突的人格化表达。','积极——行动与追求、思想/理智/冲突','消极——缺乏行动、不成熟'],
+en:['Knight of Swords','Knight of Swords represents action & pursuit. This court card embodies the personal expression of intellect/reason/conflict.','Positive — action & pursuit, intellect/reason/conflict','Negative — immaturity, blocked intellect/reason/conflict'],
+ja:['ソードのナイト','ソードのナイトは行動と追求を表す。このコートカードは思考/理性/葛藤の人格的表現を体現する。','ポジティブ——行動と追求、思考/理性/葛藤','ネガティブ——未熟さ、思考/理性/葛藤の停滞']},
+62:{zh:['宝剑王后','宝剑王后代表成熟与滋养。这张宫廷牌展现了思想/理智/冲突的人格化表达。','积极——成熟与滋养、思想/理智/冲突','消极——缺乏成熟、不成熟'],
+en:['Queen of Swords','Queen of Swords represents maturity & nurturing. This court card embodies the personal expression of intellect/reason/conflict.','Positive — maturity & nurturing, intellect/reason/conflict','Negative — immaturity, blocked intellect/reason/conflict'],
+ja:['ソードのクイーン','ソードのクイーンは成熟と養育を表す。このコートカードは思考/理性/葛藤の人格的表現を体現する。','ポジティブ——成熟と養育、思考/理性/葛藤','ネガティブ——未熟さ、思考/理性/葛藤の停滞']},
+63:{zh:['宝剑国王','宝剑国王代表权威与掌控。这张宫廷牌展现了思想/理智/冲突的人格化表达。','积极——权威与掌控、思想/理智/冲突','消极——缺乏权威、不成熟'],
+en:['King of Swords','King of Swords represents authority & mastery. This court card embodies the personal expression of intellect/reason/conflict.','Positive — authority & mastery, intellect/reason/conflict','Negative — immaturity, blocked intellect/reason/conflict'],
+ja:['ソードのキング','ソードのキングは権威と掌握を表す。このコートカードは思考/理性/葛藤の人格的表現を体現する。','ポジティブ——権威と掌握、思考/理性/葛藤','ネガティブ——未熟さ、思考/理性/葛藤の停滞']},
+64:{zh:['星币一','星币一代表新的开始。它是物质/财富/务实领域的重要卡牌。','积极面——新的开始、物质/财富/务实','消极面——缺乏新的开始、受阻'],
+en:['Ace of Pentacles','Ace of Pentacles represents new beginning in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — new beginning, material/wealth/practicality','Negative — blocked new beginning, stagnation'],
+ja:['ペンタクルのエース','ペンタクルのエースは物質/富/実用性の領域における新たな始まりを表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——新たな始まり、物質/富/実用性','ネガティブ——新たな始まりの不足、停滞']},
+65:{zh:['星币二','星币二代表计划与决策。它是物质/财富/务实领域的重要卡牌。','积极面——计划与决策、物质/财富/务实','消极面——缺乏计划、受阻'],
+en:['Two of Pentacles','Two of Pentacles represents planning & decisions in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — planning & decisions, material/wealth/practicality','Negative — blocked planning, stagnation'],
+ja:['ペンタクルの2','ペンタクルの2は物質/富/実用性の領域における計画と決断を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——計画と決断、物質/富/実用性','ネガティブ——計画の不足、停滞']},
+66:{zh:['星币三','星币三代表扩展与远见。它是物质/财富/务实领域的重要卡牌。','积极面——扩展与远见、物质/财富/务实','消极面——缺乏扩展、受阻'],
+en:['Three of Pentacles','Three of Pentacles represents expansion & foresight in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — expansion & foresight, material/wealth/practicality','Negative — blocked expansion, stagnation'],
+ja:['ペンタクルの3','ペンタクルの3は物質/富/実用性の領域における拡大と先見を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——拡大と先見、物質/富/実用性','ネガティブ——拡大の不足、停滞']},
+67:{zh:['星币四','星币四代表稳定与庆祝。它是物质/财富/务实领域的重要卡牌。','积极面——稳定与庆祝、物质/财富/务实','消极面——缺乏稳定、受阻'],
+en:['Four of Pentacles','Four of Pentacles represents stability & celebration in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — stability & celebration, material/wealth/practicality','Negative — blocked stability, stagnation'],
+ja:['ペンタクルの4','ペンタクルの4は物質/富/実用性の領域における安定と祝福を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——安定と祝福、物質/富/実用性','ネガティブ——安定の不足、停滞']},
+68:{zh:['星币五','星币五代表冲突与挑战。它是物质/财富/务实领域的重要卡牌。','积极面——冲突与挑战、物质/财富/务实','消极面——缺乏冲突、受阻'],
+en:['Five of Pentacles','Five of Pentacles represents conflict & challenge in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — conflict & challenge, material/wealth/practicality','Negative — blocked conflict, stagnation'],
+ja:['ペンタクルの5','ペンタクルの5は物質/富/実用性の領域における葛藤と挑戦を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——葛藤と挑戦、物質/富/実用性','ネガティブ——葛藤の不足、停滞']},
+69:{zh:['星币六','星币六代表胜利与认可。它是物质/财富/务实领域的重要卡牌。','积极面——胜利与认可、物质/财富/务实','消极面——缺乏胜利、受阻'],
+en:['Six of Pentacles','Six of Pentacles represents victory & recognition in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — victory & recognition, material/wealth/practicality','Negative — blocked victory, stagnation'],
+ja:['ペンタクルの6','ペンタクルの6は物質/富/実用性の領域における勝利と承認を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——勝利と承認、物質/富/実用性','ネガティブ——勝利の不足、停滞']},
+70:{zh:['星币七','星币七象征坚持与防御。它是物质/财富/务实领域的重要卡牌。','积极面——坚持与防御、物质/财富/务实','消极面——缺乏坚持、受阻'],
+en:['Seven of Pentacles','Seven of Pentacles represents perseverance & defense in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — perseverance & defense, material/wealth/practicality','Negative — blocked perseverance, stagnation'],
+ja:['ペンタクルの7','ペンタクルの7は物質/富/実用性の領域における忍耐と防衛を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——忍耐と防衛、物質/富/実用性','ネガティブ——忍耐の不足、停滞']},
+71:{zh:['星币八','星币八象征迅速行动。它是物质/财富/务实领域的重要卡牌。','积极面——迅速行动、物质/财富/务实','消极面——缺乏迅速行动、受阻'],
+en:['Eight of Pentacles','Eight of Pentacles represents swift action in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — swift action, material/wealth/practicality','Negative — blocked swift action, stagnation'],
+ja:['ペンタクルの8','ペンタクルの8は物質/富/実用性の領域における迅速な行動を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——迅速な行動、物質/富/実用性','ネガティブ——迅速な行動の不足、停滞']},
+72:{zh:['星币九','星币九象征警惕与准备。它是物质/财富/务实领域的重要卡牌。','积极面——警惕与准备、物质/财富/务实','消极面——缺乏警惕、受阻'],
+en:['Nine of Pentacles','Nine of Pentacles represents vigilance & readiness in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — vigilance & readiness, material/wealth/practicality','Negative — blocked vigilance, stagnation'],
+ja:['ペンタクルの9','ペンタクルの9は物質/富/実用性の領域における警戒と準備を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——警戒と準備、物質/富/実用性','ネガティブ——警戒の不足、停滞']},
+73:{zh:['星币十','星币十提醒我们负担与完成。它是物质/财富/务实领域的重要卡牌。','积极面——负担与完成、物质/财富/务实','消极面——缺乏负担、受阻'],
+en:['Ten of Pentacles','Ten of Pentacles represents burden & completion in the realm of material/wealth/practicality. A significant card for understanding this suit\'s energy.','Positive — burden & completion, material/wealth/practicality','Negative — blocked burden, stagnation'],
+ja:['ペンタクルの10','ペンタクルの10は物質/富/実用性の領域における重荷と完成を表す。このスートのエネルギーを理解するための重要なカード。','ポジティブ——重荷と完成、物質/富/実用性','ネガティブ——重荷の不足、停滞']},
+74:{zh:['星币侍从','星币侍从代表新的开始与好奇。这张宫廷牌展现了物质/财富/务实的人格化表达。','积极——新的开始与好奇、物质/财富/务实','消极——缺乏新的开始、不成熟'],
+en:['Page of Pentacles','Page of Pentacles represents new beginnings & curiosity. This court card embodies the personal expression of material/wealth/practicality.','Positive — new beginnings & curiosity, material/wealth/practicality','Negative — immaturity, blocked material/wealth/practicality'],
+ja:['ペンタクルのペイジ','ペンタクルのペイジは新たな始まりと好奇心を表す。このコートカードは物質/富/実用性の人格的表現を体現する。','ポジティブ——新たな始まりと好奇心、物質/富/実用性','ネガティブ——未熟さ、物質/富/実用性の停滞']},
+75:{zh:['星币骑士','星币骑士代表行动与追求。这张宫廷牌展现了物质/财富/务实的人格化表达。','积极——行动与追求、物质/财富/务实','消极——缺乏行动、不成熟'],
+en:['Knight of Pentacles','Knight of Pentacles represents action & pursuit. This court card embodies the personal expression of material/wealth/practicality.','Positive — action & pursuit, material/wealth/practicality','Negative — immaturity, blocked material/wealth/practicality'],
+ja:['ペンタクルのナイト','ペンタクルのナイトは行動と追求を表す。このコートカードは物質/富/実用性の人格的表現を体現する。','ポジティブ——行動と追求、物質/富/実用性','ネガティブ——未熟さ、物質/富/実用性の停滞']},
+76:{zh:['星币王后','星币王后代表成熟与滋养。这张宫廷牌展现了物质/财富/务实的人格化表达。','积极——成熟与滋养、物质/财富/务实','消极——缺乏成熟、不成熟'],
+en:['Queen of Pentacles','Queen of Pentacles represents maturity & nurturing. This court card embodies the personal expression of material/wealth/practicality.','Positive — maturity & nurturing, material/wealth/practicality','Negative — immaturity, blocked material/wealth/practicality'],
+ja:['ペンタクルのクイーン','ペンタクルのクイーンは成熟と養育を表す。このコートカードは物質/富/実用性の人格的表現を体現する。','ポジティブ——成熟と養育、物質/富/実用性','ネガティブ——未熟さ、物質/富/実用性の停滞']},
+77:{zh:['星币国王','星币国王代表权威与掌控。这张宫廷牌展现了物质/财富/务实的人格化表达。','积极——权威与掌控、物质/财富/务实','消极——缺乏权威、不成熟'],
+en:['King of Pentacles','King of Pentacles represents authority & mastery. This court card embodies the personal expression of material/wealth/practicality.','Positive — authority & mastery, material/wealth/practicality','Negative — immaturity, blocked material/wealth/practicality'],
+ja:['ペンタクルのキング','ペンタクルのキングは権威と掌握を表す。このコートカードは物質/富/実用性の人格的表現を体現する。','ポジティブ——権威と掌握、物質/富/実用性','ネガティブ——未熟さ、物質/富/実用性の停滞']},
+},
+ui:{
+zh:{
+'title':'塔罗牌抽取程序 & AI 解读助手',
+'pageTitle':'塔罗牌抽取程序 & AI 解读助手',
+'step1':'选择牌组',
+'step2':'抽牌设置',
+'step3':'结果与解读',
+'step1Title':'选择要抽取的牌组区域',
+    'step2Title':'设置抽牌选项',
+'majorName':'大阿卡纳',
+'majorDesc':'22张主要塔罗牌，代表人生重大课题',
+'minorName':'小阿卡纳',
+'minorDesc':'56张次要塔罗牌，代表日常生活细节',
+'allName':'全部牌组',
+'allDesc':'78张塔罗牌，全面的解读与指引',
+'confirmDeck':'确认选择',
+'aiToggleOff':'开启 AI 占卜助手',
+'aiToggleOn':'关闭 AI 占卜助手',
+'aiStepTitle':'第一步：生成 AI 占卜指令',
+'aiQuestionLabel':'你心中的困惑/问题：',
+'aiQuestionPlaceholder':'例如：我这段感情未来的发展如何？',
+'aiGenerateBtn':'生成指令 (复制给AI)',
+'aiPromptPlaceholder':'点击生成按钮，获取发送给AI的指令...',
+'aiCopyBtn':'复制',
+'aiTipText':'重要：请将指令复制给 AI。AI 回复后，请根据它推荐的<b>张数</b>，在下方调整抽牌数量。',
+'quantityTitle':'设置抽牌数量',
+'quantityTitleAi':'第二步：设置抽牌数量',
+'rangeText':'当前牌组可抽取',
+'rangeUnit':'张牌',
+'manualLabel':'或手动输入：',
+'manualPlaceholder':'数量',
+'manualConfirm':'确认',
+'invalidCount':'请输入有效的数量',
+'backBtn':'返回',
+'drawBtn':'抽取塔罗牌',
+'resultTitle':'塔罗牌抽取结果',
+'copySuccess':'已复制到剪贴板',
+'backToSelect':'重新选择',
+'copyResults':'复制结果',
+'copyResultsAi':'复制结果给 AI',
+'restartBtn':'刷新',
+'catalogTitle':'塔罗牌组信息',
+'majorCatalog':'大阿卡纳 (22张)',
+'minorCatalog':'小阿卡纳 (56张)',
+'suitWands':'权杖',
+'suitCups':'圣杯',
+'suitSwords':'宝剑',
+'suitPentacles':'星币',
+'footer1':'塔罗牌抽取程序 &copy; 2025 | 仅供娱乐',
+'footer2':'塔罗牌是一种古老的占卜工具',
+'helpTitle':'使用帮助',
+'helpStep1Title':'步骤1：选择牌组',
+'helpStep1Text':'选择您想要抽取的塔罗牌组区域：大阿卡纳、小阿卡纳或全部牌组。',
+'helpStep2Title':'步骤2：抽牌设置',
+'helpStep2Text1':'1. 您可以直接设置抽牌数量。',
+'helpStep2Text2':'2. <strong>（可选）开启 AI 占卜助手</strong>：生成专业指令发给 AI，获取牌阵和张数建议，再调整下方数量。',
+'helpStep3Title':'步骤3：抽取与解读',
+'helpStep3Text':'抽取塔罗牌。如果开启了 AI 助手，请复制结果给 AI 进行专业解读。',
+'helpCardDetailTitle':'查看牌详情',
+'helpCardDetailText':'在牌组信息区域点击任意牌名，可以查看该牌的详细解释。',
+'helpCloseBtn':'我知道了',
+'cardDetailTitle':'塔罗牌详情',
+'cardDetailTitleSuffix':' 详情',
+'cardNameLabel':'牌名',
+'cardGroupLabel':'牌组',
+'cardDescLabel':'牌意',
+'cardUprightLabel':'正位含义',
+'cardReversedLabel':'逆位含义',
+'cardCloseBtn':'关闭',
+'groupMajor':'大阿卡纳',
+'groupWands':'小阿卡纳 - 权杖',
+'groupCups':'小阿卡纳 - 圣杯',
+'groupSwords':'小阿卡纳 - 宝剑',
+'groupPentacles':'小阿卡纳 - 星币',
+'groupUnknown':'未知',
+'noInfo':'暂无信息',
+'positionUpright':'正位',
+'positionReversed':'逆位',
+'welcomeTitle':'欢迎使用',
+'welcomeSubtitle':'塔罗牌抽取程序',
+'welcomeMusicTip':'点击头像播放/暂停背景音乐',
+'welcomeAuthor':'作者：嘟嘟可教主',
+'welcomeBilibili':'B站主页',
+'welcomeThanks':'感谢使用塔罗牌抽取程序',
+'welcomeAiNote':'该网页使用ai进行开发',
+'welcomeStartBtn':'开始使用',
+'preloadText':'正在预加载塔罗牌图片...',
+'preloadDone':'图片预加载完成！',
+'preloadFail':'预加载完成（{n}张图片加载失败）',
+'langZh':'中',
+'langEn':'EN',
+'langJa':'日',
+'aiReadyTip':'AI 助手已就绪：卡片全部展示后，点击下方"复制结果给 AI"。',
+'aiPromptCopied':'指令已复制！请发送给AI，然后根据AI建议的<b>张数</b>调整下方设置。',
+'resultCopied':'结果已复制到剪贴板。',
+'resultCopiedAi':'牌面已复制！请粘贴给 AI。',
+'cardIndex':'牌位编号',
+'copyFail':'复制失败，请手动复制。',
+'loadFail':'加载失败',
+'aiPromptError':'请输入您心中的困惑，以便生成精准指令。',
+'aiPromptTemplate':'你现在是一位集神秘学造理与深度心理洞察力于一身的**首席塔罗大祭司**。你深谙伟特与透特体系，擅长将牌面符号、四大元素、占星相位与心理原型相结合。\n\n**【第一阶段：能量诊断与牌阵推演】**\n针对用户当前咨询的问题："""{question}"""，你必须执行以下逻辑流程：\n\n1. **核心动能解析**：以富有同理心且犀利的口吻，从潜意识层面分析该问题的**核心矛盾**（如：意志受阻、情感匮乏或认知失衡）。\n2. **专业牌阵推荐**：根据问题性质，精准推荐 **2-3个** 高阶牌阵（如：圣三角、因果链条阵、阴影工作阵等）。\n3. **技术参数明晰**：对于每个推荐牌阵，必须清晰列出：\n   * 该牌阵所需抽取的**【牌张总数】**。\n   * 每一张牌所锚定的**【具体位置意义】**（请使用加粗列表，确保逻辑层级分明）。\n4. **仪式化引导**：请引导用户在静心冥想后，将抽到的**牌名（含正逆位）**反馈给你，并告知用户你已准备好开启深层连接。\n\n---\n\n**【第二阶段：全维深度解读】**\n在收到用户提供的牌面数据后，你将执行以下多维度的专业转译：\n\n1. **宏观格局扫描（Macro-Analysis）**：\n   * **元素尊贵（Elemental Dignities）**：分析火/水/风/土元素的分布与互动，判断行动力与情感的平衡点。\n   * **大/小阿尔卡纳比例**：解读此事受"集体潜意识/命运"影响大，还是受"个人选择/日常生活"影响大。\n2. **微观图解与辩证（Micro-Analysis）**：\n   * 结合牌位定义，深度挖掘牌面关键符号（如：高塔的雷电、星星的泉水）在当前语境下的特指含义。\n   * 引入**占星与数字能量**（如：土星的限制性、数字3的扩张性）阐述问题的隐秘逻辑。\n3. **炼金术式指引（Alchemical Guidance）**：\n   * 拒绝模棱两可的预言，提供极具建设性的**能量转化建议**与**现实行动方案**。\n   * 给出一段极具启发性的总结，帮助用户在现实层面破局。\n\n请以专业、睿智、充满神秘感且富有同理心的口吻开启第一阶段。',
+},
+en:{
+'title':'Tarot Card Drawer & AI Reading Assistant',
+'pageTitle':'Tarot Card Drawer & AI Reading Assistant',
+'step1':'Select Deck',
+'step2':'Draw Options',
+'step3':'Results & Reading',
+'step1Title':'Select a Deck Region',
+    'step2Title':'Set Draw Options',
+'majorName':'Major Arcana',
+'majorDesc':'22 major cards representing life\'s significant themes',
+'minorName':'Minor Arcana',
+'minorDesc':'56 minor cards representing daily life details',
+'allName':'All Cards',
+'allDesc':'All 78 Tarot cards for comprehensive reading & guidance',
+'confirmDeck':'Confirm Selection',
+'aiToggleOff':'Activate AI Assistant',
+'aiToggleOn':'Deactivate AI Assistant',
+'aiStepTitle':'Step 1: Generate AI Divination Prompt',
+'aiQuestionLabel':'Your question / concern:',
+'aiQuestionPlaceholder':'e.g.: How will my relationship develop?',
+'aiGenerateBtn':'Generate Prompt (Copy to AI)',
+'aiPromptPlaceholder':'Click the button to generate an AI prompt...',
+'aiCopyBtn':'Copy',
+'aiTipText':'<b>Important:</b> Copy the prompt to an AI. After receiving the AI\'s reply, adjust the number of cards below based on its <b>recommended card count</b>.',
+'quantityTitle':'Set Number of Cards',
+'quantityTitleAi':'Step 2: Set Number of Cards',
+'rangeText':'Current deck allows',
+'rangeUnit':'cards',
+'manualLabel':'Or enter manually:',
+'manualPlaceholder':'Count',
+'manualConfirm':'OK',
+'invalidCount':'Please enter a valid number',
+'backBtn':'Back',
+'drawBtn':'Draw Tarot Cards',
+'resultTitle':'Tarot Draw Results',
+'copySuccess':'Copied to clipboard',
+'backToSelect':'Reselect',
+'copyResults':'Copy Results',
+'copyResultsAi':'Copy Results to AI',
+'restartBtn':'Refresh',
+'catalogTitle':'Tarot Deck Information',
+'majorCatalog':'Major Arcana (22 cards)',
+'minorCatalog':'Minor Arcana (56 cards)',
+'suitWands':'Wands',
+'suitCups':'Cups',
+'suitSwords':'Swords',
+'suitPentacles':'Pentacles',
+'footer1':'Tarot Card Drawer &copy; 2025 | For entertainment purposes only',
+'footer2':'Tarot is an ancient divination tool',
+'helpTitle':'Help',
+'helpStep1Title':'Step 1: Select Deck',
+'helpStep1Text':'Choose the Tarot deck region you wish to draw from: Major Arcana, Minor Arcana, or All Cards.',
+'helpStep2Title':'Step 2: Draw Options',
+'helpStep2Text1':'1. You can set the number of cards directly.',
+'helpStep2Text2':'2. <strong>(Optional) Activate AI Assistant</strong>: Generate a professional prompt for AI, get spread and card count suggestions, then adjust the count below.',
+'helpStep3Title':'Step 3: Draw & Reading',
+'helpStep3Text':'Draw the Tarot cards. If AI Assistant is active, copy the results to an AI for professional interpretation.',
+'helpCardDetailTitle':'View Card Details',
+'helpCardDetailText':'Click any card name in the Deck Information section to view its detailed explanation.',
+'helpCloseBtn':'Got it',
+'cardDetailTitle':'Card Details',
+'cardDetailTitleSuffix':' Details',
+'cardNameLabel':'Card Name',
+'cardGroupLabel':'Deck',
+'cardDescLabel':'Description',
+'cardUprightLabel':'Upright Meaning',
+'cardReversedLabel':'Reversed Meaning',
+'cardCloseBtn':'Close',
+'groupMajor':'Major Arcana',
+'groupWands':'Minor Arcana - Wands',
+'groupCups':'Minor Arcana - Cups',
+'groupSwords':'Minor Arcana - Swords',
+'groupPentacles':'Minor Arcana - Pentacles',
+'groupUnknown':'Unknown',
+'noInfo':'No information available',
+'positionUpright':'Upright',
+'positionReversed':'Reversed',
+'welcomeTitle':'Welcome',
+'welcomeSubtitle':'Tarot Card Drawer',
+'welcomeMusicTip':'Click avatar to play/pause background music',
+'welcomeAuthor':'Author: 嘟嘟可教主',
+'welcomeBilibili':'Bilibili',
+'welcomeThanks':'Thank you for using the Tarot Card Drawer',
+'welcomeAiNote':'This webpage was developed using AI',
+'welcomeStartBtn':'Get Started',
+'preloadText':'Preloading Tarot card images...',
+'preloadDone':'Image preloading complete!',
+'preloadFail':'Preloading complete ({n} images failed to load)',
+'langZh':'中',
+'langEn':'EN',
+'langJa':'日',
+'aiReadyTip':'AI Assistant ready: After all cards are displayed, click "Copy Results to AI" below.',
+'aiPromptCopied':'Prompt copied! Send it to an AI, then adjust the <b>card count</b> below based on the AI\'s suggestion.',
+'resultCopied':'Results copied to clipboard.',
+'resultCopiedAi':'Card data copied! Paste it to the AI.',
+'cardIndex':'Position',
+'copyFail':'Copy failed, please copy manually.',
+'loadFail':'Load failed',
+'aiPromptError':'Please enter your question to generate a precise prompt.',
+'aiPromptTemplate':'You are now a **Chief High Priest of Tarot**, weaving together esoteric mastery and deep psychological insight. You are fluent in both the Rider-Waite and Thoth systems, skilled at weaving together card symbolism, the four elements, astrological aspects, and Jungian archetypes.\n\n**[Phase One: Energy Diagnosis & Spread Deduction]**\nFor the user\'s current question: """{question}""", you must follow this logical sequence:\n\n1. **Core Kinetic Analysis**: With empathy yet incisiveness, dissect the **core contradiction** of the question from the subconscious level (e.g., blocked will, emotional deprivation, or cognitive imbalance).\n2. **Professional Spread Recommendation**: Based on the nature of the question, precisely recommend **2-3 advanced spreads** (e.g., the Three-Card Spread, the Causal Chain Spread, the Shadow Work Spread, etc.).\n3. **Technical Parameters**: For each recommended spread, clearly list:\n   * The **【total number of cards】** the spread requires.\n   * The **【specific positional meaning】** anchored to each card (use a bolded list with clear logical hierarchy).\n4. **Ritual Guidance**: Guide the user to meditate in stillness, then feed back the **drawn card names (including upright/reversed orientation)** to you, and inform them that you are ready to open a deep connection.\n\n---\n\n**[Phase Two: Multidimensional Deep Interpretation]**\nOnce you receive the user\'s card data, you will perform the following multidimensional professional translation:\n\n1. **Macro-Analysis**:\n   * **Elemental Dignities**: Analyze the distribution and interaction of Fire/Water/Air/Earth elements, judging the balance between action and emotion.\n   * **Major/Minor Arcana Ratio**: Interpret whether the matter is driven more by "collective unconscious / destiny" or by "personal choice / daily life".\n2. **Micro-Analysis & Dialectics**:\n   * In light of each positional definition, deeply excavate the context-specific meaning of key card symbols (e.g., the lightning of The Tower, the waters of The Star).\n   * Bring in **astrological and numerological energies** (e.g., the restrictiveness of Saturn, the expansive quality of the number 3) to illuminate the hidden logic of the question.\n3. **Alchemical Guidance**:\n   * Refuse ambiguous prophecies; deliver highly constructive **energy-transformation suggestions** and **real-world action plans**.\n   * Conclude with an insight-rich summary that helps the user break through on the practical plane.\n\nPlease open Phase One with a professional, sagely, mystically charged, and empathetic tone.',
+},
+ja:{
+'title':'タロットカード抽選 & AIリーディング',
+'pageTitle':'タロットカード抽選 & AIリーディング',
+'step1':'デッキ選択',
+'step2':'抽選設定',
+'step3':'結果と解釈',
+'step1Title':'抽選するデッキを選択',
+    'step2Title':'抽選オプションを設定',
+'majorName':'大アルカナ',
+'majorDesc':'人生の重要なテーマを表す22枚の主要カード',
+'minorName':'小アルカナ',
+'minorDesc':'日常生活の細部を表す56枚のカード',
+'allName':'全カード',
+'allDesc':'全78枚のタロットカード、総合的なリーディング',
+'confirmDeck':'選択を確認',
+'aiToggleOff':'AIアシスタントを有効化',
+'aiToggleOn':'AIアシスタントを無効化',
+'aiStepTitle':'ステップ1：AI占いプロンプトを生成',
+'aiQuestionLabel':'あなたの悩み・質問：',
+'aiQuestionPlaceholder':'例：私の恋愛はこれからどうなる？',
+'aiGenerateBtn':'プロンプトを生成（AIにコピー）',
+'aiPromptPlaceholder':'ボタンをクリックしてAI用プロンプトを生成...',
+'aiCopyBtn':'コピー',
+'aiTipText':'<b>重要：</b>プロンプトをAIにコピーしてください。AIの返信後、推奨された<b>カード枚数</b>に基づいて下の抽選枚数を調整してください。',
+'quantityTitle':'抽選枚数を設定',
+'quantityTitleAi':'ステップ2：抽選枚数を設定',
+'rangeText':'現在のデッキから抽選可能',
+'rangeUnit':'枚',
+'manualLabel':'または手動入力：',
+'manualPlaceholder':'枚数',
+'manualConfirm':'確認',
+'invalidCount':'有効な数を入力してください',
+'backBtn':'戻る',
+'drawBtn':'タロットを引く',
+'resultTitle':'タロット抽選結果',
+'copySuccess':'クリップボードにコピーしました',
+'backToSelect':'再選択',
+'copyResults':'結果をコピー',
+'copyResultsAi':'結果をAIにコピー',
+'restartBtn':'リフレッシュ',
+'catalogTitle':'タロットデッキ情報',
+'majorCatalog':'大アルカナ（22枚）',
+'minorCatalog':'小アルカナ（56枚）',
+'suitWands':'ワンド',
+'suitCups':'カップ',
+'suitSwords':'ソード',
+'suitPentacles':'ペンタクル',
+'footer1':'タロットカード抽選 &copy; 2025 | 娯楽目的のみ',
+'footer2':'タロットは古代の占いツールです',
+'helpTitle':'ヘルプ',
+'helpStep1Title':'ステップ1：デッキ選択',
+'helpStep1Text':'大アルカナ、小アルカナ、または全カードから抽選するデッキを選びます。',
+'helpStep2Title':'ステップ2：抽選設定',
+'helpStep2Text1':'1. 抽選枚数を直接設定できます。',
+'helpStep2Text2':'2. <strong>（オプション）AIアシスタントを有効化</strong>：AI用の専門プロンプトを生成し、スプレッドと枚数の提案を得てから枚数を調整します。',
+'helpStep3Title':'ステップ3：抽選と解釈',
+'helpStep3Text':'タロットカードを引きます。AIアシスタントが有効な場合、結果をAIにコピーして専門的な解釈を得られます。',
+'helpCardDetailTitle':'カード詳細を見る',
+'helpCardDetailText':'デッキ情報セクションで任意のカード名をクリックすると、詳細な説明が表示されます。',
+'helpCloseBtn':'了解',
+'cardDetailTitle':'カード詳細',
+'cardDetailTitleSuffix':' 詳細',
+'cardNameLabel':'カード名',
+'cardGroupLabel':'デッキ',
+'cardDescLabel':'カードの意味',
+'cardUprightLabel':'正位置の意味',
+'cardReversedLabel':'逆位置の意味',
+'cardCloseBtn':'閉じる',
+'groupMajor':'大アルカナ',
+'groupWands':'小アルカナ - ワンド',
+'groupCups':'小アルカナ - カップ',
+'groupSwords':'小アルカナ - ソード',
+'groupPentacles':'小アルカナ - ペンタクル',
+'groupUnknown':'不明',
+'noInfo':'情報なし',
+'positionUpright':'正位置',
+'positionReversed':'逆位置',
+'welcomeTitle':'ようこそ',
+'welcomeSubtitle':'タロットカード抽選',
+'welcomeMusicTip':'アバターをクリックでBGM再生/停止',
+'welcomeAuthor':'作者：嘟嘟可教主',
+'welcomeBilibili':'Bilibili',
+'welcomeThanks':'タロットカード抽選をご利用いただきありがとうございます',
+'welcomeAiNote':'このウェブページはAIで開発されました',
+'welcomeStartBtn':'始める',
+'preloadText':'タロットカード画像をプリロード中...',
+'preloadDone':'画像のプリロード完了！',
+'preloadFail':'プリロード完了（{n}枚の画像読み込み失敗）',
+'langZh':'中',
+'langEn':'EN',
+'langJa':'日',
+'aiReadyTip':'AIアシスタント準備完了：カードが全て表示されたら、下の「結果をAIにコピー」をクリックしてください。',
+'aiPromptCopied':'プロンプトをコピーしました！AIに送信し、AIの<b>推奨枚数</b>に基づいて下の設定を調整してください。',
+'resultCopied':'結果をクリップボードにコピーしました。',
+'resultCopiedAi':'カードデータをコピーしました！AIに貼り付けてください。',
+'cardIndex':'ポジション',
+'copyFail':'コピーに失敗しました。手動でコピーしてください。',
+'loadFail':'読み込み失敗',
+'aiPromptError':'正確なプロンプトを生成するために質問を入力してください。',
+'aiPromptTemplate':'あなたは今、神秘学の奥義と深層心理の洞察を一身に集めた**首席タロット大司祭**です。ウェイト版とトート版の両体系に精通し、カードの象徴、四大元素、占星術のアスペクト、ユング的元型を交織させることを得意とします。\n\n**【第一段階：エネルギー診断とスプレッド推演】**\nユーザーからの相談内容："""{question}"""について、以下の論理プロセスを実行しなければなりません。\n\n1. **核心動能の解析**：共感を持ちながらも鋭利な口調で、潜在意識の次元からその問題の**核心の矛盾**を分析します（例：意志の阻害、感情の枯渇、認知の失衡など）。\n2. **プロのスプレッド推奨**：問題の性質に基づき、**2〜3つの**高度なスプレッドを的確に推奨します（例：スリーカード・スプレッド、因果の鎖スプレッド、シャドウワーク・スプレッドなど）。\n3. **技術パラメータの明示**：推奨する各スプレッドについて、以下を明確に列挙します：\n   * そのスプレッドが必要とする**【カード総枚数】**。\n   * 各カードが錨付けする**【具体的な位置の意味】**（太字リストを使用し、論理階層を明確に）。\n4. **儀式的な誘導**：ユーザーに静寂の中で瞑想した後、引いた**カード名（正位・逆位を含む）**をあなたに返信するよう誘導し、深層コネクションを開く準備が整っていることを伝えます。\n\n---\n\n**【第二段階：多面的な深層リーディング】**\nユーザーから提供されたカード情報を受け取った後、以下の多面的かつプロフェッショナルな解釈を実行します：\n\n1. **マクロ分析（Macro-Analysis）**：\n   * **エレメンタル・ディグニティ（元素の品位）**：火・水・風・土の元素の分布と相互作用を分析し、行動力と感情のバランスポイントを判断します。\n   * **大小アルカナの比率**：この件が「集合的無意識／運命」の影響を強く受けるか、「個人の選択／日常生活」の影響を強く受けるかを読み解きます。\n2. **ミクロ分析と弁証（Micro-Analysis）**：\n   * 各ポジションの定義に基づき、カードの主要象徴（例：塔の落雷、星の泉水）が現在の文脈で帯びる特定の意味を深く掘り下げます。\n   * **占星術と数秘のエネルギー**（例：土星の制限性、数3の拡張性）を導入し、問題に潜む論理を明らかにします。\n3. **錬金術的な導き（Alchemical Guidance）**：\n   * 暧昧な予言を拒否し、極めて建設的な**エネルギー転換の提案**と**現実的な行動計画**を提示します。\n   * 洞察に富んだまとめで、ユーザーが現実の次元で突破口を見出せるよう導きます。\n\n第一段階を、プロフェッショナルで叡智に満ち、神秘的で共感的な口調で始めてください。',
+},
+},
+pos:{zh:{u:'正位',r:'逆位'},en:{u:'Upright',r:'Reversed'},ja:{u:'正位置',r:'逆位置'}},
+deck:{
+zh:{major:'大阿卡纳',
+wands:'小阿卡纳 - 权杖',cups:'小阿卡纳 - 圣杯',
+swords:'小阿卡纳 - 宝剑',pentacles:'小阿卡纳 - 星币',
+unknown:'未知'},
+en:{major:'Major Arcana',
+wands:'Minor Arcana - Wands',cups:'Minor Arcana - Cups',
+swords:'Minor Arcana - Swords',pentacles:'Minor Arcana - Pentacles',
+unknown:'Unknown'},
+ja:{major:'大アルカナ',
+wands:'小アルカナ - ワンド',cups:'小アルカナ - カップ',
+swords:'小アルカナ - ソード',pentacles:'小アルカナ - ペンタクル',
+unknown:'不明'},
+},
+suit:{
+zh:{wands:'权杖',cups:'圣杯',swords:'宝剑',pentacles:'星币'},
+en:{wands:'Wands',cups:'Cups',swords:'Swords',pentacles:'Pentacles'},
+ja:{wands:'ワンド',cups:'カップ',swords:'ソード',pentacles:'ペンタクル'},
+}
+};
+
+let currentLang = (() => { try { return localStorage.getItem('tarotLang') || 'zh'; } catch(e) { return 'zh'; } })();
+function __(c, f) { return I18N.c[c.id][currentLang][f]; }
+function _ui(key) { return I18N.ui[currentLang][key] || key; }
+function _pos(isUpright) { return I18N.pos[currentLang][isUpright ? 'u' : 'r']; }
+function _deck(key) { return I18N.deck[currentLang][key] || key; }
+function _suit(key) { return I18N.suit[currentLang][key] || key; }
+function switchLanguage(lang) {
+  if (lang === currentLang) return;
+  const main = document.querySelector('main');
+  if (main) {
+    main.style.opacity = '0';
+    main.style.transition = 'opacity 0.2s ease';
+  }
+  setTimeout(() => {
+    currentLang = lang;
+    try { localStorage.setItem('tarotLang', lang); } catch(e) {}
+    document.documentElement.lang = {zh:'zh-CN',en:'en',ja:'ja'}[lang];
+    document.title = _ui('pageTitle');
+    updateAllUIText();
+    TarotApp.refreshUI();
+    updateLangButtons();
+    if (main) { main.style.opacity = '1'; }
+  }, 200);
+}
+function updateLangButtons() {
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    const l = btn.dataset.lang;
+    if (l === currentLang) {
+      btn.classList.add('bg-primary/20','text-primary','border-primary');
+      btn.classList.remove('text-gray-500','border-transparent','hover:text-light');
+    } else {
+      btn.classList.remove('bg-primary/20','text-primary','border-primary');
+      btn.classList.add('text-gray-500','border-transparent','hover:text-light');
+    }
+  });
+}
+function updateAllUIText() {
+  const u = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = _ui(key); };
+  const h = (id, key, pre, post) => { const el = document.getElementById(id); if (el) el.innerHTML = (pre || '') + _ui(key) + (post || ''); };
+  // Header
+  u('headerTitle', 'title');
+  // Steps
+  u('step1Label', 'step1'); u('step2Label', 'step2'); u('step3Label', 'step3');
+  u('step1Title', 'step1Title'); u('step2Title', 'step2Title'); u('step3Title', 'resultTitle');
+  // Footer
+  u('footer1', 'footer1'); u('footer2', 'footer2');
+  // Catalog
+  u('catalogTitle', 'catalogTitle');
+  u('majorCatalogHeader', 'majorCatalog'); u('minorCatalogHeader', 'minorCatalog');
+  u('suitWandsHeader', 'suitWands'); u('suitCupsHeader', 'suitCups');
+  u('suitSwordsHeader', 'suitSwords'); u('suitPentaclesHeader', 'suitPentacles');
+  // Buttons
+  h('confirmDeckBtn', 'confirmDeck', '', ' <i class="fa fa-check ml-1"></i>');
+    // AI toggle: pick key by current AI mode state, and use the CORRECT id ("toggleAiText", not "aiToggleText")
+    const aiToggleEl = document.getElementById('toggleAiText');
+    if (aiToggleEl) aiToggleEl.textContent = _ui(TarotApp.state.aiModeActive ? 'aiToggleOn' : 'aiToggleOff');
+    h('aiStepTitle', 'aiStepTitle', '<i class="fa fa-magic mr-1"></i> ', '');
+      u('aiQuestionLabel', 'aiQuestionLabel'); u('aiGenerateBtn', 'aiGenerateBtn');
+      u('aiCopyBtn', 'aiCopyBtn');
+      // 黄色提示框（之前写死中文、漏绑定）
+      h('aiPromptTip', 'aiTipText', '<i class="fa fa-lightbulb-o mr-1"></i> ', '');
+  // 抽牌设置 (Draw Options) step — previously hardcoded / missing bindings
+  u('rangeText', 'rangeText'); u('rangeUnit', 'rangeUnit');
+  u('manualLabel', 'manualLabel');
+  u('manualCountSubmitBtn', 'manualConfirm');
+  u('invalidCountText', 'invalidCount');
+  u('backToStep1Text', 'backBtn');
+  u('drawCardsText', 'drawBtn');
+  // placeholders (set attribute, not textContent)
+  const ph = (id, key) => { const el = document.getElementById(id); if (el) el.setAttribute('placeholder', _ui(key)); };
+  ph('manualCountInput', 'manualPlaceholder');
+  ph('userQuestion', 'aiQuestionPlaceholder');
+  ph('promptOutput', 'aiPromptPlaceholder');
+  // quantity title also depends on AI mode (mirrors toggleAiMode logic)
+  const qEl = document.getElementById('quantityTitle');
+  if (qEl) qEl.textContent = _ui(TarotApp.state.aiModeActive ? 'quantityTitleAi' : 'quantityTitle');
+  // Welcome
+  u('welcomeTitle', 'welcomeTitle'); u('welcomeSubtitle', 'welcomeSubtitle');
+  u('welcomeMusicTip', 'welcomeMusicTip'); u('welcomeAuthor', 'welcomeAuthor');
+  u('welcomeBilibili', 'welcomeBilibili'); u('welcomeThanks', 'welcomeThanks');
+  u('welcomeAiNote', 'welcomeAiNote'); u('welcomeStartBtn', 'welcomeStartBtn');
+  u('preloadStatus', 'preloadText');
+  // Help
+  u('helpTitle', 'helpTitle'); u('helpStep1Title', 'helpStep1Title');
+  u('helpStep1Text', 'helpStep1Text'); u('helpStep2Title', 'helpStep2Title');
+  u('helpStep2Text1', 'helpStep2Text1'); u('helpStep2Text2', 'helpStep2Text2');
+  u('helpStep3Title', 'helpStep3Title'); u('helpStep3Text', 'helpStep3Text');
+  u('helpCardDetailTitle', 'helpCardDetailTitle'); u('helpCardDetailText', 'helpCardDetailText');
+  u('helpCloseBtn', 'helpCloseBtn');
+  // Card detail
+  u('cardNameLabel', 'cardNameLabel'); u('cardGroupLabel', 'cardGroupLabel');
+  u('cardDescLabel', 'cardDescLabel'); u('cardUprightLabel', 'cardUprightLabel');
+  u('cardReversedLabel', 'cardReversedLabel'); u('cardCloseBtn', 'cardCloseBtn');
+  // Deck options + catalog
+  TarotApp.refreshDeckOptions();
+  TarotApp.rerenderCatalog();
+}
+
   const TAROT_DATA = [
     // 大阿卡纳 (0-21)
     { id: 0, name: "愚者", type: "major", image: "https://static.shenpowang.com/img/taluopai/0.gif", description: "愚者代表新的开始、冒险精神和纯真无邪。他站在悬崖边，象征着对未来的无限可能敞开心扉，勇敢地追求梦想而不畏惧风险。", upright: "新的开始、自由、冒险、天真、灵感、创造力、无拘无束", reversed: "鲁莽、缺乏方向、不负责任、冒险过度、天真幼稚、逃避现实" },
@@ -548,6 +1216,53 @@
       this.renderCatalog();
       this.updateCardCountUI();
       this.startPreload();
+      // Apply saved language
+      document.documentElement.lang = {zh:'zh-CN',en:'en',ja:'ja'}[currentLang];
+      document.title = _ui('pageTitle');
+      updateLangButtons();
+      updateAllUIText();
+    },
+    refreshUI() {
+          // Refresh all dynamic UI after language switch
+          this.refreshDeckOptions();
+          this.updateStepUI();
+          // Re-render catalog
+          this.rerenderCatalog();
+          // Re-render drawn cards if any
+          if (this.state.drawnCards.length > 0) {
+            this.dom.resultContainer.innerHTML = '';
+            if (this.state.aiModeActive) {
+              const tip = document.createElement('div');
+              tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
+              tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> ' + _ui('aiReadyTip');
+              this.dom.resultContainer.appendChild(tip);
+            }
+            this.addCardOneByOne(this.state.drawnCards, 0);
+          }
+        },
+        rerenderCatalog() {
+          // Clear existing catalog items
+          ['majorArcanaList','wandsList','cupsList','swordsList','pentaclesList'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = '';
+          });
+          this.renderCatalog();
+        },
+        updateStepUI() {
+          const u = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = _ui(key); };
+          u('step1Label', 'step1'); u('step2Label', 'step2'); u('step3Label', 'step3');
+          u('footer1', 'footer1'); u('footer2', 'footer2');
+        },
+    refreshDeckOptions() {
+      // Update deck option text
+      const options = document.querySelectorAll('.deck-option');
+      options.forEach(opt => {
+        const deck = opt.dataset.deck;
+        const h3 = opt.querySelector('h3');
+        const p = opt.querySelector('p');
+        if (h3) h3.textContent = _ui(deck === 'major' ? 'majorName' : (deck === 'minor' ? 'minorName' : 'allName'));
+        if (p) p.textContent = _ui(deck === 'major' ? 'majorDesc' : (deck === 'minor' ? 'minorDesc' : 'allDesc'));
+      });
     },
 
     /* --- DOM 缓存 --- */
@@ -675,12 +1390,12 @@
           dom.startAppBtn.disabled = false;
 
           if (failed > 0) {
-            dom.preloadIcon.className = 'fa fa-exclamation-triangle text-yellow-400';
-            dom.preloadStatus.textContent = `预加载完成（${failed}张图片加载失败）`;
-            dom.preloadStatus.className = 'text-sm text-yellow-400';
-          } else {
-            dom.preloadIcon.className = 'fa fa-check-circle text-green-500';
-            dom.preloadStatus.textContent = '图片预加载完成！';
+                      dom.preloadIcon.className = 'fa fa-exclamation-triangle text-yellow-400';
+                      dom.preloadStatus.textContent = _ui('preloadFail').replace('{n}', failed);
+                      dom.preloadStatus.className = 'text-sm text-yellow-400';
+                    } else {
+                      dom.preloadIcon.className = 'fa fa-check-circle text-green-500';
+                      dom.preloadStatus.textContent = _ui('preloadDone');
             dom.preloadStatus.className = 'text-sm text-green-500';
           }
           dom.preloadProgressBar.classList.remove('preload-shimmer');
@@ -728,16 +1443,16 @@
         dom.aiSection.classList.remove('hidden');
         dom.toggleAiIcon.classList.replace('fa-toggle-off', 'fa-toggle-on');
         dom.toggleAiIcon.classList.replace('text-gray-500', 'text-primary');
-        dom.toggleAiText.textContent = "关闭 AI 占卜助手";
-        dom.toggleAiText.classList.add('text-primary');
-        dom.quantityTitle.textContent = "第二步：设置抽牌数量";
-      } else {
-        dom.aiSection.classList.add('hidden');
-        dom.toggleAiIcon.classList.replace('fa-toggle-on', 'fa-toggle-off');
-        dom.toggleAiIcon.classList.replace('text-primary', 'text-gray-500');
-        dom.toggleAiText.textContent = "开启 AI 占卜助手";
-        dom.toggleAiText.classList.remove('text-primary');
-        dom.quantityTitle.textContent = "设置抽牌数量";
+        dom.toggleAiText.textContent = _ui('aiToggleOn');
+                dom.toggleAiText.classList.add('text-primary');
+                dom.quantityTitle.textContent = _ui('quantityTitleAi');
+              } else {
+                dom.aiSection.classList.add('hidden');
+                dom.toggleAiIcon.classList.replace('fa-toggle-on', 'fa-toggle-off');
+                dom.toggleAiIcon.classList.replace('text-primary', 'text-gray-500');
+                dom.toggleAiText.textContent = _ui('aiToggleOff');
+                dom.toggleAiText.classList.remove('text-primary');
+                dom.quantityTitle.textContent = _ui('quantityTitle');
       }
     },
 
@@ -763,19 +1478,19 @@
       // 抽取并随机正逆位
       state.drawnCards = pool.slice(0, state.selectedCount).map(card => ({
         ...card,
-        position: Math.random() < 0.5 ? '逆位' : '正位'
+        isUpright: Math.random() >= 0.5, position: Math.random() >= 0.5 ? '正位' : '逆位'
       }));
 
       this.goToStep(3);
       this.dom.resultContainer.innerHTML = '';
       this.dom.copySuccess.classList.add('hidden');
-      this.dom.copyBtnText.textContent = state.aiModeActive ? "复制结果给 AI" : "复制结果";
+      this.dom.copyBtnText.textContent = state.aiModeActive ? _ui('copyResultsAi') : _ui('copyResults');
 
-      // AI 模式提示
-      if (state.aiModeActive) {
-        const tip = document.createElement('div');
-        tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
-        tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> AI 助手已就绪：卡片全部展示后，点击下方"复制结果给 AI"。';
+            // AI 模式提示
+            if (state.aiModeActive) {
+              const tip = document.createElement('div');
+              tip.className = 'bg-primary/10 border border-primary/30 rounded p-3 mb-4 text-center text-sm animate-fade-in';
+              tip.innerHTML = '<i class="fa fa-info-circle mr-1"></i> ' + _ui('aiReadyTip');
         this.dom.resultContainer.appendChild(tip);
       }
 
@@ -788,7 +1503,7 @@
       if (index >= cardArray.length) return;
 
       const card = cardArray[index];
-      const isUpright = card.position === '正位';
+      const isUpright = card.isUpright;
 
       const cardDiv = document.createElement('div');
       cardDiv.className = 'flex items-center p-3 bg-dark rounded-md border border-primary/20 shadow-md card-animate-item hover:border-accent transition-all cursor-pointer mb-4';
@@ -796,23 +1511,25 @@
 
       const colorMap = { 'wands': 'text-red-500', 'cups': 'text-blue-500', 'swords': 'text-gray-300', 'pentacles': 'text-yellow-500' };
       const cardColor = colorMap[card.suit] || 'text-primary';
-      const positionColor = isUpright ? 'text-green-500' : 'text-red-500';
+      const positionColor = card.isUpright ? 'text-green-500' : 'text-red-500';
 
       // 优先使用预加载缓存中的图片，否则 fallback 到 src
-      const cachedImg = ImagePreloader.get(card.image);
-      const imgSrc = cachedImg ? cachedImg.src : card.image;
+            const cachedImg = ImagePreloader.get(card.image);
+            const imgSrc = cachedImg ? cachedImg.src : card.image;
+            const idxLabel = _ui('cardIndex');
+            const failLabel = _ui('loadFail');
 
-      cardDiv.innerHTML = `
-        <div class="flex-shrink-0 w-16 h-24 bg-secondary rounded overflow-hidden border border-primary/40 mr-4">
-          <img src="${imgSrc}" class="w-full h-full object-contain ${isUpright ? '' : 'rotate-180'}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-gray-600 text-xs\\'>加载失败</div>'">
-        </div>
-        <div class="flex-grow">
-          <div class="flex justify-between items-center mb-1">
-             <h3 class="font-bold ${cardColor}">${card.name}</h3>
-             <span class="px-2 py-1 rounded-full font-bold text-[10px] ${positionColor} bg-dark/70">${card.position}</span>
-          </div>
-          <p class="text-xs text-gray-400">牌位编号: #${index + 1}</p>
-          <p class="text-[11px] text-gray-500 mt-1 italic line-clamp-1">"${isUpright ? card.upright : card.reversed}"</p>
+            cardDiv.innerHTML = `
+              <div class="flex-shrink-0 w-16 h-24 bg-secondary rounded overflow-hidden border border-primary/40 mr-4">
+                <img src="${imgSrc}" class="w-full h-full object-contain ${isUpright ? '' : 'rotate-180'}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-gray-600 text-xs\'>${failLabel}</div>'">
+              </div>
+              <div class="flex-grow">
+                <div class="flex justify-between items-center mb-1">
+                   <h3 class="font-bold ${cardColor}">${__(card, 0)}</h3>
+                   <span class="px-2 py-1 rounded-full font-bold text-[10px] ${positionColor} bg-dark/70">${_pos(card.isUpright)}</span>
+                </div>
+                <p class="text-xs text-gray-400">${idxLabel}: #${index + 1}</p>
+          <p class="text-[11px] text-gray-500 mt-1 italic line-clamp-1">"${card.isUpright ? __(card, 2) : __(card, 3)}"</p>
         </div>
       `;
 
@@ -825,6 +1542,7 @@
     /* --- 步骤导航 --- */
     goToStep(stepNumber) {
       const { dom } = this;
+      this.updateStepUI();
       dom.steps.forEach(sec => sec.classList.add('hidden'));
       dom.steps[stepNumber - 1].classList.remove('hidden');
 
@@ -861,7 +1579,7 @@
       const createCardDiv = (card) => {
         const div = document.createElement('div');
         div.className = 'bg-dark/50 p-1 rounded text-center hover:text-primary transition-colors cursor-pointer';
-        div.textContent = card.name;
+        div.textContent = __(card, 0);
         div.addEventListener('click', () => this.showCardDetail(card));
         return div;
       };
@@ -879,12 +1597,12 @@
     /* --- 牌详情弹窗 --- */
     showCardDetail(card) {
       const { dom } = this;
-      $('cardDetailTitle').textContent = `${card.name} 详情`;
+      $('cardDetailTitle').textContent = `${__(card, 0)} ${_ui('cardDetailTitleSuffix')}`;
       $('cardNumber').textContent = card.id;
-      $('cardName').textContent = card.name;
-      $('cardDescription').textContent = card.description || '暂无信息';
-      $('cardUpright').textContent = card.upright || '暂无信息';
-      $('cardReversed').textContent = card.reversed || '暂无信息';
+      $('cardName').textContent = __(card, 0);
+      $('cardDescription').textContent = __(card, 1) || _ui('noInfo');
+      $('cardUpright').textContent = __(card, 2) || _ui('noInfo');
+      $('cardReversed').textContent = __(card, 3) || _ui('noInfo');
 
       const img = $('cardImage');
       if (card.image) {
@@ -899,43 +1617,16 @@
         img.style.display = 'none';
       }
 
-      const groups = { 'major': '大阿卡纳', 'wands': '小阿卡纳 - 权杖', 'cups': '小阿卡纳 - 圣杯', 'swords': '小阿卡纳 - 宝剑', 'pentacles': '小阿卡纳 - 星币' };
-      $('cardGroup').textContent = groups[card.type] || groups[card.suit] || '未知';
+      const groupKey = card.type || card.suit || 'unknown'; const groupName = _deck(groupKey);
+      $('cardGroup').textContent = groupName;
       dom.cardDetailModal.classList.remove('hidden');
     },
 
     /* --- AI 提示词生成 --- */
     generateAIPrompt() {
       const question = this.dom.userQuestion.value.trim();
-      if (!question) { this.dom.promptOutput.value = "请输入您心中的困惑，以便生成精准指令。"; return; }
-      const prompt = `你现在是一位集神秘学造理与深度心理洞察力于一身的**首席塔罗大祭司**。你深谙伟特与透特体系，擅长将牌面符号、四大元素、占星相位与心理原型相结合。
-
-**【第一阶段：能量诊断与牌阵推演】**
-针对用户当前咨询的问题："""${question}"""，你必须执行以下逻辑流程：
-
-1. **核心动能解析**：以富有同理心且犀利的口吻，从潜意识层面分析该问题的**核心矛盾**（如：意志受阻、情感匮乏或认知失衡）。
-2. **专业牌阵推荐**：根据问题性质，精准推荐 **2-3个** 高阶牌阵（如：圣三角、因果链条阵、阴影工作阵等）。
-3. **技术参数明晰**：对于每个推荐牌阵，必须清晰列出：
-   * 该牌阵所需抽取的**【牌张总数】**。
-   * 每一张牌所锚定的**【具体位置意义】**（请使用加粗列表，确保逻辑层级分明）。
-4. **仪式化引导**：请引导用户在静心冥想后，将抽到的**牌名（含正逆位）**反馈给你，并告知用户你已准备好开启深层连接。
-
----
-
-**【第二阶段：全维深度解读】**
-在收到用户提供的牌面数据后，你将执行以下多维度的专业转译：
-
-1. **宏观格局扫描（Macro-Analysis）**：
-   * **元素尊贵（Elemental Dignities）**：分析火/水/风/土元素的分布与互动，判断行动力与情感的平衡点。
-   * **大/小阿尔卡纳比例**：解读此事受"集体潜意识/命运"影响大，还是受"个人选择/日常生活"影响大。
-2. **微观图解与辩证（Micro-Analysis）**：
-   * 结合牌位定义，深度挖掘牌面关键符号（如：高塔的雷电、星星的泉水）在当前语境下的特指含义。
-   * 引入**占星与数字能量**（如：土星的限制性、数字3的扩张性）阐述问题的隐秘逻辑。
-3. **炼金术式指引（Alchemical Guidance）**：
-   * 拒绝模棱两可的预言，提供极具建设性的**能量转化建议**与**现实行动方案**。
-   * 给出一段极具启发性的总结，帮助用户在现实层面破局。
-
-请以专业、睿智、充满神秘感且富有同理心的口吻开启第一阶段。`;
+      if (!question) { this.dom.promptOutput.value = _ui('aiPromptError'); return; }
+      const prompt = _ui('aiPromptTemplate').replace('{question}', question);
       this.dom.promptOutput.value = prompt;
       this.dom.aiPromptTip.classList.remove('hidden');
     },
@@ -945,23 +1636,23 @@
       const text = this.dom.promptOutput.value;
       if (!text) return;
       navigator.clipboard.writeText(text).then(() => {
-        this.dom.aiPromptTip.innerHTML = '<i class="fa fa-check-circle mr-1"></i> 指令已复制！请发送给AI，然后根据AI建议的**张数**调整下方设置。';
+        this.dom.aiPromptTip.innerHTML = '<i class="fa fa-check-circle mr-1"></i> ' + _ui('aiPromptCopied');
         this.dom.aiPromptTip.className = 'text-sm text-center bg-green-500/10 p-2 rounded border border-green-500/30 text-green-500';
       });
     },
 
     copyResultsToClipboard() {
-      const resultsText = this.state.drawnCards.map((card, idx) => `牌位${idx + 1}: ${card.name} (${card.position})`).join('，');
+      const resultsText = this.state.drawnCards.map((card, idx) => `牌位${idx + 1}: ${__(card, 0)} (${_pos(card.isUpright)})`).join('，');
       const fullText = this.state.aiModeActive
-        ? `【我抽到的牌面】：\n${resultsText}。\n请根据之前的牌阵定义开始解读。`
-        : `塔罗牌抽取结果：\n${resultsText}`;
+        ? `${currentLang === 'zh' ? '【我抽到的牌面】' : (currentLang === 'en' ? '[My Drawn Cards]' : '【引いたカード】')}:\n${resultsText}${currentLang === 'ja' ? '。\n先ほどのスプレッド定義に基づいて解釈を始めてください。' : (currentLang === 'en' ? '.\nPlease begin your interpretation based on the spread definition.' : '。\n请根据之前的牌阵定义开始解读。')}`
+        : `${currentLang === 'zh' ? '塔罗牌抽取结果' : (currentLang === 'en' ? 'Tarot Draw Results' : 'タロット抽選結果')}:\n${resultsText}`;
       navigator.clipboard.writeText(fullText).then(() => {
         this.dom.copySuccess.innerHTML = this.state.aiModeActive
-          ? '<i class="fa fa-check-circle mr-1"></i> 牌面已复制！请粘贴给 AI。'
-          : '<i class="fa fa-check-circle mr-1"></i> 结果已复制到剪贴板。';
-        this.dom.copySuccess.classList.remove('hidden');
-        setTimeout(() => this.dom.copySuccess.classList.add('hidden'), 3000);
-      }).catch(() => alert('复制失败，请手动复制。'));
+                  ? '<i class="fa fa-check-circle mr-1"></i> ' + _ui('resultCopiedAi')
+                  : '<i class="fa fa-check-circle mr-1"></i> ' + _ui('resultCopied');
+                this.dom.copySuccess.classList.remove('hidden');
+                setTimeout(() => this.dom.copySuccess.classList.add('hidden'), 3000);
+              }).catch(() => alert(_ui('copyFail')));
     }
   };
 
