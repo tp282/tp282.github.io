@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>B站视频在线播放</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #000000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.container {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 800px;
+    overflow: hidden;
+}
+.header {
+    background: #000000;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+}
+.header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.header p {
+    font-size: 13px;
+    opacity: .9;
+}
+.input-section {
+    padding: 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.input-wrapper {
+    flex: 1;
+    min-width: 200px;
+}
+.input-wrapper input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    background:#222;
+    color:#fff;
+}
+.input-wrapper input:focus {
+    border-color: #FFA31A;
+}
+.btn {
+    padding: 10px 16px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #2a2a2a;
+    color: #fff;
+    white-space: nowrap;
+}
+.btn:hover {
+    background: #333;
+}
+.play-btn {
+    background: #FFA31A;
+    border-color: #FFA31A;
+    color: #000;
+}
+.play-btn:hover {
+    background: #e69216;
+}
+.copy-btn {
+    background: #222;
+    border-color: #444;
+}
+.save-api-btn {
+    background: #222;
+    border-color: #444;
+}
+.collapsible-section {
+    border-top: 1px solid #333;
+}
+.collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: #252525;
+}
+.collapsible-header:hover {
+    background: #303030;
+}
+.collapsible-header .arrow {
+    transition: transform .2s;
+    font-size: 12px;
+}
+.collapsible-section.collapsed .collapsible-header .arrow {
+    transform: rotate(-90deg);
+}
+.collapsible-content {
+    transition: max-height .2s, opacity .2s;
+    overflow: hidden;
+    max-height: 300px;
+}
+.collapsible-section.collapsed .collapsible-content {
+    max-height: 0;
+    opacity: 0;
+}
+.api-section {
+    padding: 15px 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-top: 1px solid #333;
+}
+.api-section .input-wrapper {
+    flex: 1;
+    min-width: 250px;
+}
+.history-section {
+    padding: 15px 20px;
+    border-top: 1px solid #333;
+}
+.history-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+.clear-all-btn {
+    background: none;
+    border: none;
+    color: #909090;
+    cursor: pointer;
+    font-size: 13px;
+}
+.clear-all-btn:hover {
+    text-decoration: underline;
+}
+.history-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-height: 120px;
+    overflow-y: auto;
+    padding: 2px;
+}
+.history-item {
+    display: flex;
+    align-items: center;
+    background: #2c2c2c;
+    border: 1px solid #444;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-family: monospace;
+    cursor: pointer;
+    color:#fff;
+}
+.history-item:hover {
+    background: #383838;
+}
+.history-item .bv-text {
+    margin-right: 6px;
+}
+.history-item .delete-btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0 2px;
+}
+.history-item .delete-btn:hover {
+    color: #909090;
+}
+.empty-history {
+    color: #999;
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 0;
+}
+.player-section {
+    padding: 0 20px 20px;
+    display: none;
+}
+.player-section.active {
+    display: block;
+}
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    background: #000;
+    border-radius: 4px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+}
+.video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 13px;
+    text-align: center;
+}
+.loading.active {
+    display: block;
+}
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(255, 163, 26, 0.3);
+    border-top-color: #FFA31A;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    margin: 0 auto 8px;
+}
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.error-msg {
+    display: none;
+    padding: 12px;
+    background: #2b1616;
+    border: 1px solid #8c2323;
+    border-radius: 4px;
+    color: #ff7875;
+    font-size: 13px;
+    margin-top: 12px;
+}
+.error-msg.active {
+    display: block;
+}
+.info-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 12px;
+    color: #ccc;
+}
+.bv-tag {
+    background: #333;
+    color:#fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+.download-link {
+    color: #909090;
+    text-decoration: none;
+    font-weight: 500;
+}
+.download-link:hover {
+    text-decoration: underline;
+}
+.footer {
+    padding: 15px 20px;
+    text-align: center;
+    color: #777;
+    font-size: 12px;
+    border-top: 1px solid #333;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>B站视频在线播放</h1>
+            <p>视频播放&下载</p>
+        </div>
+        <div class="input-section">
+            <div class="input-wrapper">
+                <input id="bvInput" placeholder="请输入 BV 号" autocomplete="off">
+            </div>
+            <button class="btn play-btn" id="playBtn" onclick="playVideo()">播放</button>
+            <button class="btn copy-btn" onclick="copyVideoUrl()">复制链接</button>
+        </div>
+
+        <!-- 折叠：接口设置 -->
+        <div class="collapsible-section collapsed" id="apiCollapsible">
+            <div class="collapsible-header" onclick="toggleSection('apiCollapsible')">
+                <span>接口设置</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="api-section">
+                    <div class="input-wrapper">
+                        <input id="apiBaseInput" placeholder="请输入接口前缀（例如：https://example.com/?url=）" autocomplete="off">
+                    </div>
+                    <button class="btn save-api-btn" onclick="saveApiBase()">保存前缀</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 折叠：历史记录 -->
+        <div class="collapsible-section" id="historyCollapsible">
+            <div class="collapsible-header" onclick="toggleSection('historyCollapsible')">
+                <span>历史记录</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="history-section">
+                    <div class="history-header">
+                        <button class="clear-all-btn" onclick="clearAllHistory()">清空全部</button>
+                    </div>
+                    <div class="history-list" id="historyList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="player-section" id="playerSection">
+            <div class="info-bar">
+                <span>当前视频：<span class="bv-tag" id="currentBv">-</span></span>
+                <a href="#" id="downloadLink" class="download-link" download>下载视频</a>
+            </div>
+            <div class="video-wrapper">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <span>视频加载中...</span>
+                </div>
+                <video id="videoPlayer" controls playsinline></video>
+            </div>
+            <div class="error-msg" id="errorMsg"></div>
+        </div>
+        <div class="footer">仅供娱乐</div>
+    </div>
+    <script>
+        // ==================== DOM 元素 ====================
+        const bvInput = document.getElementById('bvInput');
+        const playBtn = document.getElementById('playBtn');
+        const apiBaseInput = document.getElementById('apiBaseInput');
+        const playerSection = document.getElementById('playerSection');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const loading = document.getElementById('loading');
+        const errorMsg = document.getElementById('errorMsg');
+        const currentBv = document.getElementById('currentBv');
+        const downloadLink = document.getElementById('downloadLink');
+        const historyList = document.getElementById('historyList');
+
+        // ==================== 常量 ====================
+        const HISTORY_KEY = 'bvHistory';
+        const MAX_HISTORY = 20;
+
+        // ==================== 初始化 ====================
+        function initApiBase() {
+            const saved = localStorage.getItem('customApiBase');
+            apiBaseInput.value = saved || '';
+        }
+
+        function initHistory() {
+            renderHistory();
+        }
+
+        initApiBase();
+        initHistory();
+
+        // ==================== 折叠功能 ====================
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.toggle('collapsed');
+            }
+        }
+
+        // ==================== 历史记录功能 ====================
+        function getHistory() {
+            const data = localStorage.getItem(HISTORY_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveHistory(history) {
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        }
+
+        function addHistory(bv) {
+            let history = getHistory();
+            history = history.filter(item => item !== bv);
+            history.unshift(bv);
+            if (history.length > MAX_HISTORY) {
+                history = history.slice(0, MAX_HISTORY);
+            }
+            saveHistory(history);
+            renderHistory();
+        }
+
+        function deleteHistoryItem(bv) {
+            let history = getHistory();
+            history = history.filter(item => item !== bv);
+            saveHistory(history);
+            renderHistory();
+        }
+
+        function clearAllHistory() {
+            if (confirm('确定要清空所有历史记录吗？')) {
+                saveHistory([]);
+                renderHistory();
+            }
+        }
+
+        function renderHistory() {
+            const history = getHistory();
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="empty-history">暂无历史记录</div>';
+                return;
+            }
+
+            let html = '';
+            history.forEach((bv) => {
+                html += `
+                    <div class="history-item" data-bv="${bv}">
+                        <span class="bv-text">${bv}</span>
+                        <button class="delete-btn" title="删除">×</button>
+                    </div>
+                `;
+            });
+            historyList.innerHTML = html;
+
+            document.querySelectorAll('.history-item').forEach(item => {
+                const bv = item.getAttribute('data-bv');
+                item.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('delete-btn')) return;
+                    bvInput.value = bv;
+                    bvInput.focus();
+                });
+                const delBtn = item.querySelector('.delete-btn');
+                delBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const bvToDelete = item.getAttribute('data-bv');
+                    deleteHistoryItem(bvToDelete);
+                });
+            });
+        }
+
+        // ==================== API 前缀功能 ====================
+        function saveApiBase() {
+            let prefix = apiBaseInput.value.trim();
+            if (!prefix) {
+                alert('前缀不能为空');
+                return;
+            }
+            localStorage.setItem('customApiBase', prefix);
+            alert('前缀已保存');
+        }
+
+        function getApiBase() {
+            return apiBaseInput.value.trim();
+        }
+
+        // ==================== 复制链接功能 ====================
+        function copyVideoUrl() {
+            const bv = extractBv(bvInput.value);
+            if (!bv) {
+                showError('请输入有效的 BV 号');
+                return;
+            }
+            const apiBase = getApiBase();
+            if (!apiBase) {
+                showError('请先设置接口前缀（点击“接口设置”展开填写）');
+                return;
+            }
+            const url = apiBase + bv;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('链接已复制到剪贴板：\n' + url);
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = url;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('链接已复制');
+            });
+        }
+
+        // ==================== 提取 BV 号 ====================
+        function extractBv(text) {
+            const match = text.match(/BV[a-zA-Z0-9]+/i);
+            return match ? match[0] : '';
+        }
+
+        // ==================== 播放功能 ====================
+        bvInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                playVideo();
+            }
+        });
+
+        bvInput.addEventListener('paste', function() {
+            setTimeout(() => {
+                const bv = extractBv(bvInput.value);
+                if (bv) {
+                    bvInput.value = bv;
+                    playVideo();
+                }
+            }, 100);
+        });
+
+        function playVideo() {
+            let bv = bvInput.value.trim();
+            
+            if (!bv.startsWith('BV') && !bv.startsWith('bv')) {
+                bv = extractBv(bv);
+            }
+
+            if (!bv) {
+                showError('请输入有效的 BV 号');
+                return;
+            }
+
+            const apiBase = getApiBase();
+            if (!apiBase) {
+                showError('请先设置接口前缀（点击“接口设置”展开填写）');
+                return;
+            }
+
+            const videoUrl = apiBase + bv;
+
+            addHistory(bv);
+
+            playerSection.classList.add('active');
+            currentBv.textContent = bv;
+            downloadLink.href = videoUrl;
+            downloadLink.download = bv + '.mp4';
+            
+            loading.classList.add('active');
+            errorMsg.classList.remove('active');
+            playBtn.disabled = true;
+
+            videoPlayer.src = videoUrl;
+            
+            videoPlayer.onloadeddata = function() {
+                loading.classList.remove('active');
+                playBtn.disabled = false;
+                videoPlayer.play().catch(() => {});
+            };
+
+            videoPlayer.onerror = function() {
+                loading.classList.remove('active');
+                playBtn.disabled = false;
+                showError('视频加载失败，请检查 BV 号或接口前缀是否正确');
+            };
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.classList.add('active');
+        }
+    </script>
+</body>
+</html>
