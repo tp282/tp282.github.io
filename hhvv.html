@@ -72,16 +72,21 @@
             background: #2a2a2a; 
             color: #fff; 
             white-space: nowrap; 
+            transition: all 0.3s; 
         }
-        .btn:hover { 
+        .btn:hover:not(:disabled) { 
             background: #333; 
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         .play-btn { 
             background: #FFA31A; 
             border-color: #FFA31A; 
             color: #000; 
         }
-        .play-btn:hover { 
+        .play-btn:hover:not(:disabled) { 
             background: #e69216; 
         }
         .copy-btn { 
@@ -230,6 +235,7 @@
             color: #fff; 
             font-size: 13px; 
             text-align: center; 
+            z-index: 10; 
         }
         .loading.active { 
             display: block; 
@@ -275,12 +281,18 @@
             font-family: monospace; 
         }
         .download-link { 
-            color: #909090; 
+            color: #FFA31A; 
             text-decoration: none; 
             font-weight: 500; 
+            padding: 5px 10px; 
+            border: 1px solid #FFA31A; 
+            border-radius: 4px; 
+            transition: all 0.3s; 
         }
         .download-link:hover { 
-            text-decoration: underline; 
+            background: #FFA31A; 
+            color: #000; 
+            text-decoration: none; 
         }
         .footer { 
             padding: 15px 20px; 
@@ -510,52 +522,71 @@
             return match ? match[0] : '';
         }
 
-        // ==================== 获取真实视频URL ====================
-        async function fetchVideoUrl(apiUrl) {
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': '*/*',
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+        // ==================== 获取视频Blob ====================
+        async function fetchVideoAsBlob(url) {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': '*/*',
                 }
-                
-                // 检查Content-Type
-                const contentType = response.headers.get('Content-Type');
-                
-                // 如果返回的是视频流，直接使用原URL
-                if (contentType && contentType.includes('video')) {
-                    return apiUrl;
-                }
-                
-                // 如果返回的是JSON或文本，尝试解析真实URL
-                const data = await response.text();
-                
-                // 尝试解析JSON
-                try {
-                    const jsonData = JSON.parse(data);
-                    if (jsonData.url) return jsonData.url;
-                    if (jsonData.data && jsonData.data.url) return jsonData.data.url;
-                    if (jsonData.data && jsonData.data.durl && jsonData.data.durl[0]) {
-                        return jsonData.data.durl[0].url;
-                    }
-                } catch (e) {
-                    // 不是JSON，检查是否是重定向URL
-                    if (data.startsWith('http')) {
-                        return data;
-                    }
-                }
-                
-                // 如果都没找到，返回原URL
-                return apiUrl;
-            } catch (error) {
-                console.error('Error fetching video URL:', error);
-                throw error;
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
+            const contentType = response.headers.get('Content-Type');
+            console.log('Content-Type:', contentType);
+            
+            // 如果是视频流，直接返回blob
+            if (contentType && (contentType.includes('video') || contentType.includes('octet-stream') || contentType.includes('mpegurl'))) {
+                const blob = await response.blob();
+                return URL.createObjectURL(blob);
+            }
+            
+            // 如果是JSON，解析出真实URL
+            const data = await response.text();
+            console.log('Response data:', data.substring(0, 200));
+            
+            try {
+                const jsonData = JSON.parse(data);
+                let realUrl = null;
+                
+                if (jsonData.url) {
+                    realUrl = jsonData.url;
+                } else if (jsonData.data && jsonData.data.url) {
+                    realUrl = jsonData.data.url;
+                } else if (jsonData.data && jsonData.data.durl && jsonData.data.durl[0]) {
+                    realUrl = jsonData.data.durl[0].url;
+                } else if (jsonData.code === 0 && jsonData.data) {
+                    // 尝试其他可能的格式
+                    const dataObj = jsonData.data;
+                    if (dataObj.durl && dataObj.durl[0] && dataObj.durl[0].url) {
+                        realUrl = dataObj.durl[0].url;
+                    } else if (dataObj.url) {
+                        realUrl = dataObj.url;
+                    }
+                }
+                
+                if (realUrl) {
+                    console.log('Found real URL:', realUrl);
+                    const videoResponse = await fetch(realUrl);
+                    const videoBlob = await videoResponse.blob();
+                    return URL.createObjectURL(videoBlob);
+                }
+            } catch (e) {
+                console.log('Not JSON, checking if URL');
+                // 不是JSON，检查是否是直接的URL
+                if (data.startsWith('http')) {
+                    const videoResponse = await fetch(data);
+                    const videoBlob = await videoResponse.blob();
+                    return URL.createObjectURL(videoBlob);
+                }
+            }
+            
+            // 如果都失败了，返回原始URL
+            console.log('Returning original URL');
+            return url;
         }
 
         // ==================== 播放功能 ====================
@@ -603,23 +634,58 @@
             errorMsg.classList.remove('active');
             playBtn.disabled = true;
 
-            // 使用fetch获取真实视频地址
-            fetchVideoUrl(videoUrl).then(realUrl => {
-                videoPlayer.src = realUrl;
+            // 清理之前的Blob URL
+            if (videoPlayer.src && videoPlayer.src.startsWith('blob:')) {
+                URL.revokeObjectURL(videoPlayer.src);
+            }
+
+            console.log('Fetching video from:', videoUrl);
+            
+            // 使用fetch获取视频流并创建Blob URL
+            fetchVideoAsBlob(videoUrl).then(blobUrl => {
+                console.log('Setting video src to:', blobUrl);
+                videoPlayer.src = blobUrl;
+                
                 videoPlayer.onloadeddata = function() {
+                    console.log('Video loaded successfully');
                     loading.classList.remove('active');
                     playBtn.disabled = false;
-                    videoPlayer.play().catch(() => {});
+                    videoPlayer.play().catch(err => {
+                        console.log('Auto-play failed:', err);
+                    });
                 };
                 
-                videoPlayer.onerror = function() {
+                videoPlayer.onerror = function(e) {
+                    console.error('Video error:', e);
                     loading.classList.remove('active');
                     playBtn.disabled = false;
-                    showError('视频加载失败，请尝试下载后播放');
+                    
+                    // 如果Blob方式失败，尝试直接使用URL
+                    if (blobUrl !== videoUrl) {
+                        console.log('Blob failed, trying direct URL');
+                        showError('视频加载失败，正在尝试直接播放...');
+                        videoPlayer.src = videoUrl;
+                        videoPlayer.onloadeddata = function() {
+                            loading.classList.remove('active');
+                            playBtn.disabled = false;
+                            videoPlayer.play().catch(() => {});
+                        };
+                        videoPlayer.onerror = function() {
+                            loading.classList.remove('active');
+                            playBtn.disabled = false;
+                            showError('视频加载失败，请点击右上角下载按钮下载后播放');
+                        };
+                    } else {
+                        showError('视频加载失败，请点击右上角下载按钮下载后播放');
+                    }
                 };
             }).catch(err => {
-                // 如果fetch失败，尝试直接播放
-                console.error('Fetch failed, trying direct playback:', err);
+                console.error('Failed to fetch video:', err);
+                loading.classList.remove('active');
+                playBtn.disabled = false;
+                
+                // 尝试直接播放作为最后的fallback
+                console.log('Fetch failed, trying direct playback');
                 videoPlayer.src = videoUrl;
                 videoPlayer.onloadeddata = function() {
                     loading.classList.remove('active');
@@ -629,7 +695,7 @@
                 videoPlayer.onerror = function() {
                     loading.classList.remove('active');
                     playBtn.disabled = false;
-                    showError('无法获取视频流，请使用下载功能');
+                    showError('视频加载失败，请点击右上角下载按钮下载后播放');
                 };
             });
         }
