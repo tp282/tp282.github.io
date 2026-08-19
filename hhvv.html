@@ -522,73 +522,6 @@
             return match ? match[0] : '';
         }
 
-        // ==================== 获取视频Blob ====================
-        async function fetchVideoAsBlob(url) {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Accept': '*/*',
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const contentType = response.headers.get('Content-Type');
-            console.log('Content-Type:', contentType);
-            
-            // 如果是视频流，直接返回blob
-            if (contentType && (contentType.includes('video') || contentType.includes('octet-stream') || contentType.includes('mpegurl'))) {
-                const blob = await response.blob();
-                return URL.createObjectURL(blob);
-            }
-            
-            // 如果是JSON，解析出真实URL
-            const data = await response.text();
-            console.log('Response data:', data.substring(0, 200));
-            
-            try {
-                const jsonData = JSON.parse(data);
-                let realUrl = null;
-                
-                if (jsonData.url) {
-                    realUrl = jsonData.url;
-                } else if (jsonData.data && jsonData.data.url) {
-                    realUrl = jsonData.data.url;
-                } else if (jsonData.data && jsonData.data.durl && jsonData.data.durl[0]) {
-                    realUrl = jsonData.data.durl[0].url;
-                } else if (jsonData.code === 0 && jsonData.data) {
-                    // 尝试其他可能的格式
-                    const dataObj = jsonData.data;
-                    if (dataObj.durl && dataObj.durl[0] && dataObj.durl[0].url) {
-                        realUrl = dataObj.durl[0].url;
-                    } else if (dataObj.url) {
-                        realUrl = dataObj.url;
-                    }
-                }
-                
-                if (realUrl) {
-                    console.log('Found real URL:', realUrl);
-                    const videoResponse = await fetch(realUrl);
-                    const videoBlob = await videoResponse.blob();
-                    return URL.createObjectURL(videoBlob);
-                }
-            } catch (e) {
-                console.log('Not JSON, checking if URL');
-                // 不是JSON，检查是否是直接的URL
-                if (data.startsWith('http')) {
-                    const videoResponse = await fetch(data);
-                    const videoBlob = await videoResponse.blob();
-                    return URL.createObjectURL(videoBlob);
-                }
-            }
-            
-            // 如果都失败了，返回原始URL
-            console.log('Returning original URL');
-            return url;
-        }
-
         // ==================== 播放功能 ====================
         bvInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -634,70 +567,35 @@
             errorMsg.classList.remove('active');
             playBtn.disabled = true;
 
-            // 清理之前的Blob URL
-            if (videoPlayer.src && videoPlayer.src.startsWith('blob:')) {
-                URL.revokeObjectURL(videoPlayer.src);
-            }
+            console.log('播放URL:', videoUrl);
 
-            console.log('Fetching video from:', videoUrl);
+            // 直接使用下载链接的URL进行播放
+            videoPlayer.src = videoUrl;
             
-            // 使用fetch获取视频流并创建Blob URL
-            fetchVideoAsBlob(videoUrl).then(blobUrl => {
-                console.log('Setting video src to:', blobUrl);
-                videoPlayer.src = blobUrl;
-                
-                videoPlayer.onloadeddata = function() {
-                    console.log('Video loaded successfully');
-                    loading.classList.remove('active');
-                    playBtn.disabled = false;
-                    videoPlayer.play().catch(err => {
-                        console.log('Auto-play failed:', err);
-                    });
-                };
-                
-                videoPlayer.onerror = function(e) {
-                    console.error('Video error:', e);
-                    loading.classList.remove('active');
-                    playBtn.disabled = false;
-                    
-                    // 如果Blob方式失败，尝试直接使用URL
-                    if (blobUrl !== videoUrl) {
-                        console.log('Blob failed, trying direct URL');
-                        showError('视频加载失败，正在尝试直接播放...');
-                        videoPlayer.src = videoUrl;
-                        videoPlayer.onloadeddata = function() {
-                            loading.classList.remove('active');
-                            playBtn.disabled = false;
-                            videoPlayer.play().catch(() => {});
-                        };
-                        videoPlayer.onerror = function() {
-                            loading.classList.remove('active');
-                            playBtn.disabled = false;
-                            showError('视频加载失败，请点击右上角下载按钮下载后播放');
-                        };
-                    } else {
-                        showError('视频加载失败，请点击右上角下载按钮下载后播放');
-                    }
-                };
-            }).catch(err => {
-                console.error('Failed to fetch video:', err);
+            videoPlayer.onloadeddata = function() {
+                console.log('视频加载成功');
                 loading.classList.remove('active');
                 playBtn.disabled = false;
-                
-                // 尝试直接播放作为最后的fallback
-                console.log('Fetch failed, trying direct playback');
-                videoPlayer.src = videoUrl;
-                videoPlayer.onloadeddata = function() {
+                videoPlayer.play().catch(err => {
+                    console.log('自动播放失败:', err);
+                });
+            };
+            
+            videoPlayer.onerror = function(e) {
+                console.error('视频播放错误:', e);
+                loading.classList.remove('active');
+                playBtn.disabled = false;
+                showError('视频加载失败，请尝试下载后播放');
+            };
+            
+            // 设置超时，如果10秒还没加载成功，显示错误
+            setTimeout(() => {
+                if (loading.classList.contains('active')) {
                     loading.classList.remove('active');
                     playBtn.disabled = false;
-                    videoPlayer.play().catch(() => {});
-                };
-                videoPlayer.onerror = function() {
-                    loading.classList.remove('active');
-                    playBtn.disabled = false;
-                    showError('视频加载失败，请点击右上角下载按钮下载后播放');
-                };
-            });
+                    showError('视频加载超时，请尝试下载后播放');
+                }
+            }, 10000);
         }
 
         function showError(msg) {
